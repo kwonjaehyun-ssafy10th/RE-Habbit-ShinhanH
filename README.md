@@ -1,5 +1,5 @@
 
-# RE-Habbit-SinhanH
+# RE-Habbit-ShinhanH
 ---
 ### 커밋 작성 규칙
 
