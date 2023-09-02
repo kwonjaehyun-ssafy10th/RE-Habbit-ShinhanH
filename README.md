@@ -7,7 +7,7 @@
 
   \<BLANK LINE>                  -- 빈 줄
 
- \ <body\>                        -- 본문
+ \<body\>                        -- 본문
 
   \<BLANK LINE>                  -- 빈 줄
 
