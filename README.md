@@ -2,11 +2,11 @@
 
 ## 커밋 작성 규칙
 
-  <type>(<scope>): <subject>    -- 헤더
-  <BLANK LINE>                  -- 빈 줄
-  <body>                        -- 본문
-  <BLANK LINE>                  -- 빈 줄
-  <footer>                      -- 바닥 글
+  //<type>(<scope>): <subject>    -- 헤더
+  //<BLANK LINE>                  -- 빈 줄
+  //<body>                        -- 본문
+  //<BLANK LINE>                  -- 빈 줄
+  //<footer>                      -- 바닥 글
 
   -----
 
