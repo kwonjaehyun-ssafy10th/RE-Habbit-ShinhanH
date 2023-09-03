@@ -54,31 +54,17 @@ class login extends StatelessWidget {
 
 class MyWidget extends StatelessWidget {
   Widget build(BuildContext buildContext) {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-final controller = Get.put(ControllerMain());
-
-=======
     final controller = Get.put(Controller_Main());
->>>>>>> Stashed changes
-=======
-    final controller = Get.put(Controller_Main());
->>>>>>> Stashed changes
 
     return Scaffold(
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
           // ElevatedButton(
-              // child: Text('테스트 버튼'),
-              // onPressed: () {
-              //  "${controller.testS.value}",
-              // }),
-              
-=======
-=======
->>>>>>> Stashed changes
+          // child: Text('테스트 버튼'),
+          // onPressed: () {
+          //  "${controller.testS.value}",
+          // }),
+
           GetBuilder<Controller_Main>(builder: (controller) {
             return Text('${controller.testS.value}');
           }),
@@ -87,7 +73,7 @@ final controller = Get.put(ControllerMain());
               onPressed: () {
                 controller.increment;
               }),
->>>>>>> Stashed changes
+
           ElevatedButton(
               child: Text('개인'),
               onPressed: () {
