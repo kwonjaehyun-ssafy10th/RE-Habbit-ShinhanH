@@ -15,6 +15,8 @@ class _ScreenPage3State extends State<ScreenPage3> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Screen 3 - 랭킹'),
+            Text('SortingSystem \n 기본, 나이, 성별'),
+            Text('RankingSystem \n 평균 챌린지 기간, 총 적금 금액'),
             ElevatedButton(
               onPressed: () {
                 // if(Navigator.of(context).canPop()){

@@ -14,7 +14,7 @@ class _ScreenPage1State extends State<ScreenPage1> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('텍스트 체크용')
+            Text('텍스트 체크용'),
             Text('Screen 1 - 개인'),
             ElevatedButton(
               onPressed: () {
