@@ -15,6 +15,7 @@ class _ScreenPage2State extends State<ScreenPage2> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Screen 2 - 스탬프'),
+            Text('해당 월별 일자/일별 소비에 따른 스탬프 자동 생성, 랭킹 페이지 연결 배너'),
             ElevatedButton(
               onPressed: () {
                 // if(Navigator.of(context).canPop()){
