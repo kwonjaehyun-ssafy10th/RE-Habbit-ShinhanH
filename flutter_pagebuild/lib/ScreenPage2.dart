@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ScreenTemp extends StatefulWidget {
+class ScreenPage2 extends StatefulWidget {
   @override
-  _ScreenTempState createState() => _ScreenTempState();
+  _ScreenPage2State createState() => _ScreenPage2State();
 }
 
-class _ScreenTempState extends State<ScreenTemp> {
+class _ScreenPage2State extends State<ScreenPage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +14,7 @@ class _ScreenTempState extends State<ScreenTemp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Screen Two'),
+            Text('Screen 2 - 스탬프'),
             ElevatedButton(
               onPressed: () {
                 // if(Navigator.of(context).canPop()){
