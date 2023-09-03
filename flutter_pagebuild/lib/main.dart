@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pagebuild/ScreenPage1.dart';
 import 'package:flutter_pagebuild/ScreenPage2.dart';
@@ -50,9 +52,17 @@ class login extends StatelessWidget {
 
 class MyWidget extends StatelessWidget {
   Widget build(BuildContext buildContext) {
+final controller = Get.put(Controller_Main());
+
+
     return Scaffold(
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ElevatedButton(
+              child: Text('테스트 버튼'),
+              onPressed: () {
+               "${controller.testS.value}",
+              }),
           ElevatedButton(
               child: Text('개인'),
               onPressed: () {
