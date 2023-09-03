@@ -12,8 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: MyWidget(),
+      home: login(),
       getPages: [
+        GetPage(
+          name: '/',
+          page: () => MyWidget(),
+        ),
         GetPage(
           name: '/',
           page: () => ScreenPage1(),
@@ -28,6 +32,19 @@ class MyApp extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class login extends StatelessWidget {
+  Widget build(BuildContext buildContext) {
+    return Scaffold(
+        body: Center(
+      child: ElevatedButton(
+          child: Text('메인 진입'),
+          onPressed: () {
+            Get.off(MyWidget());
+          }),
+    ));
   }
 }
 
