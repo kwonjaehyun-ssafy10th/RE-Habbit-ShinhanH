@@ -16,6 +16,7 @@ class _ScreenPage1State extends State<ScreenPage1> {
           children: [
             Text('텍스트 체크용'),
             Text('Screen 1 - 개인'),
+            Text('절약 금액, Rabbit 적금 현황, 달성율, 예상 우대 이율'),
             ElevatedButton(
               onPressed: () {
                 // if(Navigator.of(context).canPop()){
