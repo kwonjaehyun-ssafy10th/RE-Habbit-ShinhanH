@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pagebuild/ScreenPage1.dart';
 import 'package:flutter_pagebuild/ScreenPage2.dart';
 import 'package:flutter_pagebuild/ScreenPage3.dart';
+import 'package:flutter_pagebuild/Controller_Main.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -52,17 +53,18 @@ class login extends StatelessWidget {
 
 class MyWidget extends StatelessWidget {
   Widget build(BuildContext buildContext) {
-final controller = Get.put(Controller_Main());
+final controller = Get.put(ControllerMain());
 
 
     return Scaffold(
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          ElevatedButton(
-              child: Text('테스트 버튼'),
-              onPressed: () {
-               "${controller.testS.value}",
-              }),
+          // ElevatedButton(
+              // child: Text('테스트 버튼'),
+              // onPressed: () {
+              //  "${controller.testS.value}",
+              // }),
+              
           ElevatedButton(
               child: Text('개인'),
               onPressed: () {
