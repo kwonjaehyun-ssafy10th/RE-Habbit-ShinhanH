@@ -1,39 +1,41 @@
 
 # RE-Habbit-ShinhanH
 ---
-### 커밋 작성 규칙
 
-  \<type>(\<scope>): \<subject>    -- 헤더
+# 커밋 작성 규칙
+### git commit 하는 법
 
-  \<BLANK LINE>                  -- 빈 줄
 
- \<body\>                        -- 본문
+```bash
+# {$어떤내용} = $이후의 내용을 {$어떤내용} 대신 작성해주면 됩니다. 
 
-  \<BLANK LINE>                  -- 빈 줄
+git status
+ //현재 상태 확인 - git서버랑 비교해서 다른 점/commit상태 등
 
-  \<footer>                      -- 바닥 글
+git add {$올리고 싶은 파일 경로}
+// add를 통해 파일 추가
 
-  -----
+git commit -m "{$타입태그 :[#이슈넘버]제목} 
+# 이슈넘버가 없을 경우 임시로 '-'를 사용해주세요.
+# 따옴표를 닫지 않은  채로 엔터치면 줄바꿈이 됩니다.
+# 한 줄 공백으로 남겨둔 뒤 다음 줄에 body작성
 
- ### <type> 종류
+{$구체적인 commit 내용}
+# 한 줄 공백으로 남겨둔 뒤 다음 줄에 footer작성
 
-feat : 새로운 기능에 대한 커밋 \
-fix : build 빌드 관련 파일 수정에 대한 커밋\
-build : 빌드 관련 파일 수정에 대한 커밋\
-chore : 그 외 자잘한 수정에 대한 커밋(rlxk qusrud)\
-ci : CI 관련 설정 수정에 대한 커밋\
-docs : 문서 수정에 대한 커밋\
-style : 코드 스타일 혹은 포맷 등에 관한 커밋\
-refactor : 코드 리팩토링에 대한 커밋\
-test : 테스트 코드 수정에 대한 커밋
+{$footer유형 #이슈넘버}"
+# footer 위치에서 이슈 close가 가능합니다.
+# footer유형을 Resolve로 설정할 경우 git 상의 issue가 자동 종료됩니다. 이용해주세요.
+```
 
-### 메시지 예시
+++디스코드 서버 내의 commit 메시지 가이드 링크를 참고해주세요. \
+++모르겠으면 질문해주세요. 아무렇게나 commit 금지
 
-Feat: 관심지역 알림 ON/OFF 기능 추가(#123)
+커밋 예시
+```bash
+git commit -m "docs: [#-]readme.md업데이트
 
-시군구의 알림을 각각 ON/OFF 할 수 있도록 기능을 추가함
- - opnion0055: 구분 코드
+readme 내 commit 안내 추가
 
-해결: close
---------------------------------------
-레퍼런스 : https://xtring-dev.tistory.com/entry/Git-%EA%B7%9C%EC%B9%99%EC%A0%81%EC%9D%B8-Commit-%EB%A9%94%EC%84%B8%EC%A7%80%EB%A1%9C-%EA%B0%9C%EB%B0%9C%ED%8C%80-%ED%98%91%EC%97%85%ED%95%98%EA%B8%B0-%F0%9F%91%BE
+Ref: #1"
+```
