@@ -1,11 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_pagebuild/Controller_Main.dart';
-import 'package:flutter_pagebuild/ScreenPage1.dart';
-import 'package:flutter_pagebuild/ScreenPage2.dart';
-import 'package:flutter_pagebuild/ScreenPage3.dart';
-import 'package:flutter_pagebuild/Controller_Main.dart';
+
+import 'package:flutter_pagebuild/controller/RegisController.dart';
+import 'package:flutter_pagebuild/view/DetailVeiw.dart';
+import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -20,19 +17,11 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/',
-          page: () => MyWidget(),
+          page: () => MainView(),
         ),
         GetPage(
           name: '/',
-          page: () => ScreenPage1(),
-        ),
-        GetPage(
-          name: '/',
-          page: () => ScreenPage2(),
-        ),
-        GetPage(
-          name: '/',
-          page: () => ScreenPage3(),
+          page: () => MainView(),
         ),
       ],
     );
@@ -41,14 +30,7 @@ class MyApp extends StatelessWidget {
 
 class login extends StatelessWidget {
   Widget build(BuildContext buildContext) {
-    return Scaffold(
-        body: Center(
-      child: ElevatedButton(
-          child: Text('메인 진입'),
-          onPressed: () {
-            Get.off(MyWidget());
-          }),
-    ));
+    return Scaffold();
   }
 }
 

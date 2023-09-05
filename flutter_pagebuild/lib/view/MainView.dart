@@ -1,38 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-
-class MainView extends StatefulWidget{
-
-//MainView 
-
+class MainView extends StatefulWidget {
 //StatefulWidget용 메서드
+  @override
   _MainViewState createState() => _MainViewState();
 }
 
-class _MainViewState extends State<MainView>{
-
+class _MainViewState extends State<MainView> {
   //이부분이 갱신되는 뷰 - private 으로 지정
-  Widget build(BuildContext context){
-return Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center,
-         children: [
-          Text('현재 : MainView')
-          ElevatedButton(
-              child: Text('DetailView(개인)'),
-              onPressed: () {
-                Get.to(ScreenPage1());
-              }),
-          ElevatedButton(
-              child: Text('StampView'),
-              onPressed: () {
-                Get.to(ScreenPage2());
-              }),
-          ElevatedButton(
-              child: Text('RankView'),
-              onPressed: () {
-                Get.to(ScreenPage3());
-              }),
-        ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('현재 : MainView'),
+            ElevatedButton(
+                child: Text('DetailView(개인)'),
+                onPressed: () {
+                  // controller의 메서드 작동시키기
+                }),
+          ],
+        ),
       ),
     );
   }
