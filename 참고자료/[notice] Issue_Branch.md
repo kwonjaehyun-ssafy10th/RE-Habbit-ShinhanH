@@ -38,3 +38,17 @@
 ## 브랜치 병합하기
 1. `git checkout main` 으로 메인 브랜치로 이동한다.
 2. `git merge {브랜치이름}` 으로 작업 브랜치를 메인 브랜치에 반영한다.
+3. 브랜치 병합이 완료된 후에는 `git branch -d {브랜치이름}` 을 통해 브랜치를 삭제한다.
+    +) d = delete 
+
+<br>
+
+## 머지 시 충돌 관련사항
+[충돌 사례 예시](https://techblog.lotteon.com/git-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EB%A8%B8%EC%A7%80%ED%95%A0-%EB%95%8C-%EC%B6%A9%EB%8F%8C%EC%9D%B4-%EB%B0%9C%EC%83%9D%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%82%AC%EB%A1%80-d72a21c520a5)
+
+생각보다 자동 병합이 잘 된다고 한다! 
+
+만약 conflict 발생하면 충돌 난 사람끼리 협의해서 어떤 버전을 받아들일지 결정하면 된다.  
+-> `Resolve in Merge Editor`에서 진행한다.
+
+수정 후에는 머지한 내역을 한 번 더 커밋하면 끝.
