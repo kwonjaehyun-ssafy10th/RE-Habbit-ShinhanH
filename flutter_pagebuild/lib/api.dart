@@ -1,4 +1,4 @@
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // TERMINAL -> pub add http
@@ -42,20 +42,20 @@ Map<String, dynamic> api = {
   }
 };
 
-Future<http.Response> request(action) async {
-  var path = api[action]['path'];
-  var dataBody = api[action]['dataBody'];
-  final url = Uri.https('shbhack.shinhan.com', path);
-  final response = await http.post(
-    url,
-    headers: {},
-    body: json.encode({
-      "dataHeader": {"apikey": "2023_Shinhan_SSAFY_Hackathon"},
-      "dataBody": dataBody
-    }),
-  );
-  return response;
-}
+// Future<http.Response> request(action) async {
+//   var path = api[action]['path'];
+//   var dataBody = api[action]['dataBody'];
+//   final url = Uri.https('shbhack.shinhan.com', path);
+//   final response = await http.post(
+//     url,
+//     headers: {},
+//     body: json.encode({
+//       "dataHeader": {"apikey": "2023_Shinhan_SSAFY_Hackathon"},
+//       "dataBody": dataBody
+//     }),
+//   );
+//   return response;
+// }
 
 // ElevatedButton(
 //               child: Text('테스트 버튼'),

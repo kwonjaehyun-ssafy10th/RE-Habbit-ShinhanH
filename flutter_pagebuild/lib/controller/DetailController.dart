@@ -1,17 +1,18 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/model/MainModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
-import 'package:flutter_pagebuild/view/RankView.dart';
 
-class RankController extends GetxController {
-  var mainDB = MainModel("RegisControllerTest").obs;
+import 'package:flutter_pagebuild/view/MainView.dart';
+import 'package:flutter_pagebuild/view/DetailView.dart';
+
+class DetailController extends GetxController {
+  var mainDB = MainModel("DetailControllerTest").obs;
 
   void work(String str) {
-    mainDB.value.detailTest = str;
+    mainDB.value.test = str;
     mainDB.refresh();
   }
 
@@ -19,7 +20,7 @@ class RankController extends GetxController {
     Get.to(MainView());
   }
 
-  void showRank() {
-    Get.to(RankView());
+  void showDetail() {
+    Get.to(DetailView());
   }
 }

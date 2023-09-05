@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pagebuild/controller/RankController.dart';
-import 'package:get/get.dart';
-import 'package:flutter_pagebuild/controller/StampController.dart';
 
-class StampView extends StatelessWidget {
+import 'package:get/get.dart';
+import 'package:flutter_pagebuild/controller/DetailController.dart';
+
+class DetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<StampController>();
+    final controller = Get.find<DetailController>();
 
     return Scaffold(
         body: Center(
@@ -15,7 +15,7 @@ class StampView extends StatelessWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Get.find<RankController>().goToMain();
+                Get.find<DetailController>().goToMain();
               },
               child: Text('goToMain'),
             ),
