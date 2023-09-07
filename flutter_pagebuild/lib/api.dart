@@ -93,3 +93,17 @@ void postToFirebase(action) async {
   }
 
 postToFirebase('transfer');
+
+// Future<http.Response> get(action) async {
+//     var path = api[action]['path'];
+//     var dataBody = api[action]['dataBody'];
+//     final url = Uri.https(
+//         'shb-hackton-ad177-default-rtdb.firebaseio.com', path, {
+          
+//         });
+//     final response = await http.get(
+//       url,
+//       headers: {'Content-Type': 'application/json'},
+//     );
+//     return response;
+//   }
