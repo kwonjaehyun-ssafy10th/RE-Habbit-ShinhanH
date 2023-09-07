@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_pagebuild/controller/MainController.dart';
+import 'package:fl_chart/fl_chart.dart';
+
 import 'package:get/get.dart';
 import 'dart:math';
 
@@ -16,16 +18,44 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     final controller = Get.find<MainController>();
 
+    return MaterialApp(
+      title: 'Flutter Chart',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Flutter Chart'),
+      
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
+      
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-            
-              HeaderWidget(),
 
+              const SizedBox(
+                height: 70,
+              ),
               
-              UserWidget(),
+              const HeaderWidget(),
+              const UserWidget(),
 
               // 마이페이지 버튼
               TextButton(
@@ -42,7 +72,6 @@ class _MainViewState extends State<MainView> {
                 child: const Text('마이페이지'),
               ),
 
-              
               // 랭킹 및 현황 버튼들
               Container(
                 child: Row(
@@ -50,7 +79,7 @@ class _MainViewState extends State<MainView> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        controller.goToRank();
+                        // controller.goToRank();
                       },
                       child: Text('랭킹보기'),
                     ),
@@ -59,7 +88,7 @@ class _MainViewState extends State<MainView> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        controller.goToStamp();
+                        // controller.goToStamp();
                       },
                       child: Text('현황보기'),
                     ),
@@ -67,24 +96,25 @@ class _MainViewState extends State<MainView> {
                 ),
 
               ),
-                
-                
-              // 달성률 그래프
-              Expanded(
-                child: ListView(
-                  children: [
-                    // ListView 내부에 원하는 항목들을 추가
-                    ListTile(
-                      title: ChartPage(),
 
-                    ),
-                      
-                    
-                    // 나머지 항목들 추가
-                    
-                  ],
-                ),
+              // 달성률 
+              Stack(
+                children: <Widget>[
+                  PieChartWidget(industrySectors),
+                  const Positioned(
+                    top: 100,
+                    left: 130,
+                    child: Text(
+                      '달성률 : n%',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ),
+                ],
               ),
+              
 
               // 현재 진행중인 챌린지 및 이미지
               Stack(
@@ -103,6 +133,7 @@ class _MainViewState extends State<MainView> {
                   
                   Image.asset(
                     'assets/images/main-image.png',
+                    
                   ),
                 ],
               ),
@@ -116,12 +147,96 @@ class _MainViewState extends State<MainView> {
                   () => Text('${controller.mainBD.value.test}'),
                 ),
               ),
-            
-            
             ],
+          ),
         ),
-     ),  
+      ),
     );
+  }
+}
+
+// 파이차트에 필요한 위젯들
+class SectorRow extends StatelessWidget {
+  const SectorRow(this.sector, {Key? key}) : super(key: key);
+  final Sector sector;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 28,
+          child: CircleAvatar(
+            backgroundColor: sector.color,
+          ),
+        ),
+        const Spacer(),
+        Text(sector.title),
+      ],
+    );
+  }
+}
+
+class Sector {
+  final Color color;
+  final double value;
+  final String title;
+
+  Sector({required this.color, required this.value, required this.title});
+}
+
+
+List<double> get randomNumbers {
+  final Random random = Random();
+  final randomNumbers = <double>[];
+  for (var i = 1; i <= 2; i++) {
+    randomNumbers.add(random.nextDouble() * 100);
+  }
+
+  return randomNumbers;
+}
+
+List<Sector> get industrySectors {
+  return [
+    Sector(
+        color: Color.fromARGB(255, 69, 100, 255),
+        value: randomNumbers[0],
+        title: 'Information Technology'),
+    Sector(
+        color: Color.fromARGB(255, 163, 163, 163),
+        value: randomNumbers[1],
+        title: 'Automobile'),
+    
+  ];
+}
+class PieChartWidget extends StatelessWidget {
+  final List<Sector> sectors;
+
+  const PieChartWidget(this.sectors, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+        aspectRatio: 1.5, // 위치 조절
+        child: PieChart(PieChartData(
+          sections: _chartSections(sectors),
+          centerSpaceRadius: 20.0, // 내부 원 크기 조절
+        )));
+  }
+
+  List<PieChartSectionData> _chartSections(List<Sector> sectors) {
+    final List<PieChartSectionData> list = [];
+    for (var sector in sectors) {
+      const double radius = 70.0; // 전체 원 크기 조절
+      final data = PieChartSectionData(
+        color: sector.color,
+        value: sector.value,
+        radius: radius,
+        title: '',
+      );
+      list.add(data);
+    }
+    return list;
   }
 }
 
@@ -156,88 +271,4 @@ class UserWidget extends StatelessWidget {
           ],
         ); 
   }
-}
-
-// 그래프 위젯
-
-class ChartPage extends StatelessWidget {
-
-  List<double> points = [50, 0, 73, 100,150, 120, 200, 80];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Center(
-          child: CustomPaint( // CustomPaint를 그리고 이 안에 차트를 그려줍니다.. 
-              size: Size(50, 50), // CustomPaint의 크기는 가로 세로 150, 150으로 합니다. 
-              painter: PieChart(),
-                 
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PieChart extends CustomPainter {
-
-  final int percentage = 100; // 달성률 부분
-  final double textScaleFactor = 1;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint() // 화면에 그릴 때 쓸 Paint를 정의합니다. 
-        ..color = Colors.orangeAccent
-        ..strokeWidth = 1.0 // 선의 길이를 정합니다. 
-        ..style = PaintingStyle.stroke // 선의 스타일을 정합니다. stroke면 외곽선만 그리고, fill이면 다 채웁니다. 
-        ..strokeCap = StrokeCap.round; // stroke의 스타일을 정합니다. round를 고르면 stroke의 끝이 둥글게 됩니다. 
-
-    double radius = min(size.width / 2 - paint.strokeWidth / 2 , size.height / 2 - paint.strokeWidth/2); // 원의 반지름을 구함. 선의 굵기에 영향을 받지 않게 보정함. 
-    Offset center = Offset(size.width / 2, size.height/ 2); // 원이 위젯의 가운데에 그려지게 좌표를 정함.
-    canvas.drawCircle(center, radius, paint); // 원을 그림. 
-
-    double arcAngle = 2 * pi * (percentage / 100); // 호(arc)의 각도를 정함. 정해진 각도만큼만 그리도록 함. 
-
-    paint..color = Colors.deepPurpleAccent; // 호를 그릴 때는 색을 바꿔줌. 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi / 2, arcAngle, false, paint); // 호(arc)를 그림.
-
-    drawText(canvas, size, "$percentage / 100"); // 텍스트를 화면에 표시함.
-  }
-
-  // 원의 중앙에 텍스트를 적음.
-  void drawText(Canvas canvas, Size size, String text) {
-    double fontSize = getFontSize(size, text);
-    
-    TextSpan sp = TextSpan(
-      style: TextStyle(
-        fontSize: fontSize, 
-        fontWeight: FontWeight.bold, 
-        color: Colors.black
-      ), 
-      text: text
-    ); // TextSpan은 Text위젯과 거의 동일하다. 
-
-    TextPainter tp = TextPainter(text: sp, textDirection: TextDirection.ltr); 
-
-    tp.layout(); // 필수! 텍스트 페인터에 그려질 텍스트의 크기와 방향를 정함.
-
-    double dx = size.width / 2 - tp.width / 2;
-    double dy = size.height / 2 - tp.height / 2;
-
-    Offset offset = Offset(dx, dy); 
-    tp.paint(canvas, offset);
-  }
-
-  // 화면 크기에 비례하도록 텍스트 폰트 크기를 정함.
-  double getFontSize(Size size, String text) {
-    return size.width / text.length * textScaleFactor;
-  }
-
-  @override
-  bool shouldRepaint(PieChart old) {
-    return old.percentage != percentage;
-  }
-  
 }
