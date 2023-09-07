@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
               // 마이페이지 버튼
               TextButton(
                 onPressed: () {
-                  controller.goToDetail();
+                  // controller.goToDetail();
                 }, 
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
@@ -139,14 +139,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
                   
 
-              ElevatedButton(
-                onPressed: () {
-                  controller.work("test성공");
-                },
-                child: Obx(
-                  () => Text('${controller.mainBD.value.test}'),
-                ),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     controller.work("test성공");
+              //   },
+              //   child: Obx(
+              //     // () => Text('${controller.mainBD.value.test}'),
+              //   ),
+              // ),
             ],
           ),
         ),
