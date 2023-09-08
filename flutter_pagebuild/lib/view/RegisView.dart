@@ -306,31 +306,238 @@ class FourthScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              '당신의 이름은 무엇인가요?',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            
-            TextFieldExample(),
-
-            OutlinedButton(onPressed: (){
-              // 다음 단계로
-              Navigator.of(context).push( //push: 다음 화면을 쌓겠다는 의미
-                CustomRoute(
-                  builder: (BuildContext context) => ThirdScreen(), 
-                  settings: RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
-                ),
-              );
-              
-            }, child: Text('제출'))
+            // 선택지들
+            PeriodDropdownButton(),
+            AmountSlider(),
+            OutlinedButton(
+              onPressed: () {
+                // 다음 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => FifthScreen(),
+                    settings: RouteSettings(),
+                  ),
+                );
+              },
+              child: Text('제출'),
+            )
           ],
-       
         ),
-
-      )
+      ),
     );
   }
 }
 
+// 드롭다운 1 - 기간 설정
+class PeriodDropdownButton extends StatefulWidget {
+  const PeriodDropdownButton({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _PeriodDropdownButtonState();
+}
+
+class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
+  static const menuItems = <String>[
+    '30일',
+  ];
+  final List<DropdownMenuItem<String>> _dropDownMenuItems = menuItems
+      .map(
+        (String value) => DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        ),
+      )
+      .toList();
+
+  final List<PopupMenuItem<String>> _popUpMenuItems = menuItems
+      .map(
+        (String value) => PopupMenuItem<String>(
+          value: value,
+          child: Text(value),
+        ),
+      )
+      .toList();
+
+  String _btn1SelectedVal = '30일';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: const Text(
+            '참여 일수 : ',
+            
+            style: TextStyle(
+              fontSize: 28,
+            ),
+          ),
+          contentPadding: EdgeInsets.all(100),
+          trailing: DropdownButton<String>(
+            // Must be one of items.value.
+            value: _btn1SelectedVal,
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() => _btn1SelectedVal = newValue);
+              }
+            },
+            items: this._dropDownMenuItems,
+          ),
+        ),
+        
+      ],
+    );
+  }
+}
+
+// 슬라이더 - 금액 설정
+class AmountSlider extends StatefulWidget {
+  const AmountSlider({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _AmountSliderState();
+}
+
+class _AmountSliderState extends State<AmountSlider> {
+  double _sliderVal = 10000.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        const Text(
+          '실패시 적금할 금액 설정',
+          style: TextStyle(
+              fontSize: 28,
+            ),),
+        Slider(
+          value: _sliderVal,
+          max: 30000.0,
+          divisions: 30,
+          label: '${_sliderVal.round()}',
+          onChanged: (double value) {
+            setState(() => _sliderVal = value);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// !!! 중간에 적금 계좌 선택하는 부분 빼먹음 !!!
+
+// 다섯번째 화면 - 선택 결과 알려주는 창 
+class FifthScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // 선택지들
+            Text(
+              'Re-Habbit 명세서',
+              style: TextStyle(
+                fontSize: 28,
+              ),
+            ),
+            Text(
+              '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
+              //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
+              
+              style: TextStyle(
+                fontSize: 25,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+
+            OutlinedButton(
+              onPressed: () {
+                // 다음 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => FinalScreen(),
+                    settings: RouteSettings(),
+                  ),
+                );
+              },
+              child: Text(
+                '이대로 생성하기',
+                style: TextStyle(
+                  fontSize: 30,
+                ),  
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 마지막 화면 - 토끼 생성 + 메인으로 입장
+class FinalScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // 선택지들
+            Text(
+              'Re-Habbit 명세서',
+              style: TextStyle(
+                fontSize: 28,
+              ),
+            ),
+            Text(
+              '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
+              //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
+              
+              style: TextStyle(
+                fontSize: 25,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+
+            OutlinedButton(
+              onPressed: () {
+                // 다음 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => FinalScreen(),
+                    settings: RouteSettings(),
+                  ),
+                );
+              },
+              child: Text(
+                '이대로 생성하기',
+                style: TextStyle(
+                  fontSize: 30,
+                ),  
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
