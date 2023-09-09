@@ -4,32 +4,30 @@ import 'package:flutter_pagebuild/controller/RegisController.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 final controller = Get.find<RegisController>();
+
 class RegisView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        appBar: AppBar(
-              title: const HeaderWidget(),
-              centerTitle: true,
-              backgroundColor: Colors.white,
-              toolbarHeight: 130,
-            ),
-
-        body: const SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // 페이지에 들어갈 위젯들
-                StartPage(),
-              ],
-            ),
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: const SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // 페이지에 들어갈 위젯들
+              StartPage(),
+            ],
           ),
         ),
-      );
-    
+      ),
+    );
   }
 }
 
@@ -41,7 +39,8 @@ class HeaderWidget extends StatelessWidget {
   Widget build(context) {
     return Image.asset(
       'assets/images/logo-image.png',
-      height: 150,);
+      height: 150,
+    );
   }
 }
 
@@ -53,46 +52,42 @@ class StartPage extends StatelessWidget {
   Widget build(context) {
     return Center(
       child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              Image.asset(
-                'assets/images/profile-img.png',
-                height: 300,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              SizedBox( 
-                width: 200,
-                height: 100,
-                child: ElevatedButton(
-                
-                  onPressed: () {
-                    Navigator.of(context).push( //push: 다음 화면을 쌓겠다는 의미
-                      CustomRoute(
-    
-                        builder: (BuildContext context) => SecondScreen(), 
-                        settings: RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
-                      ),
-                    );
-                  },
-    
-                  child: const Text(
-                    'Re-Habbit\n생성하기',
-                    style: TextStyle(
-                      fontSize: 30
-                    ),
-                    
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ],
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            height: 50,
           ),
-    ); 
+          Image.asset(
+            'assets/images/profile-img.png',
+            height: 300,
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          SizedBox(
+            width: 200,
+            height: 100,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  //push: 다음 화면을 쌓겠다는 의미
+                  CustomRoute(
+                    builder: (BuildContext context) => SecondScreen(),
+                    settings:
+                        RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
+                  ),
+                );
+              },
+              child: const Text(
+                'Re-Habbit\n생성하기',
+                style: TextStyle(fontSize: 30),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -102,63 +97,57 @@ class SecondScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const HeaderWidget(),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: 130,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '당신의 이름은 무엇인가요?',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            
-            TextFieldExample(),
-
-            OutlinedButton(onPressed: (){
-              // !!! 소비내역 조회하기 !!!
-              // 조회 후 다음 단계로
-              Navigator.of(context).push( //push: 다음 화면을 쌓겠다는 의미
-                CustomRoute(
-                  builder: (BuildContext context) => ThirdScreen(), 
-                  settings: RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
-                ),
-              );
-              
-            }, child: Text('제출'))
-          ],
-       
+        appBar: AppBar(
+          title: const HeaderWidget(),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          toolbarHeight: 130,
         ),
-
-      )
-    );
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '당신의 이름은 무엇인가요?',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              TextFieldExample(),
+              OutlinedButton(
+                  onPressed: () {
+                    // !!! 소비내역 조회하기 !!!
+                    // 조회 후 다음 단계로
+                    Navigator.of(context).push(
+                      //push: 다음 화면을 쌓겠다는 의미
+                      CustomRoute(
+                        builder: (BuildContext context) => ThirdScreen(),
+                        settings:
+                            RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
+                      ),
+                    );
+                  },
+                  child: Text('제출'))
+            ],
+          ),
+        ));
   }
 }
 
 // 화면 전환 커스텀
 class CustomRoute<T> extends MaterialPageRoute<T> {
-
-  CustomRoute({ required WidgetBuilder builder, required RouteSettings settings })
+  CustomRoute({required WidgetBuilder builder, required RouteSettings settings})
       : super(builder: builder, settings: settings);
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    if (settings.name=='/' )
-      return child;
-    
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    if (settings.name == '/') return child;
+
     return SlideTransition(
-        position: Tween<Offset>(
-            begin: Offset(1,0),
-            end: Offset.zero
-        ).animate(animation), 
-        child: child
-    );
+        position: Tween<Offset>(begin: Offset(1, 0), end: Offset.zero)
+            .animate(animation),
+        child: child);
   }
 }
 
@@ -175,7 +164,6 @@ class _TextFieldExampleState extends State<TextFieldExample> {
 
   // Widget _buildNumberTextField() {
   Widget build(BuildContext context) {
-  
     return SizedBox(
       width: 270,
       child: TextField(
@@ -192,7 +180,6 @@ class _TextFieldExampleState extends State<TextFieldExample> {
           final v = val;
           debugPrint('value = $v');
           setState(() => _nameInputIsValid = true);
-          
         },
       ),
     );
@@ -367,7 +354,6 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
         ListTile(
           title: const Text(
             '참여 일수 : ',
-            
             style: TextStyle(
               fontSize: 28,
             ),
@@ -384,7 +370,6 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
             items: this._dropDownMenuItems,
           ),
         ),
-        
       ],
     );
   }
@@ -408,8 +393,9 @@ class _AmountSliderState extends State<AmountSlider> {
         const Text(
           '실패시 적금할 금액 설정',
           style: TextStyle(
-              fontSize: 28,
-            ),),
+            fontSize: 28,
+          ),
+        ),
         Slider(
           value: _sliderVal,
           max: 30000.0,
@@ -426,7 +412,7 @@ class _AmountSliderState extends State<AmountSlider> {
 
 // !!! 중간에 적금 계좌 선택하는 부분 빼먹음 !!!
 
-// 다섯번째 화면 - 선택 결과 알려주는 창 
+// 다섯번째 화면 - 선택 결과 알려주는 창
 class FifthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -451,7 +437,7 @@ class FifthScreen extends StatelessWidget {
             Text(
               '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
               //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
-              
+
               style: TextStyle(
                 fontSize: 25,
               ),
@@ -474,7 +460,7 @@ class FifthScreen extends StatelessWidget {
                 '이대로 생성하기',
                 style: TextStyle(
                   fontSize: 30,
-                ),  
+                ),
               ),
             )
           ],
@@ -509,7 +495,7 @@ class FinalScreen extends StatelessWidget {
             Text(
               '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
               //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
-              
+
               style: TextStyle(
                 fontSize: 25,
               ),
@@ -520,19 +506,20 @@ class FinalScreen extends StatelessWidget {
 
             OutlinedButton(
               onPressed: () {
+                Get.find<RegisController>().goToMain();
                 // 다음 단계로
-                Navigator.of(context).push(
-                  CustomRoute(
-                    builder: (BuildContext context) => FinalScreen(),
-                    settings: RouteSettings(),
-                  ),
-                );
+                // Navigator.of(context).push(
+                //   CustomRoute(
+                //     builder: (BuildContext context) => FinalScreen(),
+                //     settings: RouteSettings(),
+                //   ),
+                // );
               },
               child: Text(
                 '이대로 생성하기',
                 style: TextStyle(
                   fontSize: 30,
-                ),  
+                ),
               ),
             )
           ],

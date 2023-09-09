@@ -1,4 +1,4 @@
-//import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // TERMINAL -> pub add http
@@ -66,33 +66,29 @@ Map<String, dynamic> api = {
 //               })
 
 void postToFirebase(action) async {
-    var path = api[action]['path'];
-    final url = Uri.https(
-        'shb-hackton-ad177-default-rtdb.firebaseio.com', path + ".json");
-    await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        "dataHeader": {
-          "successCode": "0",
-          "resultCode": "",
-          "resultMessage": ""
-        },
-        "dataBody": {
-          "출금계좌번호": "1102008999999",
-          "입금은행코드": "088",
-          "입금계좌번호": "110054999999",
-          "이체금액": "30000",
-          "입금계좌통장메모": "김신한",
-          "출금계좌통장메모": "회비",
-          "거래후잔액": "3542000"
-        }
-      }),
-    );
-    return;
-  }
+  var path = api[action]['path'];
+  final url = Uri.https(
+      'shb-hackton-ad177-default-rtdb.firebaseio.com', path + ".json");
+  await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: json.encode({
+      "dataHeader": {"successCode": "0", "resultCode": "", "resultMessage": ""},
+      "dataBody": {
+        "출금계좌번호": "1102008999999",
+        "입금은행코드": "088",
+        "입금계좌번호": "110054999999",
+        "이체금액": "30000",
+        "입금계좌통장메모": "김신한",
+        "출금계좌통장메모": "회비",
+        "거래후잔액": "3542000"
+      }
+    }),
+  );
+  return;
+}
 
-postToFirebase('transfer');
+//postToFirebase('transfer');
 
 // Future<http.Response> get(action) async {
 //     var path = api[action]['path'];
