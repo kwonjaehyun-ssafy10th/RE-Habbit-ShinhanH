@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/RegisController.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_pagebuild/view/MainView.dart';
 
 final controller = Get.find<RegisController>();
 
@@ -410,64 +411,6 @@ class _AmountSliderState extends State<AmountSlider> {
   }
 }
 
-// !!! 중간에 적금 계좌 선택하는 부분 빼먹음 !!!
-
-// 다섯번째 화면 - 선택 결과 알려주는 창
-class FifthScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const HeaderWidget(),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: 130,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // 선택지들
-            Text(
-              'Re-Habbit 명세서',
-              style: TextStyle(
-                fontSize: 28,
-              ),
-            ),
-            Text(
-              '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
-              //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
-
-              style: TextStyle(
-                fontSize: 25,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-
-            OutlinedButton(
-              onPressed: () {
-                // 다음 단계로
-                Navigator.of(context).push(
-                  CustomRoute(
-                    builder: (BuildContext context) => FinalScreen(),
-                    settings: RouteSettings(),
-                  ),
-                );
-              },
-              child: Text(
-                '이대로 생성하기',
-                style: TextStyle(
-                  fontSize: 30,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 // 마지막 화면 - 토끼 생성 + 메인으로 입장
@@ -485,17 +428,26 @@ class FinalScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 선택지들
             Text(
-              'Re-Habbit 명세서',
+              '축하합니다!',
               style: TextStyle(
                 fontSize: 28,
               ),
             ),
-            Text(
-              '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
-              //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
 
+            SizedBox(
+              height: 50,
+            ),
+            Image.asset(
+              'assets/images/profile-img.png',
+              height: 300,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+
+            Text(
+              '도전을 시작하세요',
               style: TextStyle(
                 fontSize: 25,
               ),
@@ -507,21 +459,83 @@ class FinalScreen extends StatelessWidget {
             OutlinedButton(
               onPressed: () {
                 Get.find<RegisController>().goToMain();
-                // 다음 단계로
-                // Navigator.of(context).push(
-                //   CustomRoute(
-                //     builder: (BuildContext context) => FinalScreen(),
-                //     settings: RouteSettings(),
-                //   ),
-                // );
               },
               child: Text(
-                '이대로 생성하기',
+                '메인으로 가기',
                 style: TextStyle(
                   fontSize: 30,
-                ),
+                ),  
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 적금계좌 클래스 선언
+class Account {
+  Account(this.bank, this.accNum, this.maxAmount);
+  final String bank;
+  final int accNum;
+  final int maxAmount;
+  
+  bool selected = false;
+}
+
+// 데이터 소스
+final List<Account> _accounts = <Account>[
+  Account('신한은행', 1104742313, 300000),
+  Account('카카오뱅크', 7432343242, 200000),
+  Account('우리은행', 2623339834, 200000),
+  Account('새마을금고', 3058831284, 300000),
+  Account('농협은행', 3564775924, 300000),
+];
+
+
+// row 수 만큼 테이블 만들기
+class AccountTable extends StatefulWidget {
+  @override
+  _AccountTableState createState() => _AccountTableState();
+}
+
+class _AccountTableState extends State<AccountTable> {
+  int? selectedRow; // 선택된 로우의 인덱스를 저장하는 변수
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Card(
+        elevation: 4.0,
+        child: Column(
+          children: <Widget>[
+            
+            // ListView.builder를 사용하여 동적으로 아이템 생성
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: _accounts.length,
+              itemBuilder: (context, index) {
+                final account = _accounts[index];
+                return ListTile(
+                  title: Text(account.bank),
+                  subtitle: Text('적금계좌번호: ${account.accNum}'),
+                  trailing: Text('월 최대 납부액: ${account.maxAmount}'),
+                  tileColor: selectedRow == index ? Color.fromARGB(255, 150, 208, 255) : null, // 선택된 로우에 색상 적용
+                  onTap: () {
+                    setState(() {
+                      if (selectedRow == index) {
+                        selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                      } else {
+                        selectedRow = index; // 새로운 로우를 선택
+                      }
+                    });
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
