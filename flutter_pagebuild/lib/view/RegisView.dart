@@ -410,8 +410,136 @@ class _AmountSliderState extends State<AmountSlider> {
     );
   }
 }
+// 다섯번째 화면 - 적금계좌 조회 및 선택
+class FifthScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '연동할 적금 계좌 선택하기',
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            // DataTableExample(),
 
+            AccountTable(),
+
+            SizedBox(
+              height: 20,
+            ),
+
+            OutlinedButton(
+              onPressed: () {
+                // 다음 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => ResultScreen(),
+                    settings: RouteSettings(),
+                  ),
+                );
+              },
+              child: Text(
+                '연동하기',
+                style: TextStyle(
+                  fontSize: 30,
+                ),  
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
+
+// 선택 결과 알려주는 창 
+class ResultScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // 선택지들
+            Text(
+              'Re-Habbit 명세서',
+              style: TextStyle(
+                fontSize: 28,
+              ),
+            ),
+            Text(
+              '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
+              //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
+              
+              style: TextStyle(
+                fontSize: 25,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+
+            // 선택지 1 - 토끼 생성
+            OutlinedButton(
+              onPressed: () {
+                // 다음 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => FinalScreen(),
+                    settings: RouteSettings(),
+                  ),
+                );
+              },
+              child: Text(
+                '이대로 생성하기',
+                style: TextStyle(
+                  fontSize: 30,
+                ),  
+              ),
+            ),
+            // 선택지 2 - 다시 설정하기
+            OutlinedButton(
+              onPressed: () {
+                // 챌린지 선택 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => ThirdScreen(),
+                    settings: RouteSettings(),
+                  ),
+                );
+              },
+              child: Text(
+                '수정하기',
+                style: TextStyle(
+                  fontSize: 30,
+                ),  
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 // 마지막 화면 - 토끼 생성 + 메인으로 입장
 class FinalScreen extends StatelessWidget {

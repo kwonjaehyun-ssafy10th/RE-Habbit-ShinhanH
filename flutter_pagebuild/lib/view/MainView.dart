@@ -13,10 +13,10 @@ class MainView extends StatefulWidget {
   _MainViewState createState() => _MainViewState();
 }
 
+final controller = Get.find<MainController>();
 class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MainController>();
 
     return MaterialApp(
       title: 'Flutter Chart',
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
               // 마이페이지 버튼
               TextButton(
                 onPressed: () {
-                  // controller.goToDetail();
+                  controller.goToDetail();
                 }, 
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // controller.goToRank();
+                        controller.goToRank();
                       },
                       child: Text('랭킹보기'),
                     ),
@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // controller.goToStamp();
+                        controller.goToStamp();
                       },
                       child: Text('현황보기'),
                     ),
