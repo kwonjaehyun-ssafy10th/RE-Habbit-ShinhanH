@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/RegisController.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_pagebuild/view/MainView.dart';
 
 final controller = Get.find<RegisController>();
@@ -83,7 +85,9 @@ class StartPage extends StatelessWidget {
               },
               child: const Text(
                 'Re-Habbit\n생성하기',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(
+                  fontSize: 30,
+                  ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -171,8 +175,10 @@ class _TextFieldExampleState extends State<TextFieldExample> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      
       width: 270,
       child: TextField(
+        
         keyboardType: TextInputType.text,
         style: Theme.of(context).textTheme.titleSmall,
         decoration: InputDecoration(
@@ -193,8 +199,6 @@ class _TextFieldExampleState extends State<TextFieldExample> {
 }
 
 // 세번째 페이지 - 챌린지 선택하기
-// 커피 선택지만 남기고 비활성화 하는 건 나중에 해 볼 예정
-
 class ThirdScreen extends StatefulWidget {
   const ThirdScreen({Key? key}) : super(key: key);
 
@@ -215,7 +219,7 @@ class _ThirdScreenState extends State<ThirdScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Text(
               '참여할 챌린지를 선택하세요',
@@ -223,31 +227,42 @@ class _ThirdScreenState extends State<ThirdScreen> {
                 fontSize: 25,
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            
             ListView(
               shrinkWrap: true,
               children: [0, 1, 2, 3].map((int index) {
+                bool isEnabled = true; // 기본적으로 모든 선택지를 활성화합니다.
+                if (index != 0) {
+                  // '커피 안 마시기' 선택지가 아닌 경우에만 비활성화합니다.
+                  isEnabled = false;
+                }
+
                 return ListTile(
                   leading: Radio<int>(
                     value: index,
                     groupValue: _radioVal,
-                    onChanged: (int? value) {
-                      if (value != null) {
-                        setState(() {
-                          _radioVal = value;
-                        });
-                      }
-                    },
+                    onChanged: isEnabled
+                        ? (int? value) {
+                            if (value != null) {
+                              setState(() {
+                                _radioVal = value;
+                              });
+                            }
+                          }
+                        : null, // isEnabled가 false인 경우, onChanged를 null로 설정하여 비활성화 상태로 만듭니다.
                   ),
                   title: Text(
                     _getLabelText(index),
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: isEnabled ? Colors.black : Colors.grey, // 비활성화된 경우 색상을 변경합니다.
+                    ),
                   ),
                 );
               }).toList(),
             ),
+
+
             OutlinedButton(
               onPressed: () {
                 // 다음 단계로
@@ -299,7 +314,7 @@ class FourthScreen extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // 선택지들
             const PeriodDropdownButton(),
@@ -408,6 +423,7 @@ class _AmountSliderState extends State<AmountSlider> {
           value: _sliderVal,
           max: 30000.0,
           divisions: 30,
+
           label: '${_sliderVal.round()}',
           onChanged: (double value) {
             setState(() => _sliderVal = value);
@@ -487,25 +503,37 @@ class ResultScreen extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // 선택지들
+            SizedBox(
+              height: 50,
+            ),
             const Text(
-              'Re-Habbit 명세서',
+              '===============\n\n** RECEIPT **\n\n===============',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 28,
               ),
             ),
             const Text(
-              '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
+              '\n생성하려는 Re-Habbit이 맞나요?\n\n...........................................................',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            const Text(
+              textAlign: TextAlign.center,
+              '\n시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장\n\n...........................................................',
               //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
               
               style: TextStyle(
-                fontSize: 25,
+                fontSize: 20,
               ),
             ),
-            const SizedBox(
-              height: 20,
+            
+            SizedBox(
+              height: 50,
             ),
 
             // 선택지 1 - 토끼 생성
@@ -522,12 +550,12 @@ class ResultScreen extends StatelessWidget {
               child: const Text(
                 '이대로 생성하기',
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 28,
                 ),  
               ),
             ),
             // 선택지 2 - 다시 설정하기
-            OutlinedButton(
+            TextButton(
               onPressed: () {
                 // 챌린지 선택 단계로
                 Navigator.of(context).push(
@@ -540,7 +568,8 @@ class ResultScreen extends StatelessWidget {
               child: const Text(
                 '수정하기',
                 style: TextStyle(
-                  fontSize: 30,
+                  color: Color.fromARGB(255, 112, 108, 108),
+                  fontSize: 18,
                 ),  
               ),
             )
@@ -650,7 +679,7 @@ class _AccountTableState extends State<AccountTable> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Card(
         elevation: 4.0,
         child: Column(
@@ -664,7 +693,7 @@ class _AccountTableState extends State<AccountTable> {
                 final account = _accounts[index];
                 return ListTile(
                   title: Text(account.bank),
-                  subtitle: Text('적금계좌번호: ${account.accNum}'),
+                  subtitle: Text('계좌번호: ${account.accNum}'),
                   trailing: Text('월 최대 납부액: ${account.maxAmount}'),
                   tileColor: selectedRow == index ? const Color.fromARGB(255, 150, 208, 255) : null, // 선택된 로우에 색상 적용
                   onTap: () {

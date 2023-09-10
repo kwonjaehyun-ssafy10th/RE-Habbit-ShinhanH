@@ -14,7 +14,10 @@ class MyApp extends StatelessWidget {
     Get.lazyPut<RegisController>(() => RegisController());
     return GetMaterialApp(
       title: 'GetX MVC Example',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: '아리따-돋움',
+        ),
       home: RegisView(),
     );
   }
