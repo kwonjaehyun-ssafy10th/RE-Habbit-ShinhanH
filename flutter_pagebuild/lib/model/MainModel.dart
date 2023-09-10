@@ -46,4 +46,12 @@ class MainModel {
   // -1 - 커피o / 적금 x [실패]
   List<int> stampList = [];
   double sucRate = 0.7;
+
+//성공한 일 수를 여기서 계산?
+  int sucDate = 0;
+  int failDate = 0;
+  int savingDate = 0;
+
+
+
 }
