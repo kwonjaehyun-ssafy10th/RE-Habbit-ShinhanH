@@ -14,10 +14,10 @@ class User {
         this.name,
         (random.nextInt(100000) + 100000).toString(),
         "입출금계좌",
-        "자유로운SOL통장",
+        "쏠편한입출금통장",
         100000).toMap());
     accountList.add(Account(this.name,
-        (random.nextInt(100000) + 100000).toString(), "자유적금", "나만의SOL적금", 0).toMap());
+        (random.nextInt(100000) + 100000).toString(), "자유적금", "쏠편한작심3일적금", 0).toMap());
     userCnt++;
   }
 
@@ -26,11 +26,11 @@ class User {
   }
 
   Map<dynamic, dynamic> toMap() {
-    Map<dynamic, dynamic> map = new Map();
+    Map<String, dynamic> map = new Map();
     map['고객명'] = this.name;
-    Map<dynamic, dynamic> temp = new Map();
+    Map<String, dynamic> temp = new Map();
     for (int i = 0; i < this.accountList.length; i++) {
-      temp[i] = this.accountList[i];
+      temp[i.toString()] = this.accountList[i];
     }
     map['계좌목록'] = temp;
     return map;
