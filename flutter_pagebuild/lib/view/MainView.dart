@@ -76,18 +76,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // controller.goToRank();
+                        controller.goToRank();
                       },
-                      child: Text('랭킹보기'),
+                      child: const Text('랭킹보기'),
                     ),
                     const SizedBox(
                       width: 30,
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // controller.goToStamp();
+                        controller.goToStamp();
                       },
-                      child: Text('현황보기'),
+                      child: const Text('현황보기'),
                     ),
                   ],
                 ),
@@ -102,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       left: 130,
                       child: Text(
                         '달성률 :  ${controller.sucRatePer}',
+
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -129,6 +130,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
+
+              // ElevatedButton(
+              //   onPressed: () {
+              //     controller.work("test성공");
+              //   },
+              //   child: Obx(
+              //     // () => Text('${controller.mainBD.value.test}'),
+              //   ),
+              // ),
+
             ],
           ),
         ),
@@ -167,6 +178,7 @@ class Sector {
   Sector({required this.color, required this.value, required this.title});
 }
 
+
 List<Sector> get industrySectors {
   return [
     Sector(
@@ -175,6 +187,7 @@ List<Sector> get industrySectors {
         title: 'Information Technology'),
     Sector(
         color: Color.fromARGB(255, 163, 163, 163),
+
         value: controller.sucRate[1],
         title: 'Automobile'),
   ];

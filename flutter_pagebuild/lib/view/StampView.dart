@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/StampController.dart';
 
 class StampView extends StatelessWidget {
+  const StampView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<StampController>();
@@ -17,14 +19,16 @@ class StampView extends StatelessWidget {
               onPressed: () {
                 Get.find<RankController>().goToMain();
               },
-              child: Text('goToMain'),
+              child: const Text('goToMain'),
             ),
             ElevatedButton(
               onPressed: () {
                 controller.work("test성공");
               },
               child: Obx(
+
                 () => Text('작동안함'),
+
               ),
             ),
           ]),

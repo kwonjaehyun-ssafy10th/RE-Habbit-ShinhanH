@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/DetailController.dart';
 
 class DetailView extends StatelessWidget {
+  const DetailView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<DetailController>();
@@ -17,13 +19,14 @@ class DetailView extends StatelessWidget {
               onPressed: () {
                 Get.find<DetailController>().goToMain();
               },
-              child: Text('goToMain'),
+              child: const Text('goToMain'),
             ),
             ElevatedButton(
                 onPressed: () {
                   //controller.work("test성공");
                 },
                 child: Text('작동안함')),
+
           ]),
     ));
   }

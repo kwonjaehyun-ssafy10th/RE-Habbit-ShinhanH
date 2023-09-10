@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/RegisController.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_pagebuild/view/MainView.dart';
 
 final controller = Get.find<RegisController>();
 
 class RegisView extends StatelessWidget {
+  const RegisView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,9 +75,9 @@ class StartPage extends StatelessWidget {
                 Navigator.of(context).push(
                   //push: 다음 화면을 쌓겠다는 의미
                   CustomRoute(
-                    builder: (BuildContext context) => SecondScreen(),
+                    builder: (BuildContext context) => const SecondScreen(),
                     settings:
-                        RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
+                        const RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
                   ),
                 );
               },
@@ -94,6 +97,8 @@ class StartPage extends StatelessWidget {
 // 두번째 페이지 - 이름 받기
 
 class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,13 +112,13 @@ class SecondScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 '당신의 이름은 무엇인가요?',
                 style: TextStyle(
                   fontSize: 20,
                 ),
               ),
-              TextFieldExample(),
+              const TextFieldExample(),
               OutlinedButton(
                   onPressed: () {
                     // !!! 소비내역 조회하기 !!!
@@ -121,13 +126,13 @@ class SecondScreen extends StatelessWidget {
                     Navigator.of(context).push(
                       //push: 다음 화면을 쌓겠다는 의미
                       CustomRoute(
-                        builder: (BuildContext context) => ThirdScreen(),
+                        builder: (BuildContext context) => const ThirdScreen(),
                         settings:
-                            RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
+                            const RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
                       ),
                     );
                   },
-                  child: Text('제출'))
+                  child: const Text('제출'))
             ],
           ),
         ));
@@ -145,7 +150,7 @@ class CustomRoute<T> extends MaterialPageRoute<T> {
     if (settings.name == '/') return child;
 
     return SlideTransition(
-        position: Tween<Offset>(begin: Offset(1, 0), end: Offset.zero)
+        position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
             .animate(animation),
         child: child);
   }
@@ -163,6 +168,7 @@ class _TextFieldExampleState extends State<TextFieldExample> {
   bool _nameInputIsValid = true;
 
   // Widget _buildNumberTextField() {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 270,
@@ -237,7 +243,7 @@ class _ThirdScreenState extends State<ThirdScreen> {
                   ),
                   title: Text(
                     _getLabelText(index),
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                   ),
                 );
               }).toList(),
@@ -247,12 +253,12 @@ class _ThirdScreenState extends State<ThirdScreen> {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => FourthScreen(),
-                    settings: RouteSettings(),
+                    builder: (BuildContext context) => const FourthScreen(),
+                    settings: const RouteSettings(),
                   ),
                 );
               },
-              child: Text('제출'),
+              child: const Text('제출'),
             )
           ],
         ),
@@ -280,6 +286,8 @@ String _getLabelText(int index) {
 // 네번째 페이지 - 참여일수 및 금액 받기
 
 class FourthScreen extends StatelessWidget {
+  const FourthScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -294,19 +302,19 @@ class FourthScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // 선택지들
-            PeriodDropdownButton(),
-            AmountSlider(),
+            const PeriodDropdownButton(),
+            const AmountSlider(),
             OutlinedButton(
               onPressed: () {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => FifthScreen(),
-                    settings: RouteSettings(),
+                    builder: (BuildContext context) => const FifthScreen(),
+                    settings: const RouteSettings(),
                   ),
                 );
               },
-              child: Text('제출'),
+              child: const Text('제출'),
             )
           ],
         ),
@@ -358,7 +366,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
               fontSize: 28,
             ),
           ),
-          contentPadding: EdgeInsets.all(100),
+          contentPadding: const EdgeInsets.all(100),
           trailing: DropdownButton<String>(
             // Must be one of items.value.
             value: _btn1SelectedVal,
@@ -367,7 +375,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
                 setState(() => _btn1SelectedVal = newValue);
               }
             },
-            items: this._dropDownMenuItems,
+            items: _dropDownMenuItems,
           ),
         ),
       ],
@@ -409,11 +417,10 @@ class _AmountSliderState extends State<AmountSlider> {
     );
   }
 }
-
-// !!! 중간에 적금 계좌 선택하는 부분 빼먹음 !!!
-
-// 다섯번째 화면 - 선택 결과 알려주는 창
+// 다섯번째 화면 - 적금계좌 조회 및 선택
 class FifthScreen extends StatelessWidget {
+  const FifthScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -427,22 +434,17 @@ class FifthScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 선택지들
-            Text(
-              'Re-Habbit 명세서',
+            const Text(
+              '연동할 적금 계좌 선택하기',
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 24,
               ),
             ),
-            Text(
-              '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
-              //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
+            // DataTableExample(),
 
-              style: TextStyle(
-                fontSize: 25,
-              ),
-            ),
-            SizedBox(
+            const AccountTable(),
+
+            const SizedBox(
               height: 20,
             ),
 
@@ -451,16 +453,16 @@ class FifthScreen extends StatelessWidget {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => FinalScreen(),
-                    settings: RouteSettings(),
+                    builder: (BuildContext context) => const ResultScreen(),
+                    settings: const RouteSettings(),
                   ),
                 );
               },
-              child: Text(
-                '이대로 생성하기',
+              child: const Text(
+                '연동하기',
                 style: TextStyle(
                   fontSize: 30,
-                ),
+                ),  
               ),
             )
           ],
@@ -470,8 +472,10 @@ class FifthScreen extends StatelessWidget {
   }
 }
 
-// 마지막 화면 - 토끼 생성 + 메인으로 입장
-class FinalScreen extends StatelessWidget {
+// 선택 결과 알려주는 창 
+class ResultScreen extends StatelessWidget {
+  const ResultScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -486,42 +490,195 @@ class FinalScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // 선택지들
-            Text(
+            const Text(
               'Re-Habbit 명세서',
               style: TextStyle(
                 fontSize: 28,
               ),
             ),
-            Text(
+            const Text(
               '시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장',
               //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
-
+              
               style: TextStyle(
                 fontSize: 25,
               ),
             ),
-            SizedBox(
+            const SizedBox(
+              height: 20,
+            ),
+
+            // 선택지 1 - 토끼 생성
+            OutlinedButton(
+              onPressed: () {
+                // 다음 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => const FinalScreen(),
+                    settings: const RouteSettings(),
+                  ),
+                );
+              },
+              child: const Text(
+                '이대로 생성하기',
+                style: TextStyle(
+                  fontSize: 30,
+                ),  
+              ),
+            ),
+            // 선택지 2 - 다시 설정하기
+            OutlinedButton(
+              onPressed: () {
+                // 챌린지 선택 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => const ThirdScreen(),
+                    settings: const RouteSettings(),
+                  ),
+                );
+              },
+              child: const Text(
+                '수정하기',
+                style: TextStyle(
+                  fontSize: 30,
+                ),  
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+// 마지막 화면 - 토끼 생성 + 메인으로 입장
+class FinalScreen extends StatelessWidget {
+  const FinalScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              '축하합니다!',
+              style: TextStyle(
+                fontSize: 28,
+              ),
+            ),
+
+            const SizedBox(
+              height: 50,
+            ),
+            Image.asset(
+              'assets/images/profile-img.png',
+              height: 300,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+
+            const Text(
+              '도전을 시작하세요',
+              style: TextStyle(
+                fontSize: 25,
+              ),
+            ),
+            const SizedBox(
               height: 20,
             ),
 
             OutlinedButton(
               onPressed: () {
                 Get.find<RegisController>().goToMain();
-                // 다음 단계로
-                // Navigator.of(context).push(
-                //   CustomRoute(
-                //     builder: (BuildContext context) => FinalScreen(),
-                //     settings: RouteSettings(),
-                //   ),
-                // );
               },
-              child: Text(
-                '이대로 생성하기',
+              child: const Text(
+                '메인으로 가기',
                 style: TextStyle(
                   fontSize: 30,
-                ),
+                ),  
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 적금계좌 클래스 선언
+class Account {
+  Account(this.bank, this.accNum, this.maxAmount);
+  final String bank;
+  final int accNum;
+  final int maxAmount;
+  
+  bool selected = false;
+}
+
+// 데이터 소스
+final List<Account> _accounts = <Account>[
+  Account('신한은행', 1104742313, 300000),
+  Account('카카오뱅크', 7432343242, 200000),
+  Account('우리은행', 2623339834, 200000),
+  Account('새마을금고', 3058831284, 300000),
+  Account('농협은행', 3564775924, 300000),
+];
+
+
+// row 수 만큼 테이블 만들기
+class AccountTable extends StatefulWidget {
+  const AccountTable({super.key});
+
+  @override
+  _AccountTableState createState() => _AccountTableState();
+}
+
+class _AccountTableState extends State<AccountTable> {
+  int? selectedRow; // 선택된 로우의 인덱스를 저장하는 변수
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Card(
+        elevation: 4.0,
+        child: Column(
+          children: <Widget>[
+            
+            // ListView.builder를 사용하여 동적으로 아이템 생성
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: _accounts.length,
+              itemBuilder: (context, index) {
+                final account = _accounts[index];
+                return ListTile(
+                  title: Text(account.bank),
+                  subtitle: Text('적금계좌번호: ${account.accNum}'),
+                  trailing: Text('월 최대 납부액: ${account.maxAmount}'),
+                  tileColor: selectedRow == index ? const Color.fromARGB(255, 150, 208, 255) : null, // 선택된 로우에 색상 적용
+                  onTap: () {
+                    setState(() {
+                      if (selectedRow == index) {
+                        selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                      } else {
+                        selectedRow = index; // 새로운 로우를 선택
+                      }
+                    });
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
