@@ -64,6 +64,19 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: 아리따-돋움
+      fonts:
+        - asset: assets/fonts/아리따-돋움(OTF)-Bold.otf
+          weight: 500
+        - asset: assets/fonts/아리따-돋움(OTF)-SemiBold.otf
+          weight: 400
+        - asset: assets/fonts/아리따-돋움(OTF)-Medium.otf
+          weight: 300
+        - asset: assets/fonts/아리따-돋움(OTF)-Light.otf
+          weight: 200
+        - asset: assets/fonts/아리따-돋움(OTF)-Thin.otf
+          weight: 100
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/.
