@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_pagebuild/controller/MainController.dart';
-import 'package:fl_chart/fl_chart.dart';
+// import 'package:fl_chart/fl_chart.dart';
 
 import 'package:get/get.dart';
 import 'dart:math';
+import 'package:pie_chart/pie_chart.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -78,7 +79,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         controller.goToRank();
                       },
-                      child: const Text('랭킹보기'),
+                      child: const Text(
+                        '랭킹보기',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color?>(Color.fromARGB(255, 233, 255, 133)),
+                      ),
                     ),
                     const SizedBox(
                       width: 30,
@@ -87,28 +95,56 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         controller.goToStamp();
                       },
-                      child: const Text('현황보기'),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color?>(Color.fromARGB(255, 197, 255, 249)),
+                      ),
+                      child: const Text(
+                        '현황보기',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),),
                     ),
                   ],
                 ),
               ),
 
-              // 달성률
-              Stack(
-                children: <Widget>[
-                  PieChartWidget(industrySectors),
-                  Positioned(
-                      top: 100,
-                      left: 130,
-                      child: Text(
-                        '달성률 :  ${controller.sucRatePer}',
-
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                ],
+              // 달성률 차트
+              Text(
+                '현재 달성률 🏃‍♀️ | 90%',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+                
+              PieChart(
+                dataMap: dataMap,
+                animationDuration: Duration(milliseconds: 800),
+                colorList: colorList,
+                chartLegendSpacing: 20,
+                chartRadius: MediaQuery.of(context).size.width / 2,
+                initialAngleInDegree: 0,
+                ringStrokeWidth: 32,
+                
+                legendOptions: const LegendOptions(
+                  showLegendsInRow: false,
+                  legendPosition: LegendPosition.right,
+                  showLegends: true,
+                
+                ),
+                chartValuesOptions: const ChartValuesOptions(
+                  showChartValueBackground: false,
+                  showChartValues: true,
+                  showChartValuesInPercentage: true,
+                  showChartValuesOutside: false,
+                  decimalPlaces: 1,
+                  chartValueStyle: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  )
+                ),
               ),
 
               // 현재 진행중인 챌린지 및 이미지
@@ -148,81 +184,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-// 파이차트에 필요한 위젯들
-class SectorRow extends StatelessWidget {
-  const SectorRow(this.sector, {Key? key}) : super(key: key);
-  final Sector sector;
+// 파이차트 데이터 
+Map<String, double> dataMap = {
+    "챌린지성공": 80.0,
+    "적금": 10.0,
+    "실패": 10.0,
+  };
+ 
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 28,
-          child: CircleAvatar(
-            backgroundColor: sector.color,
-          ),
-        ),
-        const Spacer(),
-        Text(sector.title),
-      ],
-    );
-  }
-}
+// 파이차트 색상
+final colorList = <Color>[
+  Color.fromARGB(255, 68, 136, 255),
+  Color.fromARGB(255, 148, 218, 255),
+  Color.fromARGB(255, 157, 157, 157),
+];
 
-class Sector {
-  final Color color;
-  final double value;
-  final String title;
-
-  Sector({required this.color, required this.value, required this.title});
-}
-
-
-List<Sector> get industrySectors {
-  return [
-    Sector(
-        color: Color.fromARGB(255, 69, 100, 255),
-        value: controller.sucRate[0],
-        title: 'Information Technology'),
-    Sector(
-        color: Color.fromARGB(255, 163, 163, 163),
-
-        value: controller.sucRate[1],
-        title: 'Automobile'),
-  ];
-}
-
-class PieChartWidget extends StatelessWidget {
-  final List<Sector> sectors;
-
-  const PieChartWidget(this.sectors, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-        aspectRatio: 1.5, // 위치 조절
-        child: PieChart(PieChartData(
-          sections: _chartSections(sectors),
-          centerSpaceRadius: 20.0, // 내부 원 크기 조절
-        )));
-  }
-
-  List<PieChartSectionData> _chartSections(List<Sector> sectors) {
-    final List<PieChartSectionData> list = [];
-    for (var sector in sectors) {
-      const double radius = 70.0; // 전체 원 크기 조절
-      final data = PieChartSectionData(
-        color: sector.color,
-        value: sector.value,
-        radius: radius,
-        title: '',
-      );
-      list.add(data);
-    }
-    return list;
-  }
-}
 
 // 헤더위젯
 class HeaderWidget extends StatelessWidget {
