@@ -44,13 +44,18 @@ class resetMainModel with ChangeNotifier {
 
   void updateMainModel() {}
 
-  void setPieChartMap() {}
+  void setPieChartMap() {
+
+//파이 차트에 필요한 내용만 업데이트
+//provider 콜 함수
+
+  }
 
 //성공률 리스트
   Map<String, double> get sucRate {
-    List<double> sucRatelist = [];
+
     Map<String, double> testMap = {
-      'suc': 60.0,
+      'suc': 50.0,
       'fail': (100.0 - 60.0),
       'savings': (10.0),
     };
