@@ -49,12 +49,8 @@ class resetMainModel with ChangeNotifier {
 //성공률 리스트
   Map<String, double> get sucRate {
     List<double> sucRatelist = [];
-    sucRatelist.add(MainModel.inst.sucRate);
-    sucRatelist.add(1 - MainModel.inst.sucRate - 0.1);
-    sucRatelist.add(0.1);
-
     Map<String, double> testMap = {
-      'suc': 70.0,
+      'suc': 60.0,
       'fail': (100.0 - 60.0),
       'savings': (10.0),
     };
