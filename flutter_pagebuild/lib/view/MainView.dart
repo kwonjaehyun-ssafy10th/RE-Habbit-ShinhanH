@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         controller.goToRank();
                       },
-                      child: Text('랭킹보기'),
+                      child: const Text('랭킹보기'),
                     ),
                     const SizedBox(
                       width: 30,
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         controller.goToStamp();
                       },
-                      child: Text('현황보기'),
+                      child: const Text('현황보기'),
                     ),
                   ],
                 ),
@@ -199,11 +199,11 @@ List<double> get randomNumbers {
 List<Sector> get industrySectors {
   return [
     Sector(
-        color: Color.fromARGB(255, 69, 100, 255),
+        color: const Color.fromARGB(255, 69, 100, 255),
         value: randomNumbers[0],
         title: 'Information Technology'),
     Sector(
-        color: Color.fromARGB(255, 163, 163, 163),
+        color: const Color.fromARGB(255, 163, 163, 163),
         value: randomNumbers[1],
         title: 'Automobile'),
     

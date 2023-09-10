@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
 
 class RankView extends StatelessWidget {
+  const RankView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<RankController>();
@@ -16,14 +18,14 @@ class RankView extends StatelessWidget {
               onPressed: () {
                 Get.find<RankController>().goToMain();
               },
-              child: Text('goToMain'),
+              child: const Text('goToMain'),
             ),
             ElevatedButton(
               onPressed: () {
                 controller.work("test성공");
               },
               child: Obx(
-                () => Text('${controller.mainDB.value.detailTest}'),
+                () => Text(controller.mainDB.value.detailTest),
               ),
             ),
           ]),
