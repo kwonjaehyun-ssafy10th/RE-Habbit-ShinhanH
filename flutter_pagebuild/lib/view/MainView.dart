@@ -13,18 +13,17 @@ class MainView extends StatefulWidget {
   _MainViewState createState() => _MainViewState();
 }
 
+final controller = Get.find<MainController>();
+
 class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MainController>();
-
     return MaterialApp(
       title: 'Flutter Chart',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Chart'),
-      
     );
   }
 }
@@ -42,26 +41,24 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-
               const SizedBox(
                 height: 70,
               ),
-              
+
               const HeaderWidget(),
               const UserWidget(),
 
               // 마이페이지 버튼
               TextButton(
                 onPressed: () {
-                  // controller.goToDetail();
-                }, 
+                  controller.goToDetail();
+                },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                   textStyle: const TextStyle(
@@ -94,27 +91,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ],
                 ),
-
               ),
 
-              // 달성률 
+              // 달성률
               Stack(
                 children: <Widget>[
                   PieChartWidget(industrySectors),
-                  const Positioned(
-                    top: 100,
-                    left: 130,
-                    child: Text(
-                      '달성률 : n%',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ),
+                  Positioned(
+                      top: 100,
+                      left: 130,
+                      child: Text(
+                        '달성률 :  ${controller.sucRatePer}',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
                 ],
               ),
-              
 
               // 현재 진행중인 챌린지 및 이미지
               Stack(
@@ -123,30 +117,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     top: 100,
                     left: 150,
                     child: Text(
-                    '커피 사먹지 않기 진행 중...',
-                    // '${challenge_name} 진행중'
+                      '커피 사먹지 않기 진행 중...',
+                      // '${challenge_name} 진행중'
                       style: TextStyle(
                         fontSize: 20,
                       ),
                     ),
                   ),
-                  
                   Image.asset(
                     'assets/images/main-image.png',
-                    
                   ),
                 ],
               ),
-                  
-
-              // ElevatedButton(
-              //   onPressed: () {
-              //     controller.work("test성공");
-              //   },
-              //   child: Obx(
-              //     // () => Text('${controller.mainBD.value.test}'),
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -185,30 +167,19 @@ class Sector {
   Sector({required this.color, required this.value, required this.title});
 }
 
-
-List<double> get randomNumbers {
-  final Random random = Random();
-  final randomNumbers = <double>[];
-  for (var i = 1; i <= 2; i++) {
-    randomNumbers.add(random.nextDouble() * 100);
-  }
-
-  return randomNumbers;
-}
-
 List<Sector> get industrySectors {
   return [
     Sector(
         color: Color.fromARGB(255, 69, 100, 255),
-        value: randomNumbers[0],
+        value: controller.sucRate[0],
         title: 'Information Technology'),
     Sector(
         color: Color.fromARGB(255, 163, 163, 163),
-        value: randomNumbers[1],
+        value: controller.sucRate[1],
         title: 'Automobile'),
-    
   ];
 }
+
 class PieChartWidget extends StatelessWidget {
   final List<Sector> sectors;
 
@@ -246,9 +217,7 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return const Text(
-      '[캐치프레이즈] 좋은 습관이 ~~ '
-        ); 
+    return const Text('[캐치프레이즈] 좋은 습관이 ~~ ');
   }
 }
 
@@ -259,16 +228,16 @@ class UserWidget extends StatelessWidget {
   @override
   Widget build(context) {
     return const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '시계토끼 님',
-              // '${user_name} 님'
-              style: TextStyle(
-                fontSize: 28,
-              ),
-            ),
-          ],
-        ); 
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '시계토끼 님',
+          // '${user_name} 님'
+          style: TextStyle(
+            fontSize: 28,
+          ),
+        ),
+      ],
+    );
   }
 }

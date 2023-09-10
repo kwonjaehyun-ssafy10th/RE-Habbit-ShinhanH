@@ -9,12 +9,12 @@ import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:flutter_pagebuild/view/DetailView.dart';
 
 class DetailController extends GetxController {
-  var mainDB = MainModel("DetailControllerTest").obs;
+  //var mainDB = MainModel("DetailControllerTest").obs;
 
-  void work(String str) {
-    mainDB.value.test = str;
-    mainDB.refresh();
-  }
+  //void work(String str) {
+  //mainDB.value.test = str;
+  //mainDB.refresh();
+  //}
 
   void goToMain() {
     Get.to(MainView());

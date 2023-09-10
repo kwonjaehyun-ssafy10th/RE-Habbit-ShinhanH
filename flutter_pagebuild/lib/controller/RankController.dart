@@ -8,12 +8,12 @@ import 'package:flutter_pagebuild/controller/MainController.dart';
 import 'package:flutter_pagebuild/view/RankView.dart';
 
 class RankController extends GetxController {
-  var mainDB = MainModel("RegisControllerTest").obs;
+  // var mainDB = MainModel("RegisControllerTest").obs;
 
-  void work(String str) {
-    mainDB.value.detailTest = str;
-    mainDB.refresh();
-  }
+  // void work(String str) {
+  //   mainDB.value.detailTest = str;
+  //   mainDB.refresh();
+  // }
 
   void goToMain() {
     Get.to(MainView());
