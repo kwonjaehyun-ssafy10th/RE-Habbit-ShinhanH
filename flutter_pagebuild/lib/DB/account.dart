@@ -4,7 +4,7 @@ class Account {
   String type = "";
   String title = "";
   int balance = 0;
-  List<dynamic> transaction = [];
+  List<dynamic> transactionList = [];
 
   Account(this.name, this.accountNo, this.type, this.title, this.balance);
 
