@@ -1,5 +1,24 @@
 import 'package:get/get.dart';
 
+class User {
+  User.privateConstructor();
+  static final User _instUser = User.privateConstructor();
+
+  //사용자명
+  String username = '';
+
+  //챌린지명
+  String challengeName = '';
+
+  //챌린지 명 -> 챌린지에서 걸러낼 단어 목록
+  //카페, 커피, 스타벅스...등
+  //주기적으로 갱신 필요
+
+  //계좌 정보 - 출금 & 적금
+  String chkAccount = '1234';
+  String savings = '1234';
+}
+
 class MainModel {
   //Model도 싱글턴으로 구현
   MainModel.privateConstructor();
@@ -9,12 +28,8 @@ class MainModel {
   static MainModel get inst => _inst;
   //-- 여기가 싱글턴 패턴 구현 파트
 
-  String test = "";
-
-  // String detailTest = "detailTest";
-  // String rankTest = "rankTest";
-  // String stampTest = "stampTest";
-
+//사용자 정보 객체
+  User user = User._instUser;
   //데이터 종류
 
   //성공율
