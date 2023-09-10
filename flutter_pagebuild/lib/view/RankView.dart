@@ -20,14 +20,9 @@ class RankView extends StatelessWidget {
               },
               child: const Text('goToMain'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                controller.work("test성공");
-              },
-              child: Obx(
-                () => Text(controller.mainDB.value.detailTest),
-              ),
-            ),
+
+            ElevatedButton(onPressed: () {}, child: Text('작동 안함')),
+
           ]),
     ));
   }

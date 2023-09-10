@@ -97,11 +97,12 @@ class _MyHomePageState extends State<MyHomePage> {
               Stack(
                 children: <Widget>[
                   PieChartWidget(industrySectors),
-                  const Positioned(
+                  Positioned(
                       top: 100,
                       left: 130,
                       child: Text(
-                        '달성률 : n%',
+                        '달성률 :  ${controller.sucRatePer}',
+
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -138,6 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
               //     // () => Text('${controller.mainBD.value.test}'),
               //   ),
               // ),
+
             ],
           ),
         ),
@@ -176,24 +178,16 @@ class Sector {
   Sector({required this.color, required this.value, required this.title});
 }
 
-List<double> get randomNumbers {
-  final Random random = Random();
-  final randomNumbers = <double>[];
-  for (var i = 1; i <= 2; i++) {
-    randomNumbers.add(random.nextDouble() * 100);
-  }
-
-  return randomNumbers;
-}
 
 List<Sector> get industrySectors {
   return [
     Sector(
-        color: const Color.fromARGB(255, 69, 100, 255),
+        color: Color.fromARGB(255, 69, 100, 255),
         value: controller.sucRate[0],
         title: 'Information Technology'),
     Sector(
-        color: const Color.fromARGB(255, 163, 163, 163),
+        color: Color.fromARGB(255, 163, 163, 163),
+
         value: controller.sucRate[1],
         title: 'Automobile'),
   ];

@@ -22,13 +22,11 @@ class DetailView extends StatelessWidget {
               child: const Text('goToMain'),
             ),
             ElevatedButton(
-              onPressed: () {
-                controller.work("test성공");
-              },
-              child: Obx(
-                () => Text(controller.mainDB.value.detailTest),
-              ),
-            ),
+                onPressed: () {
+                  //controller.work("test성공");
+                },
+                child: Text('작동안함')),
+
           ]),
     ));
   }

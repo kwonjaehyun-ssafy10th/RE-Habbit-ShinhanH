@@ -26,7 +26,9 @@ class StampView extends StatelessWidget {
                 controller.work("test성공");
               },
               child: Obx(
-                () => const Text('작동안함'),
+
+                () => Text('작동안함'),
+
               ),
             ),
           ]),

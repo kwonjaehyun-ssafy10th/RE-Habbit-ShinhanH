@@ -22,15 +22,28 @@ class MainController extends GetxController {
     Get.lazyPut<StampController>(() => StampController());
   }
 
-  var mainBD = MainModel("MainControllerTest").obs;
-  void work(String str) {
-    mainBD.value.test = str;
-    mainBD.refresh();
-  }
-
 //장면 보여주는 뷰
   void showMain() {
-    Get.to(MainView());
+    Get.to(const MainView());
+  }
+
+//원형 그래프
+
+  void updateMainModel() {
+// 여기서 모델 업데이트
+  }
+
+//성공률 리스트
+  List<double> get sucRate {
+    List<double> sucRatelist = [];
+    sucRatelist.add(MainModel.inst.sucRate);
+    sucRatelist.add(1 - MainModel.inst.sucRate);
+    return sucRatelist;
+  }
+
+  int get sucRatePer {
+    int rate = ((MainModel.inst.sucRate) * 100).toInt();
+    return rate;
   }
 
 //하단부 -  컨트롤러들
