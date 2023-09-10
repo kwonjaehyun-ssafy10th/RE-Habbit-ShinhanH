@@ -134,7 +134,7 @@ class Stamps extends StatelessWidget {
       children: List.generate(5, (index) {
         return Center(
           child: Container(
-            child: Image.asset('assets/images/carrot-stamp.png'),
+            child: Image.asset('assets/images/rabbit-stamp.png'),
           ),
         );
       }),
