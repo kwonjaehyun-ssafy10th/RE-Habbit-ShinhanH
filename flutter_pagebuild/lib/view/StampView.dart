@@ -32,7 +32,14 @@ class StampView extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 30,
+              height: 10,
+            ),
+            Text(
+              '🥕 현재 당근 수 2개 🥕',
+              // '현재 당근 수 {$carrotCnt}개'
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
 
             // 달력 위젯
