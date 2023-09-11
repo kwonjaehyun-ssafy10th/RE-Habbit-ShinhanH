@@ -13,22 +13,36 @@ class RegisView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const HeaderWidget(),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: 130,
+    return MaterialApp(
+      theme: ThemeData(
+        fontFamily: '아리따-돋움',
       ),
-      body: const SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // 페이지에 들어갈 위젯들
-              StartPage(),
-            ],
+      home: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage('assets/images/background-img.png'), // 배경 이미지
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: const HeaderWidget(),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            toolbarHeight: 130,
+          ),
+          body: const SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // 페이지에 들어갈 위젯들
+                  StartPage(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -42,9 +56,12 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(context) {
+  //   double screenHeight = MediaQuery.of(context).size.height;
+  //   double appbarHeight = screenHeight * 0.15;
+
     return Image.asset(
       'assets/images/logo-image.png',
-      height: 150,
+      height: 100,
     );
   }
 }
@@ -55,41 +72,53 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double buttonHeight = screenHeight * 0.1;
+    double imageHeight = screenHeight * 0.4;
+    double startHeight = screenHeight * 0.15;
+
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Image.asset(
-            'assets/images/profile-img.png',
-            height: 300,
-          ),
-          const SizedBox(
-            height: 30,
+          SizedBox(
+            height: startHeight,
           ),
           SizedBox(
+            height: buttonHeight,
             width: 200,
-            height: 100,
-            child: ElevatedButton(
+            child: MaterialButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              color: Colors.blue,
+              highlightColor: Color.fromARGB(255, 0, 72, 255),
+              // 클릭시 색상 다르게 표현
               onPressed: () {
                 Navigator.of(context).push(
-                  //push: 다음 화면을 쌓겠다는 의미
                   CustomRoute(
                     builder: (BuildContext context) => const SecondScreen(),
-                    settings:
-                        const RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
+                    settings: const RouteSettings(),
                   ),
                 );
               },
+                
               child: const Text(
                 'Re-Habbit\n생성하기',
                 style: TextStyle(
                   fontSize: 30,
-                  ),
+                  color: Colors.white,
+                ),
                 textAlign: TextAlign.center,
               ),
+            ),
+          ),
+         
+          SizedBox(
+            height: imageHeight,
+            child: Image.asset(
+              'assets/images/profile-img.png',
+              height: 300,
             ),
           ),
         ],
@@ -103,14 +132,17 @@ class StartPage extends StatelessWidget {
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});
 
-  @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double appbarHeight = screenHeight * 0.15;
+    double blankHeight = screenHeight * 0.03;
+
     return Scaffold(
         appBar: AppBar(
-          title: const HeaderWidget(),
+          title: HeaderWidget(),
           centerTitle: true,
           backgroundColor: Colors.white,
-          toolbarHeight: 130,
+          toolbarHeight: appbarHeight,
         ),
         body: Center(
           child: Column(
@@ -122,7 +154,13 @@ class SecondScreen extends StatelessWidget {
                   fontSize: 20,
                 ),
               ),
+              SizedBox(
+                height: blankHeight,
+              ),
               const TextFieldExample(),
+              SizedBox(
+                height: blankHeight,
+              ),
               OutlinedButton(
                   onPressed: () {
                     // !!! 소비내역 조회하기 !!!
@@ -174,9 +212,12 @@ class _TextFieldExampleState extends State<TextFieldExample> {
   // Widget _buildNumberTextField() {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double textWidth = screenWidth * 0.7;
     return SizedBox(
       
-      width: 270,
+      width: textWidth,
       child: TextField(
         
         keyboardType: TextInputType.text,
@@ -210,6 +251,12 @@ class _ThirdScreenState extends State<ThirdScreen> {
   int _radioVal = 0;
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double blankHeight = screenHeight * 0.05;
+    double itemWidth = screenWidth * 0.8;
+
+
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
@@ -219,7 +266,7 @@ class _ThirdScreenState extends State<ThirdScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
               '참여할 챌린지를 선택하세요',
@@ -227,41 +274,50 @@ class _ThirdScreenState extends State<ThirdScreen> {
                 fontSize: 25,
               ),
             ),
+            SizedBox(
+              height: blankHeight,
+            ),
+            SizedBox(
+              width: itemWidth,
+              child: ListView(
+                shrinkWrap: true,
+                children: [0, 1, 2, 3].map((int index) {
+                  bool isEnabled = true; // 기본적으로 모든 선택지를 활성화합니다.
+                  if (index != 0) {
+                    // '커피 안 마시기' 선택지가 아닌 경우에만 비활성화합니다.
+                    isEnabled = false;
+                  }
             
-            ListView(
-              shrinkWrap: true,
-              children: [0, 1, 2, 3].map((int index) {
-                bool isEnabled = true; // 기본적으로 모든 선택지를 활성화합니다.
-                if (index != 0) {
-                  // '커피 안 마시기' 선택지가 아닌 경우에만 비활성화합니다.
-                  isEnabled = false;
-                }
-
-                return ListTile(
-                  leading: Radio<int>(
-                    value: index,
-                    groupValue: _radioVal,
-                    onChanged: isEnabled
-                        ? (int? value) {
-                            if (value != null) {
-                              setState(() {
-                                _radioVal = value;
-                              });
-                            }
-                          }
-                        : null, // isEnabled가 false인 경우, onChanged를 null로 설정하여 비활성화 상태로 만듭니다.
-                  ),
-                  title: Text(
-                    _getLabelText(index),
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: isEnabled ? Colors.black : Colors.grey, // 비활성화된 경우 색상을 변경합니다.
-                    ),
-                  ),
-                );
-              }).toList(),
+                  return ListTile(
+                      leading: Radio<int>(
+                        value: index,
+                        groupValue: _radioVal,
+                        onChanged: isEnabled
+                            ? (int? value) {
+                                if (value != null) {
+                                  setState(() {
+                                    _radioVal = value;
+                                  });
+                                }
+                              }
+                            : null, // isEnabled가 false인 경우, onChanged를 null로 설정하여 비활성화 상태로 만듭니다.
+                      ),
+                      title: Text(
+                        _getLabelText(index),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: isEnabled ? Colors.black : Colors.grey, // 비활성화된 경우 색상을 변경합니다.
+                        ),
+                      ),
+                    );
+                  
+                }).toList(),
+              ),
             ),
 
+            SizedBox(
+              height: blankHeight,
+            ),
 
             OutlinedButton(
               onPressed: () {
@@ -305,6 +361,14 @@ class FourthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double blankHeight = screenHeight * 0.05;
+    double startHeight = screenHeight * 0.2;
+
+    double contentWidth = screenWidth * 0.8;
+
+    
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
@@ -316,9 +380,26 @@ class FourthScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(
+              height: startHeight,
+            ),
             // 선택지들
-            const PeriodDropdownButton(),
-            const AmountSlider(),
+            SizedBox(
+              width: contentWidth,
+              child: Column(
+                children: [
+                  PeriodDropdownButton(),
+                  SizedBox(
+                    height: blankHeight,
+                  ),
+                  AmountSlider(),
+                ],
+              )
+            ),
+            
+            SizedBox(
+              height: blankHeight,
+            ),
             OutlinedButton(
               onPressed: () {
                 // 다음 단계로
@@ -378,10 +459,10 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
           title: const Text(
             '참여 일수 : ',
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 25,
             ),
           ),
-          contentPadding: const EdgeInsets.all(100),
+          
           trailing: DropdownButton<String>(
             // Must be one of items.value.
             value: _btn1SelectedVal,
@@ -416,15 +497,18 @@ class _AmountSliderState extends State<AmountSlider> {
         const Text(
           '실패시 적금할 금액 설정',
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 25,
           ),
         ),
         Slider(
           value: _sliderVal,
           max: 30000.0,
           divisions: 30,
+          
 
           label: '${_sliderVal.round()}',
+          // 이것도 제출하면 state 바꾸도록하기
+          // 설정한 금액도 띄워보자
           onChanged: (double value) {
             setState(() => _sliderVal = value);
           },
