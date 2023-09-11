@@ -132,9 +132,22 @@ class Stamps extends StatelessWidget {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
       children: List.generate(5, (index) {
+        String imageName;
+        if (index == 0) {
+          imageName = 'assets/images/rabbit-stamp.png'; // 첫 번째 이미지
+        } else if (index == 1) {
+          imageName = 'assets/images/rabbit-stamp.png'; // 두 번째 이미지
+        } else if (index == 2) {
+          imageName = 'assets/images/rabbit-stamp.png'; // 세 번째 이미지
+        } else if (index == 3) {
+          imageName = 'assets/images/carrot-stamp.png'; // 네 번째 이미지
+        } else {
+          imageName = 'assets/images/carrot-stamp.png'; // 다섯 번째 이미지
+        }
+
         return Center(
           child: Container(
-            child: Image.asset('assets/images/rabbit-stamp.png'),
+            child: Image.asset(imageName),
           ),
         );
       }),
