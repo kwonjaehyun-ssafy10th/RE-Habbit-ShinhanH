@@ -67,6 +67,7 @@ class StampView extends StatelessWidget {
           
           onPressed: () {
             // Handle button press
+            Get.find<StampController>().goToMain();
           },
           child: Text(
             '메인화면으로',
