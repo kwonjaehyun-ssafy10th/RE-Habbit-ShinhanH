@@ -41,6 +41,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double blankHeight = screenHeight * 0.05;
+    double startHeight = screenHeight * 0.1;
+    double contentWidth = screenWidth * 0.8;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -48,11 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const SizedBox(
-                height: 70,
+              SizedBox(
+                height: startHeight,
               ),
-
-              const HeaderWidget(),
+              // const HeaderWidget(),
               const UserWidget(),
 
               // 마이페이지 버튼
@@ -87,7 +92,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         '랭킹보기',
                         style: TextStyle(
                           color: Colors.black,
-                        ),
+
+
+                        ),),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color?>(Color.fromARGB(255, 246, 255, 207)),
+
                       ),
                     ),
                     const SizedBox(
@@ -98,8 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         controller.goToStamp();
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color?>(
-                            const Color.fromARGB(255, 197, 255, 249)),
+
+                        backgroundColor: MaterialStateProperty.all<Color?>(Color.fromARGB(255, 153, 255, 180)),
+
                       ),
                       child: const Text(
                         '현황보기',
@@ -111,40 +122,71 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
               ),
-
-              // 달성률 차트
+              SizedBox(
+                height: blankHeight,
+              ),
+              // 달성률 현황
               Text(
-                '현재 달성률 🏃‍♀️ | ${controller.reget.getSucRate}%',
-                style: const TextStyle(
-                  fontSize: 20,
+                '현재 달성률 🏃‍♀️  ${controller.reget.getSucRate}%',
+                style: TextStyle(
+                  fontSize: 24,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
+                
               ),
-
+              
+              Text(
+                // '챌린지성공 ${succRate} % \n적금성공 ${moneyRate} % \n',
+                '챌린지성공 80 % + 적금 10 %',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                  // fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: blankHeight,
+              ),
+              // 달성률 차트
               PieChart(
+                chartType: ChartType.ring,
                 dataMap: controller.reget.getPieChartMap,
-                animationDuration: const Duration(milliseconds: 800),
+                animationDuration: Duration(milliseconds: 800),
+
                 colorList: colorList,
-                chartLegendSpacing: 20,
-                chartRadius: MediaQuery.of(context).size.width / 2,
+                chartLegendSpacing: 50,
+                chartRadius: contentWidth/3,
                 initialAngleInDegree: 0,
-                ringStrokeWidth: 32,
+
+                ringStrokeWidth: 60,
+
+                
+                // 범례
+
                 legendOptions: const LegendOptions(
+
                   showLegendsInRow: false,
                   legendPosition: LegendPosition.right,
                   showLegends: true,
                 ),
                 chartValuesOptions: const ChartValuesOptions(
-                    showChartValueBackground: false,
-                    showChartValues: true,
-                    showChartValuesInPercentage: true,
-                    showChartValuesOutside: false,
-                    decimalPlaces: 1,
-                    chartValueStyle: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold)),
+
+
+                  showChartValueBackground: false,
+                  showChartValues: false,
+                  showChartValuesInPercentage: true,
+                  showChartValuesOutside: false,
+                  decimalPlaces: 1,
+                  chartValueStyle: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  )
+                ),
+
               ),
 
               // 현재 진행중인 챌린지 및 이미지
@@ -167,14 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
 
-              // ElevatedButton(
-              //   onPressed: () {
-              //     controller.work("test성공");
-              //   },
-              //   child: Obx(
-              //     // () => Text('${controller.mainBD.value.test}'),
-              //   ),
-              // ),
+
             ],
           ),
         ),
@@ -204,7 +239,7 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return const Text('[캐치프레이즈] 좋은 습관이 ~~ ');
+    return const Text('오늘도 갓생 가자');
   }
 }
 
