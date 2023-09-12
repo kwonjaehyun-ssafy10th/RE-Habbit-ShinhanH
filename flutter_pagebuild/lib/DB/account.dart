@@ -28,6 +28,7 @@ class Account {
     map['계좌번호'] = this.accountNo;
     map['구분'] = this.type;
     map['상품명'] = this.title;
+    map['잔액'] = this.balance;
     return map;
   }
 }
