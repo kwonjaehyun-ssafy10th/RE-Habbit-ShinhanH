@@ -53,16 +53,16 @@ class MainModel {
   // fail = 커피 o 적금 x
   // savingBonus = 커피 x 적금 o
 
-  int challengeSuc = 5;
-  int savingSuc = 4;
-  int challengefail = 3;
-  int savingBonus = 1;
+  int challengeSuc = 15;
+  int savingSuc = 10;
+  int challengefail = 5;
+  int savingBonus = 3;
 
 //PieChart reset시 갱신해야하는 데이터들
   Map<String, double> PieChartMap = {};
   double sucRate = -1;
   double failRate = -1;
-  double savinCnt = -1;
+  double savinRate = -1;
 
   int dayCnt = 30;
 
