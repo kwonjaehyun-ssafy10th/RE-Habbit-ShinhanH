@@ -10,11 +10,17 @@ class User {
   Random random = Random();
 
   User(this.name) {
-    accountList.add(Account(name, (random.nextInt(100000) + 100000).toString(),
-        "입출금계좌", "쏠편한입출금통장", 100000));
-    accountList.add(Account(name, (random.nextInt(100000) + 100000).toString(),
-        "자유적금", "쏠편한작심3일적금", 0));
-    //userCnt++;
+
+    accountList.add(Account(
+        this.name,
+        (random.nextInt(100000) + 100000).toString(),
+        "입출금계좌",
+        "쏠편한입출금통장",
+        100000));
+    accountList.add(Account(this.name,
+        (random.nextInt(100000) + 100000).toString(), "자유적금", "쏠편한작심3일적금", 0));
+    // userCnt++;
+
   }
 
   @override
