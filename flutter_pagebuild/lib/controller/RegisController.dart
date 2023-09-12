@@ -7,16 +7,22 @@ import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
 
 class RegisController extends GetxController {
-  var regis = RegisModel("RegisControllerTest").obs;
+  RegisController.privateConstructor();
+  //MainModel.inst로 구현
+  static final RegisController _inst = RegisController.privateConstructor();
+  static RegisController get inst => _inst;
 
-  void work(String str) {
-    regis.value.test = str;
-    regis.refresh();
+//이름 받아오는 파트
+  static TextEditingController inputName = TextEditingController();
+
+  void setUser(String user) {
+    //사용자 이름 받아오기
   }
 
+//메인 화면 연결
   void goToMain() {
     Get.put(MainController());
     Get.find<MainController>().getController();
-    Get.off(MainView());
+    Get.off(const MainView());
   }
 }
