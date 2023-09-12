@@ -1,4 +1,10 @@
+import 'dart:ffi';
+import 'package:flutter_pagebuild/model/MainModel.dart';
+import 'package:get/get.dart';
+
 class RegisModel {
-  String test;
-  RegisModel(this.test);
+  //싱글턴
+  RegisModel.privateConstructor();
+  static final RegisModel _inst = RegisModel.privateConstructor();
+  static RegisModel get inst => _inst;
 }
