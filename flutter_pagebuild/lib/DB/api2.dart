@@ -1,52 +1,41 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'user.dart';
+import 'account.dart';
+import 'transfer.dart';
+import 'solAppPush.dart';
+import 'transaction.dart';
+import 'notification.dart';
 export 'api2.dart';
 
-String date = "09" + ((time / 10).toInt() + 1).toString().padLeft(2, '0');
 int time = 0;
+String date = "09${((time / 10).toInt() + 1).toString().padLeft(2, '0')}";
 
-Map<String, dynamic> api = {
+Map<String, dynamic> api2 = {
     'account': {
-      'path': 'v1/account',
-      'dataBody': {"실명번호": "WmokLBDC09/yfin=="}
+      'path': 'v2/account',
     },
     'transaction': {
-      'path': 'v1/search/transaction',
-      'dataBody': '''{
-        "계좌번호": "110184999999"
-        }'''
+      'path': 'v2/transaction',
     },
     'balance': {
-      'path': 'v1/account/balance/detail',
-      'dataBody': '''{
-        "출금계좌번호": "110184999999"
-        }'''
+      'path': 'v2/balance',
     },
-    'deposit': {
-      'path': 'v1/account/deposit/detail',
-      'dataBody': '''{
-        "계좌번호":"230307000000"
-      }'''
-    },
-    'transfer': {
-      'path': 'v1/transfer/krw',
-      'dataBody': {
-        "출금계좌번호": "1102008999999",
-        "입금은행코드": "088",
-        "입금계좌번호": "110054999999",
-        "이체금액": "30000",
-        "입금계좌통장메모": "김신한",
-        "출금계좌통장메모": "회비"
-      }
-    },
-    'sol-push': {
-      'path': 'v1/notice/sol-push',
-      'dataBody': {"제휴고객번호": "233hWS3k", "발송메시지": "발송메세지 "}
+    'user': {
+      'path': 'v2/user',
     }
   };
 
+  Map<String, dynamic> keyMap = {
+    'user': '고객명',
+    'account': '계좌번호',
+    'balance': '계좌번호',
+    'transaction': '계좌번호',
+    'notificatoin': '고객명'
+  };
+
 Future<List> loadData(action) async {
-  var path = api[action]['path'];
+  var path = api2[action]['path'];
   final url = Uri.https(
       'shb-hackton-ad177-default-rtdb.firebaseio.com', path + ".json");
   final response = await http.get(url);
@@ -56,4 +45,35 @@ Future<List> loadData(action) async {
     loadedData.add(item);
   }
   return loadedData;
+}
+
+void patchToFirebase(action, map) async {
+  var path = api2[action]['path'];
+  var keyName = keyMap[action];
+  final url = Uri.https(
+      'shb-hackton-ad177-default-rtdb.firebaseio.com', path + ".json");
+  Map<String, dynamic> temp = new Map();
+  temp[map[keyName]] = map;
+  await http.patch(
+    url,
+    body: json.encode(temp),
+  );
+  }
+
+void patchUser(User user) {
+  patchToFirebase('user', user.toMap());
+  for (var account in user.accountList) {
+    patchAccount(account);
+    patchBalance(account);
+  }
+  }
+
+void patchAccount(Account account) {
+  patchToFirebase('account', account.toMap());
+}
+
+void patchBalance(Account account) {
+  Map<String, dynamic> map = new Map();
+  map['잔액'] = account.balance.toString();
+  patchToFirebase('balance', map);
 }
