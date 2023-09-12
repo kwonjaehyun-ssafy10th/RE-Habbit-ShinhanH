@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:get/get.dart';
 
 class User {
@@ -44,6 +46,25 @@ class MainModel {
   // 0 - 커피x [성공]
   // 1 - 커피o / 적금 o [성공]
   // -1 - 커피o / 적금 x [실패]
+
+  //case 종류
+  // challengeSuc = 커피 x
+  // savingSuc = 커피 o 적금 o
+  // fail = 커피 o 적금 x
+  // savingBonus = 커피 x 적금 o
+
+  int challengeSuc = 5;
+  int savingSuc = 4;
+  int challengefail = 3;
+  int savingBonus = 1;
+
+//PieChart reset시 갱신해야하는 데이터들
+  Map<String, double> PieChartMap = {};
+  double sucRate = -1;
+  double failRate = -1;
+  double savinCnt = -1;
+
+  int dayCnt = 30;
+
   List<int> stampList = [];
-  double sucRate = 0.7;
 }

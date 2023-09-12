@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'account.dart';
-import 'practice2.dart';
+//import 'practice2.dart';
 
 class User {
   String name;
@@ -21,8 +21,9 @@ class User {
     userCnt++;
   }
 
+  @override
   toString() {
-    return this.name + this.accountList.toString();
+    return name + accountList.toString();
   }
 
   Map<dynamic, dynamic> toMap() {
