@@ -12,27 +12,27 @@ int time = 0;
 String date = "09${((time / 10).toInt() + 1).toString().padLeft(2, '0')}";
 
 Map<String, dynamic> api2 = {
-    'account': {
-      'path': 'v2/account',
-    },
-    'transaction': {
-      'path': 'v2/transaction',
-    },
-    'balance': {
-      'path': 'v2/balance',
-    },
-    'user': {
-      'path': 'v2/user',
-    }
-  };
+  'account': {
+    'path': 'v2/account',
+  },
+  'transaction': {
+    'path': 'v2/transaction',
+  },
+  'balance': {
+    'path': 'v2/balance',
+  },
+  'user': {
+    'path': 'v2/user',
+  }
+};
 
-  Map<String, dynamic> keyMap = {
-    'user': '고객명',
-    'account': '계좌번호',
-    'balance': '계좌번호',
-    'transaction': '계좌번호',
-    'notificatoin': '고객명'
-  };
+Map<String, dynamic> keyMap = {
+  'user': '고객명',
+  'account': '계좌번호',
+  'balance': '계좌번호',
+  'transaction': '계좌번호',
+  'notificatoin': '고객명'
+};
 
 Future<List> loadData(action) async {
   var path = api2[action]['path'];
@@ -58,7 +58,7 @@ void patchToFirebase(action, map) async {
     url,
     body: json.encode(temp),
   );
-  }
+}
 
 void patchUser(User user) {
   patchToFirebase('user', user.toMap());
@@ -66,7 +66,7 @@ void patchUser(User user) {
     patchAccount(account);
     patchBalance(account);
   }
-  }
+}
 
 void patchAccount(Account account) {
   patchToFirebase('account', account.toMap());
@@ -74,6 +74,7 @@ void patchAccount(Account account) {
 
 void patchBalance(Account account) {
   Map<String, dynamic> map = new Map();
-  map['잔액'] = account.balance.toString();
+  map['계좌번호'] = account.accountNo;
+  map['잔액'] = account.balance;
   patchToFirebase('balance', map);
 }

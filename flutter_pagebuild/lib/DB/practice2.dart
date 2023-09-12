@@ -12,7 +12,6 @@ export 'practice2.dart';
 int userCnt = 0;
 
 void main() async {
-
   Future<http.Response> request(action) async {
     var path = api2[action]['path'];
     var dataBody = api2[action]['dataBody'];
@@ -36,7 +35,6 @@ void main() async {
   }
 
   // var response = await request("transfer");
-
 
   Future<void> printData(action) async {
     List<dynamic> list = await loadData(action);
@@ -96,12 +94,11 @@ void main() async {
     return accounts;
   }
 
-
   // void putToFirebase(action, map) async {
   // var path = api2[action]['path'];
   // final url = Uri.https('shb-hackton-ad177-default-rtdb.firebaseio.com', path + ".json");
   // print(map);
-  // var keyName = 
+  // var keyName =
   // await http.put(
   //   url,
   //   body: json.encode(map)
@@ -111,9 +108,6 @@ void main() async {
 
   // printData('account');
 
-  User user2 = new User("이몰리");
-  patchToFirebase('user', user2.toMap());
-
-  Account a1 = new Account("박플리", "102030", "입출금계좌", "쏠편한입출금통장", 0);
-  patchToFirebase('account', a1.toMap());
+  User user3 = new User("루루라라");
+  patchUser(user3);
 }

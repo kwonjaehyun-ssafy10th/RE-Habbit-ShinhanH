@@ -15,9 +15,9 @@ class User {
         (random.nextInt(100000) + 100000).toString(),
         "입출금계좌",
         "쏠편한입출금통장",
-        100000).toMap());
+        100000));
     accountList.add(Account(this.name,
-        (random.nextInt(100000) + 100000).toString(), "자유적금", "쏠편한작심3일적금", 0).toMap());
+        (random.nextInt(100000) + 100000).toString(), "자유적금", "쏠편한작심3일적금", 0));
     userCnt++;
   }
 
@@ -30,7 +30,7 @@ class User {
     map['고객명'] = this.name;
     Map<String, dynamic> temp = new Map();
     for (int i = 0; i < this.accountList.length; i++) {
-      temp[i.toString()] = this.accountList[i];
+      temp[i.toString()] = this.accountList[i].toMap();
     }
     map['계좌목록'] = temp;
     return map;
@@ -41,4 +41,5 @@ void main() {
   var user = User('김신한');
   print(user.toMap());
   print(user);
+  print(user.accountList);
 }
