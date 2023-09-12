@@ -174,7 +174,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: PieChart(
                       // 달성률 차트
                       chartType: ChartType.ring,
+                      
                       dataMap: controller.reset.getPieChartMap,
+
                       animationDuration: const Duration(milliseconds: 800),
                       colorList: colorList,
                       chartLegendSpacing: 50,
