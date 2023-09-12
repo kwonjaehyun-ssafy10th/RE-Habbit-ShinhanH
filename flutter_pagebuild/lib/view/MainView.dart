@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             const Color.fromARGB(255, 153, 255, 180)),
                       ),
                       child: const Text(
-                        '현황보기',
+                        '스탬프 보기',
                         style: TextStyle(
                           color: Colors.black,
                         ),
@@ -146,9 +146,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: blankHeight,
                         ),
                         // 달성률 현황
-                        const Text(
-                          '현재 달성률 🏃‍♀️',
-                          style: TextStyle(
+                        //const 삭제했음 - 담비
+                        Text(
+                          '현재 달성률 ${controller.reset.getSucSavRate}% 🏃‍♀️',
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w300,
                             color: Color.fromARGB(255, 0, 113, 206),
@@ -157,10 +158,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
 
                         // !! 성공률 변수 넣기 !!
-                        const Text(
-                          // '챌린지성공 ${succRate} % \n적금성공 ${moneyRate} % \n',
-                          '챌린지성공 80 % + 적금 10 %',
-                          style: TextStyle(
+                        Text(
+                          '챌린지성공 ${controller.reset.getSucRate} % + 적금 ${controller.reset.getsavinRate}%',
+                          style: const TextStyle(
                             fontSize: 18,
                           ),
                           textAlign: TextAlign.center,
@@ -174,7 +174,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: PieChart(
                       // 달성률 차트
                       chartType: ChartType.ring,
-                      dataMap: dataMap,
+                      
+                      dataMap: controller.reset.getPieChartMap,
+
                       animationDuration: const Duration(milliseconds: 800),
                       colorList: colorList,
                       chartLegendSpacing: 50,

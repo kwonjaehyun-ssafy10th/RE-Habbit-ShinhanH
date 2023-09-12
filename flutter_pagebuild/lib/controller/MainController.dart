@@ -18,9 +18,11 @@ import 'package:flutter_pagebuild/controller/StampController.dart';
 
 class resetMainModel with ChangeNotifier {
   //싱글턴
-  resetMainModel.privateConstructor();
-  static final resetMainModel _inst = resetMainModel.privateConstructor();
-  static resetMainModel get inst => _inst;
+  static final resetMainModel _inst = resetMainModel._internal();
+  resetMainModel._internal();
+  factory resetMainModel() {
+    return _inst;
+  }
 
 //MainController에서 바꿔야 할 내용
 //1. 사용자 명
@@ -50,6 +52,10 @@ class resetMainModel with ChangeNotifier {
 //챌린지 달성률 업데이트
     MainModel.inst.sucRate =
         MainModel.inst.challengeSuc / MainModel.inst.dayCnt * 100;
+    MainModel.inst.failRate =
+        MainModel.inst.challengefail / MainModel.inst.dayCnt * 100;
+    MainModel.inst.savinRate =
+        MainModel.inst.savingSuc / MainModel.inst.dayCnt * 100;
 
 //Listener
     notifyListeners();
@@ -70,18 +76,36 @@ class resetMainModel with ChangeNotifier {
     return MainModel.inst.PieChartMap;
   }
 
-  String get getSucRate {
+//성공
+  String get getSucSavRate {
     if (MainModel.inst.sucRate == -1) {
       resetPieChartMap();
     }
     //소수점 자리 수
     return MainModel.inst.sucRate.toStringAsFixed(1);
   }
+
+  String get getSucRate {
+    //소수점 자리 수
+    return MainModel.inst.sucRate.toStringAsFixed(1);
+  }
+
+//실패
+  String get getFailRate {
+    //소수점 자리 수
+    return MainModel.inst.failRate.toStringAsFixed(1);
+  }
+
+//적금으로 성공
+  String get getsavinRate {
+    //소수점 자리 수
+    return MainModel.inst.savinRate.toStringAsFixed(1);
+  }
 }
 
 class MainController extends GetxController {
-  //reset 모델 get해오기기
-  resetMainModel reget = resetMainModel.inst;
+  //reset 모델 - 싱글턴 생성자
+  resetMainModel reset = resetMainModel();
 
   //하단부는 페이지 관리
   void getController() {
