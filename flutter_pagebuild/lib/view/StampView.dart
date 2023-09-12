@@ -10,14 +10,20 @@ class StampView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double blankWidth = screenWidth*0.25;
+    double HeaderWidth = screenWidth*0.05;
+
     return Scaffold(
       appBar: AppBar(
-        title: const HeaderWidget(),
-        centerTitle: true,
+        title: HeaderWidget(),
         backgroundColor: Colors.white,
         toolbarHeight: 130,
       ),
-      body: SingleChildScrollView(
+        
+      
+      body: const SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -55,30 +61,32 @@ class StampView extends StatelessWidget {
               ],
             ),
 
-            SizedBox(
-              height: 30,
-            ),
 
             
           ],
         ),
       ),
-      bottomNavigationBar: ElevatedButton(
-          
-          onPressed: () {
-            // Handle button press
-            Get.find<StampController>().goToMain();
-          },
-          child: Text(
-            '메인화면으로',
-            style: TextStyle(
-              fontSize: 20,
-            ),
-            
-          ),
-        ),
+      
       );
       
+  }
+}
+
+class HomeIcon extends StatelessWidget {
+  const HomeIcon({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.home_rounded,
+        color: Color.fromARGB(255, 152, 152, 152),
+      ),
+      iconSize: 50,
+      onPressed: () {
+        Get.find<StampController>().goToMain();
+      },
+    );
   }
 }
 
@@ -89,7 +97,7 @@ class HeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       'assets/images/logo-image.png',
-      height: 150,
+      height: 100,
     );
   }
 }
@@ -105,6 +113,7 @@ class Calendar extends StatelessWidget {
       childAspectRatio: 1, // 가로:세로 비율 설정
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+      // physics: FixedExtentScrollPhysics(),
       children: List.generate(30, (index) {
         return Center(
           child: Container(
@@ -128,6 +137,7 @@ class Calendar extends StatelessWidget {
   }
 }
 
+// 데이터 받을 때마다 이 부분 수정하기
 class Stamps extends StatelessWidget {
   const Stamps({Key? key}) : super(key: key);
 
@@ -141,6 +151,10 @@ class Stamps extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
       children: List.generate(5, (index) {
         String imageName;
+        // 적용예시) n-1 일차가 rabbit 일 때
+        // if (index == n-1) {
+        //   imageName = 'assets/images/rabbit-stamp.png'; // 첫 번째 이미지
+        // }
         if (index == 0) {
           imageName = 'assets/images/rabbit-stamp.png'; // 첫 번째 이미지
         } else if (index == 1) {
@@ -163,7 +177,7 @@ class Stamps extends StatelessWidget {
   }
 }
 
-
+// 수정된 스탬프 받아오기 (달력은 그대로)
 class CalendarAndStamps extends StatelessWidget {
   const CalendarAndStamps({Key? key}) : super(key: key);
 
