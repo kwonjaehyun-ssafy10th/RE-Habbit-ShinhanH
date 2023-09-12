@@ -1,6 +1,8 @@
 import 'dart:convert';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/RegisController.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -127,15 +129,17 @@ class StartPage extends StatelessWidget {
   }
 }
 
-// 두번째 페이지 - 이름 받기
+// 두번째 페이지 - 이름 받기 -> 계좌 받기로 수정
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});
 
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.15;
     double blankHeight = screenHeight * 0.03;
+
 
     return Scaffold(
         appBar: AppBar(
@@ -149,7 +153,7 @@ class SecondScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                '당신의 이름은 무엇인가요?',
+                '사용하고 계신 계좌를 알려주세요.',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -157,7 +161,19 @@ class SecondScreen extends StatelessWidget {
               SizedBox(
                 height: blankHeight,
               ),
-              const TextFieldExample(),
+
+              // 은행과 계좌 받기
+              Container(
+                width: screenWidth*0.8,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    BankDropdownButton(),
+                    AccountNum(),
+                  ],
+                ),
+              ),
+              
               SizedBox(
                 height: blankHeight,
               ),
@@ -168,7 +184,7 @@ class SecondScreen extends StatelessWidget {
                     Navigator.of(context).push(
                       //push: 다음 화면을 쌓겠다는 의미
                       CustomRoute(
-                        builder: (BuildContext context) => const ThirdScreen(),
+                        builder: (BuildContext context) => const AccSelectScreen(),
                         settings:
                             const RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
                       ),
@@ -198,56 +214,50 @@ class CustomRoute<T> extends MaterialPageRoute<T> {
   }
 }
 
-// 텍스트(이름) 인풋 받기
-class TextFieldExample extends StatefulWidget {
-  const TextFieldExample({Key? key}) : super(key: key);
+// 인풋 받기 : (수정) 이름 -> 계좌
+class AccountNum extends StatefulWidget {
+  const AccountNum({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TextFieldExampleState();
+  State<StatefulWidget> createState() => _AccountNumState();
 }
 
-class _TextFieldExampleState extends State<TextFieldExample> {
-  bool _nameInputIsValid = true;
+class _AccountNumState extends State<AccountNum> {
+  bool _numInputIsValid = true;
 
   // Widget _buildNumberTextField() {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double textWidth = screenWidth * 0.7;
+    double textWidth = screenWidth * 0.5;
     return SizedBox(
       
       width: textWidth,
       child: TextField(
-        
         keyboardType: TextInputType.text,
         style: Theme.of(context).textTheme.titleSmall,
-        decoration: InputDecoration(
-          errorText: _nameInputIsValid ? null : '실명을 정확히 입력해주세요.',
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          ),
-        ),
-        onChanged: (String val) {
-          // 이름 받으려고 코드 남겨두긴 했는데, 변화할 때마다 받아와서 좀 수정이 필요할듯
-          final v = val;
-          debugPrint('value = $v');
-          setState(() => _nameInputIsValid = true);
-        },
+        
+        // 인풋 받아오는 부분인데, 변화할 때마다 받아와서 수정 필요
+        // onChanged: (String val) {
+        //   final v = val;
+        //   debugPrint('value = $v');
+        //   setState(() => _numInputIsValid = true);
+        // },
       ),
     );
   }
 }
 
 // 세번째 페이지 - 챌린지 선택하기
-class ThirdScreen extends StatefulWidget {
-  const ThirdScreen({Key? key}) : super(key: key);
+class ChallSelectScreen extends StatefulWidget {
+  const ChallSelectScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ThirdScreenState();
+  State<StatefulWidget> createState() => _ChallSelectScreenState();
 }
 
-class _ThirdScreenState extends State<ThirdScreen> {
+class _ChallSelectScreenState extends State<ChallSelectScreen> {
   int _radioVal = 0;
   @override
   Widget build(BuildContext context) {
@@ -324,7 +334,7 @@ class _ThirdScreenState extends State<ThirdScreen> {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => const FourthScreen(),
+                    builder: (BuildContext context) => const AmountSelectScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
@@ -356,8 +366,8 @@ String _getLabelText(int index) {
 
 // 네번째 페이지 - 참여일수 및 금액 받기
 
-class FourthScreen extends StatelessWidget {
-  const FourthScreen({super.key});
+class AmountSelectScreen extends StatelessWidget {
+  const AmountSelectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -388,7 +398,7 @@ class FourthScreen extends StatelessWidget {
               width: contentWidth,
               child: Column(
                 children: [
-                  PeriodDropdownButton(),
+                  BankDropdownButton(),
                   SizedBox(
                     height: blankHeight,
                   ),
@@ -405,7 +415,7 @@ class FourthScreen extends StatelessWidget {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => const FifthScreen(),
+                    builder: (BuildContext context) => const ResultScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
@@ -518,8 +528,8 @@ class _AmountSliderState extends State<AmountSlider> {
   }
 }
 // 다섯번째 화면 - 적금계좌 조회 및 선택
-class FifthScreen extends StatelessWidget {
-  const FifthScreen({super.key});
+class AccSelectScreen extends StatelessWidget {
+  const AccSelectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -553,7 +563,7 @@ class FifthScreen extends StatelessWidget {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => const ResultScreen(),
+                    builder: (BuildContext context) => const ChallSelectScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
@@ -608,7 +618,7 @@ class ResultScreen extends StatelessWidget {
             ),
             const Text(
               textAlign: TextAlign.center,
-              '\n시계토끼 님\n커피 안 마시기\n30일\n10,000원\n신한 110xxx 적금통장\n\n...........................................................',
+              '\n시계토끼 님\n신한 110xxx 적금통장\n커피 안 마시기\n30일\n10,000원\n\n...........................................................',
               //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
               
               style: TextStyle(
@@ -641,10 +651,10 @@ class ResultScreen extends StatelessWidget {
             // 선택지 2 - 다시 설정하기
             TextButton(
               onPressed: () {
-                // 챌린지 선택 단계로
+                // 적금 선택 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => const ThirdScreen(),
+                    builder: (BuildContext context) => const AccSelectScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
@@ -798,3 +808,131 @@ class _AccountTableState extends State<AccountTable> {
     );
   }
 }
+
+// 추가 - 계좌번호 입력 시 은행 선택 과정에 필요한 클래스
+// 은행 클래스 선언 -> 필드에 은행 이름과 은행 코드를 넣음
+class Bank {
+  Bank(this.bName, this.bCode);
+  final String bName;
+  final int bCode;
+  
+  // bool selected = false;
+}
+
+// 은행 데이터들
+// 너무 많아서 일단 주석처리
+final List<Bank> _banks = <Bank>[
+  Bank('신한', 088),
+  Bank('제주', 035),
+  Bank('국민', 004),
+  Bank('기업', 003),
+  Bank('농협', 011),
+  Bank('산업', 002),
+  Bank('수협', 007),
+  Bank('신협', 048),
+  Bank('우리', 020),
+  Bank('하나', 081),
+  Bank('한국씨티', 027),
+  Bank('카카오뱅크', 090),
+  Bank('케이뱅크', 089),
+  Bank('토스뱅크', 092),
+  Bank('경남', 039),
+  Bank('광주', 034),
+  Bank('대구', 031),
+  Bank('부산', 032),
+  Bank('전북', 037),
+  Bank('새마을', 045),
+  Bank('우체국', 071),
+  Bank('저축은행', 050),
+  // Bank('지역농.축협', 012),
+  // Bank('도이치', 055),
+  // Bank('중국', 063),
+  // Bank('중국건설', 067),
+  // Bank('중국공상', 062),
+  // Bank('BNP파리바', 061),
+  // Bank('BOA', 060),
+  // Bank('HSBC', 054),
+  // Bank('JP모간', 057),
+  // Bank('SC제일', 023),
+  // Bank('산림조합', 064),
+  // Bank('국세', 091),
+  // Bank('신한금융투자', 278),
+  // Bank('교보증권', 261),
+  // Bank('다올투자증권', 227),
+  // Bank('대신증권', 267),
+  // Bank('메리츠증권', 287),
+  // Bank('미래에셋증권', 238),
+  // Bank('부국증권', 290),
+  // Bank('삼성증권', 240),
+  // Bank('상상인', 221),
+  // Bank('신영증권', 291),
+  // Bank('에스케이증권', 266),
+  // Bank('유안타증권', 209),
+  // Bank('유진투자증권', 280),
+  // Bank('이베스트투자증권', 265),
+  // Bank('카카오페이증권', 288),
+  // Bank('케이프투자증권', 292),
+  // Bank('키움증권', 264),
+  // Bank('토스증권', 271),
+  // Bank('한국포스증권', 294),
+  // Bank('하나금융투자', 270),
+  // Bank('하이투자증권', 262),
+  // Bank('한국투자증권', 243),
+  // Bank('한화투자증권', 269),
+  // Bank('현대차증권', 263),
+  // Bank('BNK투자증권', 224),
+  // Bank('DB금융투자', 279),
+  // Bank('IBK투자증권', 225),
+  // Bank('KB증권', 218),
+  // Bank('NH투자증권', 247),
+  // Bank('지방세', 481),
+  // Bank('국고금', 485),
+  // Bank('금융결제원', 099)
+];
+
+class BankDropdownButton extends StatefulWidget {
+  const BankDropdownButton({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _BankDropdownButtonState();
+}
+
+class _BankDropdownButtonState extends State<BankDropdownButton> {
+  static List<String> bankNames = _banks.map((bank) => bank.bName).toList();
+  
+  final List<DropdownMenuItem<String>> _dropDownMenuItems = bankNames
+      .map(
+        (String value) => DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        ),
+      )
+      .toList();
+
+  final List<PopupMenuItem<String>> _popUpMenuItems = bankNames
+      .map(
+        (String value) => PopupMenuItem<String>(
+          value: value,
+          child: Text(value),
+        ),
+      )
+      .toList();
+
+  String _btn1SelectedVal = '신한';
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+            value: _btn1SelectedVal,
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() => _btn1SelectedVal = newValue);
+              }
+            },
+            items: _dropDownMenuItems,
+          );
+        
+  }
+  
+}
+            
