@@ -42,34 +42,48 @@ class resetMainModel with ChangeNotifier {
 
 //원형 그래프
 
-  void updateMainModel() {}
-
-  void setPieChartMap() {
-
+  void resetPieChartMap() {
 //파이 차트에 필요한 내용만 업데이트
-//provider 콜 함수
+    MainModel.inst.PieChartMap['챌린지 성공'] = MainModel.inst.challengeSuc / 100;
+    MainModel.inst.PieChartMap['적금 성공'] = MainModel.inst.savingSuc / 100;
+    MainModel.inst.PieChartMap['실패'] = MainModel.inst.challengefail / 100;
+//챌린지 달성률 업데이트
+    MainModel.inst.sucRate =
+        MainModel.inst.challengeSuc / MainModel.inst.dayCnt * 100;
 
+//Listener
+    notifyListeners();
+  }
+  //파이 차트에서 필요한 재료는?
+
+//PieChartMap get
+  Map<String, double> get getPieChartMap {
+    //비어 있을 경우 -reset콜
+    if (MainModel.inst.PieChartMap == null) {
+      resetPieChartMap();
+    } else if (true) {
+      //변동 사항 있을 경우 -reset콜
+      resetPieChartMap();
+    }
+
+    //변동 사항 없으면 그대로 반환
+    return MainModel.inst.PieChartMap;
   }
 
-//성공률 리스트
-  Map<String, double> get sucRate {
-
-    Map<String, double> testMap = {
-      'suc': 50.0,
-      'fail': (100.0 - 60.0),
-      'savings': (10.0),
-    };
-
-    return testMap;
-  }
-
-  int get sucRatePer {
-    int rate = ((MainModel.inst.sucRate) * 100).toInt();
-    return rate;
+  String get getSucRate {
+    if (MainModel.inst.sucRate == -1) {
+      resetPieChartMap();
+    }
+    //소수점 자리 수
+    return MainModel.inst.sucRate.toStringAsFixed(1);
   }
 }
 
 class MainController extends GetxController {
+  //reset 모델 get해오기기
+  resetMainModel reget = resetMainModel.inst;
+
+  //하단부는 페이지 관리
   void getController() {
     Get.lazyPut<DetailController>(() => DetailController());
     Get.lazyPut<RankController>(() => RankController());
@@ -83,11 +97,11 @@ class MainController extends GetxController {
 
 //하단부 -  컨트롤러들
   void goToDetail() {
-    Get.to(const DetailView());
+    //Get.to(DetailView());
   }
 
   void goToRank() {
-    Get.to(const RankView());
+    //Get.to(RankView());
   }
 
   void goToStamp() {

@@ -113,9 +113,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
 
               // 달성률 차트
-              const Text(
-                '현재 달성률 🏃‍♀️ | 90%',
-                style: TextStyle(
+              Text(
+                '현재 달성률 🏃‍♀️ | ${controller.reget.getSucRate}%',
+                style: const TextStyle(
                   fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
 
               PieChart(
-                dataMap: resetMainModel.inst.sucRate,
+                dataMap: controller.reget.getPieChartMap,
                 animationDuration: const Duration(milliseconds: 800),
                 colorList: colorList,
                 chartLegendSpacing: 20,
