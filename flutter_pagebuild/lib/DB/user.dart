@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'account.dart';
-import 'practice2.dart';
+//import 'practice2.dart';
 
 class User {
   String name;
@@ -10,27 +10,26 @@ class User {
   Random random = Random();
 
   User(this.name) {
-    accountList.add(Account(
-        this.name,
-        (random.nextInt(100000) + 100000).toString(),
-        "입출금계좌",
-        "쏠편한입출금통장",
-        100000).toMap());
-    accountList.add(Account(this.name,
-        (random.nextInt(100000) + 100000).toString(), "자유적금", "쏠편한작심3일적금", 0).toMap());
-    userCnt++;
+    accountList.add(Account(name, (random.nextInt(100000) + 100000).toString(),
+            "입출금계좌", "쏠편한입출금통장", 100000)
+        .toMap());
+    accountList.add(Account(name, (random.nextInt(100000) + 100000).toString(),
+            "자유적금", "쏠편한작심3일적금", 0)
+        .toMap());
+    //userCnt++;
   }
 
+  @override
   toString() {
-    return this.name + this.accountList.toString();
+    return name + accountList.toString();
   }
 
   Map<dynamic, dynamic> toMap() {
-    Map<String, dynamic> map = new Map();
-    map['고객명'] = this.name;
-    Map<String, dynamic> temp = new Map();
-    for (int i = 0; i < this.accountList.length; i++) {
-      temp[i.toString()] = this.accountList[i];
+    Map<String, dynamic> map = {};
+    map['고객명'] = name;
+    Map<String, dynamic> temp = {};
+    for (int i = 0; i < accountList.length; i++) {
+      temp[i.toString()] = accountList[i];
     }
     map['계좌목록'] = temp;
     return map;

@@ -84,13 +84,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         controller.goToRank();
                       },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color?>(
+                            const Color.fromARGB(255, 233, 255, 133)),
+                      ),
                       child: const Text(
                         '랭킹보기',
                         style: TextStyle(
                           color: Colors.black,
+
+
                         ),),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color?>(Color.fromARGB(255, 246, 255, 207)),
+
                       ),
                     ),
                     const SizedBox(
@@ -101,13 +108,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         controller.goToStamp();
                       },
                       style: ButtonStyle(
+
                         backgroundColor: MaterialStateProperty.all<Color?>(Color.fromARGB(255, 153, 255, 180)),
+
                       ),
                       child: const Text(
                         '현황보기',
                         style: TextStyle(
                           color: Colors.black,
-                        ),),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -117,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               // 달성률 현황
               Text(
-                '현재 달성률 🏃‍♀️',
+                '현재 달성률 🏃‍♀️  ${controller.reget.getSucRate}%',
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.black,
@@ -143,24 +153,28 @@ class _MyHomePageState extends State<MyHomePage> {
               // 달성률 차트
               PieChart(
                 chartType: ChartType.ring,
-                dataMap: dataMap,
+                dataMap: controller.reget.getPieChartMap,
                 animationDuration: Duration(milliseconds: 800),
+
                 colorList: colorList,
                 chartLegendSpacing: 50,
                 chartRadius: contentWidth/3,
                 initialAngleInDegree: 0,
+
                 ringStrokeWidth: 60,
 
                 
                 // 범례
+
                 legendOptions: const LegendOptions(
 
                   showLegendsInRow: false,
                   legendPosition: LegendPosition.right,
                   showLegends: true,
-                
                 ),
                 chartValuesOptions: const ChartValuesOptions(
+
+
                   showChartValueBackground: false,
                   showChartValues: false,
                   showChartValuesInPercentage: true,
@@ -172,6 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.bold
                   )
                 ),
+
               ),
 
               // 현재 진행중인 챌린지 및 이미지
@@ -194,6 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
 
+
             ],
           ),
         ),
@@ -202,21 +218,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-// 파이차트 데이터 
-Map<String, double> dataMap = {
-    "챌린지성공": 80.0,
-    "적금": 10.0,
-    "실패": 10.0,
-  };
- 
+// 파이차트 데이터
 
+//Map자체를 가져오는 걸로 변경할 것임
+// Map<String, double> dataMap = {
+//   '성공': resetMainModel.inst.sucRate[0],
+//   '적금': resetMainModel.inst.sucRate[1],
+//   '실패': resetMainModel.inst.sucRate[2]
+// };
 // 파이차트 색상
 final colorList = <Color>[
-  Color.fromARGB(255, 68, 136, 255),
-  Color.fromARGB(255, 148, 218, 255),
-  Color.fromARGB(255, 157, 157, 157),
+  const Color.fromARGB(255, 68, 136, 255),
+  const Color.fromARGB(255, 148, 218, 255),
+  const Color.fromARGB(255, 157, 157, 157),
 ];
-
 
 // 헤더위젯
 class HeaderWidget extends StatelessWidget {

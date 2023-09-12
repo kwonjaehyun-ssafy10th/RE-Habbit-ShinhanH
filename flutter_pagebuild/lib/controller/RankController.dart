@@ -16,10 +16,10 @@ class RankController extends GetxController {
   // }
 
   void goToMain() {
-    Get.to(MainView());
+    Get.to(const MainView());
   }
 
   void showRank() {
-    Get.to(RankView());
+    //Get.to(RankView());
   }
 }
