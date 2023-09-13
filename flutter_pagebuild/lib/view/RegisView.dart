@@ -7,14 +7,16 @@ import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/RegisController.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_pagebuild/view/MainView.dart';
+import 'package:provider/provider.dart';
 
 final controller = Get.find<RegisController>();
 
 class RegisView extends StatelessWidget {
   const RegisView({super.key});
-
   @override
   Widget build(BuildContext context) {
+    //초기값 설정용
+    //controller.reset.resetPieChartMap();
     return MaterialApp(
       theme: ThemeData(
         fontFamily: '아리따-돋움',
@@ -130,6 +132,11 @@ class StartPage extends StatelessWidget {
 
 // 두번째 페이지 - 이름 받기 -> 계좌 받기로 수정
 
+//계좌 받기 위한 변수
+TextEditingController _inputName = TextEditingController();
+TextEditingController _inputAccount = TextEditingController();
+TextEditingController _inputBank = TextEditingController();
+
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});
 
@@ -151,6 +158,30 @@ class SecondScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(
+                width: screenWidth * 0.8,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      '이름을 입력해주세요',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                    SizedBox(
+                      width: screenWidth * 0.3,
+                      child: TextField(
+                          controller: _inputName,
+                          keyboardType: TextInputType.text),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: blankHeight,
+              ),
+
               const Text(
                 '사용하고 계신 계좌를 알려주세요.',
                 style: TextStyle(
@@ -178,7 +209,10 @@ class SecondScreen extends StatelessWidget {
               ),
               OutlinedButton(
                   onPressed: () {
-                    // !!! 소비내역 조회하기 !!!
+                    if (_inputAccount != 'null') {
+                      controller.setUser(_inputAccount.text, 'et', 'et');
+                    }
+
                     // 조회 후 다음 단계로
                     Navigator.of(context).push(
                       //push: 다음 화면을 쌓겠다는 의미
@@ -223,8 +257,6 @@ class AccountNum extends StatefulWidget {
 }
 
 class _AccountNumState extends State<AccountNum> {
-  final bool _numInputIsValid = true;
-
   // Widget _buildNumberTextField() {
   @override
   Widget build(BuildContext context) {
@@ -234,15 +266,9 @@ class _AccountNumState extends State<AccountNum> {
     return SizedBox(
       width: textWidth,
       child: TextField(
+        controller: _inputAccount,
         keyboardType: TextInputType.number,
         style: Theme.of(context).textTheme.titleSmall,
-
-        // 인풋 받아오는 부분인데, 변화할 때마다 받아와서 수정 필요
-        // onChanged: (String val) {
-        //   final v = val;
-        //   debugPrint('value = $v');
-        //   setState(() => _numInputIsValid = true);
-        // },
       ),
     );
   }
@@ -904,14 +930,14 @@ class _BankDropdownButtonState extends State<BankDropdownButton> {
       )
       .toList();
 
-  final List<PopupMenuItem<String>> _popUpMenuItems = bankNames
-      .map(
-        (String value) => PopupMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-      )
-      .toList();
+  // final List<PopupMenuItem<String>> _popUpMenuItems = bankNames
+  //     .map(
+  //       (String value) => PopupMenuItem<String>(
+  //         value: value,
+  //         child: Text(value),
+  //       ),
+  //     )
+  //     .toList();
 
   String _btn1SelectedVal = '신한';
 
