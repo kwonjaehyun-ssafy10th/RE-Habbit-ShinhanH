@@ -146,6 +146,8 @@ class SecondScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.15;
     double blankHeight = screenHeight * 0.03;
+    double startHeight = screenHeight * 0.15;
+
 
     return Scaffold(
         appBar: AppBar(
@@ -156,15 +158,20 @@ class SecondScreen extends StatelessWidget {
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
+                height: startHeight,
+              ),
+              // 이름 입력 위젯
+              Container(
                 width: screenWidth * 0.8,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      '이름을 입력해주세요',
+                      '1. 이름을 입력해주세요',
                       style: TextStyle(
                         fontSize: 20,
                       ),
@@ -172,11 +179,12 @@ class SecondScreen extends StatelessWidget {
                     SizedBox(
                       height: blankHeight,
                     ),
+
                     SizedBox(
                       width: screenWidth * 0.35,
                       child: TextField(
                           decoration: InputDecoration(
-                            // labelText: '이름을 입력해주세요',
+                            labelText: 'ex) 김신한',
                             border: OutlineInputBorder(),
                           ),
                           controller: _inputName,
@@ -185,52 +193,74 @@ class SecondScreen extends StatelessWidget {
                   ],
                 ),
               ),
+
               SizedBox(
                 height: blankHeight,
               ),
 
-              const Text(
-                '사용하고 계신 계좌를 알려주세요.',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(
-                height: blankHeight,
-              ),
-
-              // 은행과 계좌 받기
-              SizedBox(
+              // 계좌 입력 위젯
+              Container(
                 width: screenWidth * 0.8,
-                child: const Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BankDropdownButton(),
-                    AccountNum(),
+                    const Text(
+                      '2. 사용하고 계신 계좌를 알려주세요.',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: blankHeight,
+                    ),
+
+                    Container(
+                      width: screenWidth * 0.8,
+                      child: const Row(
+                        children: [
+                          BankDropdownButton(),
+                          AccountNum(),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: blankHeight,
+                    ),
+
                   ],
                 ),
               ),
+              
 
+              // 제출 버튼
               SizedBox(
-                height: blankHeight,
-              ),
-              OutlinedButton(
-                  onPressed: () {
-                    if (_inputAccount != 'null') {
-                      controller.setUser(_inputAccount.text, 'et', 'et');
-                    }
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () {
+                        if (_inputAccount != 'null') {
+                          controller.setUser(_inputAccount.text, 'et', 'et');
+                        }
 
-                    // 조회 후 다음 단계로
-                    Navigator.of(context).push(
-                      //push: 다음 화면을 쌓겠다는 의미
-                      CustomRoute(
-                        builder: (BuildContext context) => const AuthScreen(),
-                        settings:
-                            const RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
-                      ),
-                    );
-                  },
-                  child: const Text('제출'))
+                        // 조회 후 다음 단계로
+                        Navigator.of(context).push(
+                          //push: 다음 화면을 쌓겠다는 의미
+                          CustomRoute(
+                            builder: (BuildContext context) => const AuthScreen(),
+                            settings:
+                                const RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
+                          ),
+                        );
+                      },
+                      child: const Text('제출')),
+                  ],
+                ),
+              ),
+              
             ],
           ),
         ));
@@ -295,6 +325,8 @@ class _AuthScreenState extends State<AuthScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
+    double startHeight = screenHeight * 0.15;
+
 
     return Scaffold(
       appBar: AppBar(
@@ -305,10 +337,20 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(
+              height: startHeight,
+            ),
             const Text(
-              '계좌로 1원을 전송하였습니다.\n\n인증문구를 입력해주세요.',
+              '입력하신 계좌로 1원을 송금하였습니다.\n',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            const Text(
+              '받으신 인증문구를 입력해주세요.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 23,
@@ -457,71 +499,90 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              '참여할 챌린지를 선택하세요',
-              style: TextStyle(
-                fontSize: 25,
-              ),
-            ),
-            SizedBox(
-              height: blankHeight,
-            ),
-            SizedBox(
+            Container(
               width: itemWidth,
-              child: ListView(
-                shrinkWrap: true,
-                children: [0, 1, 2, 3].map((int index) {
-                  bool isEnabled = true; // 기본적으로 모든 선택지를 활성화합니다.
-                  if (index != 0) {
-                    // '커피 안 마시기' 선택지가 아닌 경우에만 비활성화합니다.
-                    isEnabled = false;
-                  }
-
-                  return ListTile(
-                    leading: Radio<int>(
-                      value: index,
-                      groupValue: _radioVal,
-                      onChanged: isEnabled
-                          ? (int? value) {
-                              if (value != null) {
-                                setState(() {
-                                  _radioVal = value;
-                                });
-                              }
-                            }
-                          : null, // isEnabled가 false인 경우, onChanged를 null로 설정하여 비활성화 상태로 만듭니다.
-                    ),
-                    title: Text(
-                      _getLabelText(index),
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: isEnabled
-                            ? Colors.black
-                            : Colors.grey, // 비활성화된 경우 색상을 변경합니다.
-                      ),
-                    ),
-                  );
-                }).toList(),
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child : Text(
+                textAlign: TextAlign.center,
+                '🔎 신한 110xxxxxxxxx 계좌에서 oo 지출이 있으시네요!',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
             ),
-            SizedBox(
-              height: blankHeight,
+          
+            
+          const Text(
+            '\n참여할 챌린지를 선택하세요.',
+            style: TextStyle(
+              fontSize: 25,
             ),
-            OutlinedButton(
-              onPressed: () {
-                // 다음 단계로
-                Navigator.of(context).push(
-                  CustomRoute(
-                    builder: (BuildContext context) => const trackAccScreen(),
-                    settings: const RouteSettings(),
+          ),
+          SizedBox(
+            height: blankHeight,
+          ),
+          SizedBox(
+            width: itemWidth,
+            child: ListView(
+              shrinkWrap: true,
+              children: [0, 1, 2, 3].map((int index) {
+                bool isEnabled = true; // 기본적으로 모든 선택지를 활성화합니다.
+                if (index != 0) {
+                  // '커피 안 마시기' 선택지가 아닌 경우에만 비활성화합니다.
+                  isEnabled = false;
+                }
+
+                return ListTile(
+                  leading: Radio<int>(
+                    value: index,
+                    groupValue: _radioVal,
+                    onChanged: isEnabled
+                        ? (int? value) {
+                            if (value != null) {
+                              setState(() {
+                                _radioVal = value;
+                              });
+                            }
+                          }
+                        : null, // isEnabled가 false인 경우, onChanged를 null로 설정하여 비활성화 상태로 만듭니다.
+                  ),
+                  title: Text(
+                    _getLabelText(index),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: isEnabled
+                          ? Colors.black
+                          : Colors.grey, // 비활성화된 경우 색상을 변경합니다.
+                    ),
                   ),
                 );
-              },
-              child: const Text('제출'),
-            )
+              }).toList(),
+            ),
+          ),
+          SizedBox(
+            height: blankHeight,
+          ),
+          OutlinedButton(
+            onPressed: () {
+              // 다음 단계로
+              Navigator.of(context).push(
+                CustomRoute(
+                  builder: (BuildContext context) => const AmountSelectScreen(),
+                  settings: const RouteSettings(),
+                ),
+              );
+            },
+            child: const Text('제출'),
+          ),
+          
+        
           ],
         ),
-      ),
+      )
     );
   }
 }
@@ -634,24 +695,26 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ListTile(
-          titleAlignment: ListTileTitleAlignment.center,
-          title: const Text(
-            '참여 일수 : ',
-            style: TextStyle(
-              fontSize: 25,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '참여 일수  :  ',
+              style: TextStyle(
+                fontSize: 25,
+              ),
             ),
-          ),
-          trailing: DropdownButton<String>(
+            DropdownButton<String>(
             // Must be one of items.value.
-            value: _btn1SelectedVal,
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                setState(() => _btn1SelectedVal = newValue);
-              }
-            },
-            items: _dropDownMenuItems,
-          ),
+              value: _btn1SelectedVal,
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() => _btn1SelectedVal = newValue);
+                }
+              },
+              items: _dropDownMenuItems,
+            ),
+          ],
         ),
       ],
     );
@@ -673,8 +736,8 @@ class _AmountSliderState extends State<AmountSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const Text(
-          '실패시 적금할 금액 설정',
+        Text(
+          '실패시 적금할 금액',
           style: TextStyle(
             fontSize: 25,
           ),
@@ -690,6 +753,12 @@ class _AmountSliderState extends State<AmountSlider> {
           onChanged: (double value) {
             setState(() => _sliderVal = value);
           },
+        ),
+        Text(
+          '${_sliderVal.round()} 원',
+          style: TextStyle(
+            fontSize: 25,
+          ),
         ),
       ],
     );
@@ -729,9 +798,7 @@ class AccSelectScreen extends StatelessWidget {
 
             const AccountTable(),
 
-            const SizedBox(
-              height: 20,
-            ),
+            
 
             OutlinedButton(
               onPressed: () {
@@ -739,15 +806,15 @@ class AccSelectScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   CustomRoute(
                     builder: (BuildContext context) =>
-                        const ChallSelectScreen(),
+                        const trackAccScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
               },
               child: const Text(
-                '연동하기',
+                '선택완료',
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 25,
                 ),
               ),
             )
@@ -775,12 +842,12 @@ class trackAccScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              '시계토끼 님 환영합니다!\n',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
+            // Text(
+            //   '시계토끼 님 환영합니다!\n',
+            //   style: TextStyle(
+            //     fontSize: 18,
+            //   ),
+            // ),
             const Text(
               '조회할 입출금계좌 선택하기',
               style: TextStyle(
@@ -801,15 +868,15 @@ class trackAccScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   CustomRoute(
                     builder: (BuildContext context) =>
-                        const AmountSelectScreen(),
+                        const ChallSelectScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
               },
               child: const Text(
-                '연동하기',
+                '조회하기',
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 25,
                 ),
               ),
             )
@@ -923,7 +990,7 @@ class ResultScreen extends StatelessWidget {
             SizedBox(
               width: screenWidth * 0.8,
               child: const Text(
-                '\n시계토끼님이 선택한 Re-Habbit이 맞나요?\n\n...........................................................',
+                '\n시계토끼님이 선택하신 \nRe-Habbit이 맞나요?\n\n...........................................................',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -1006,23 +1073,23 @@ class FinalScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              '첫 걸음을 내딛은 걸 축하합니다!',
+              '천리길도 한 걸음부터!',
               style: TextStyle(
                 fontSize: 25,
               ),
             ),
-            const SizedBox(
-              height: 50,
-            ),
+            // const SizedBox(
+            //   height: 50,
+            // ),
             Image.asset(
               'assets/images/profile-img.png',
               height: 300,
             ),
-            const SizedBox(
-              height: 30,
-            ),
+            // const SizedBox(
+            //   height: 30,
+            // ),
             const Text(
-              '도전을 시작하세요',
+              '도전이 시작되었습니다.',
               style: TextStyle(
                 fontSize: 25,
               ),
@@ -1035,9 +1102,9 @@ class FinalScreen extends StatelessWidget {
                 Get.find<RegisController>().goToMain();
               },
               child: const Text(
-                '메인으로 가기',
+                '메인으로',
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 25,
                 ),
               ),
             )
