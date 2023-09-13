@@ -43,7 +43,8 @@ class RegisController extends GetxController {
 //메인 화면 연결
   void goToMain() {
     Get.put(MainController());
+    //getController 필요할 때 만들 클래스들 저장
     Get.find<MainController>().getController();
-    Get.off(const MainView());
+    Get.offAll(() => const MainView());
   }
 }

@@ -51,6 +51,19 @@ class resetMainModel with ChangeNotifier {
   }
 
 //원형 그래프
+  void setPieChartMap() {
+    //챌린지 달성률 업데이트
+    MainModel.inst.sucRate =
+        MainModel.inst.challengeSuc / MainModel.inst.dayCnt * 100;
+    MainModel.inst.failRate =
+        MainModel.inst.challengefail / MainModel.inst.dayCnt * 100;
+    MainModel.inst.savinRate =
+        MainModel.inst.savingSuc / MainModel.inst.dayCnt * 100;
+//파이 차트에 필요한 내용만 업데이트
+    MainModel.inst.PieChartMap['챌린지 성공'] = MainModel.inst.sucRate;
+    MainModel.inst.PieChartMap['적금 성공'] = MainModel.inst.savinRate;
+    MainModel.inst.PieChartMap['실패'] = MainModel.inst.failRate;
+  }
 
   void resetPieChartMap() {
     //챌린지 달성률 업데이트
@@ -112,20 +125,16 @@ class MainController extends GetxController {
   }
 
 //장면 보여주는 뷰
-  void showMain() {
-    Get.to(const MainView());
-  }
 
 //하단부 -  컨트롤러들
-  void goToDetail() {
-    //Get.to(DetailView());
+  void goToRank() {
+    Get.find<RankController>();
   }
 
-  void goToRank() {
-    //Get.to(RankView());
-  }
+  void goToDetail() {}
 
   void goToStamp() {
-    Get.to(const StampView());
+    Get.find<StampController>();
+    Get.to(() => StampView());
   }
 }

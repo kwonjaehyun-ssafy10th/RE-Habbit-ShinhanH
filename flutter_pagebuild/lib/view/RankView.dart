@@ -9,7 +9,7 @@
 // import 'package:categorized_dropdown/categorized_dropdown.dart';
 // import 'package:syncfusion_flutter_charts/charts.dart';
 
-// class RankView extends StatefulWidget {
+//class RankView extends StatefulWidget {
 //   const RankView({super.key});
 //   @override
 //   _RankViewState createState() => _RankViewState();
@@ -306,4 +306,4 @@
 //       height: 150,
 //     );
 //   }
-// }
+//}
