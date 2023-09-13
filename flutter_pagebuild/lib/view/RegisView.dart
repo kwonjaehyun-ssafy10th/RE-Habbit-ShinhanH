@@ -398,7 +398,7 @@ class AmountSelectScreen extends StatelessWidget {
               width: contentWidth,
               child: Column(
                 children: [
-                  BankDropdownButton(),
+                  PeriodDropdownButton(),
                   SizedBox(
                     height: blankHeight,
                   ),
@@ -466,6 +466,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
     return Column(
       children: <Widget>[
         ListTile(
+          titleAlignment: ListTileTitleAlignment.center,
           title: const Text(
             '참여 일수 : ',
             style: TextStyle(
@@ -510,18 +511,25 @@ class _AmountSliderState extends State<AmountSlider> {
             fontSize: 25,
           ),
         ),
-        Slider(
-          value: _sliderVal,
-          max: 30000.0,
-          divisions: 30,
-          
+        SliderTheme(
+          data: SliderThemeData(
+            tickMarkShape: SliderTickMarkShape.noTickMark,
+            valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+          ),
+          child: Slider(
 
-          label: '${_sliderVal.round()}',
-          // 이것도 제출하면 state 바꾸도록하기
-          // 설정한 금액도 띄워보자
-          onChanged: (double value) {
-            setState(() => _sliderVal = value);
-          },
+            value: _sliderVal,
+            max: 30000.0,
+            divisions: 30,
+            
+
+            label: '${_sliderVal.round()}',
+            // 이것도 제출하면 state 바꾸도록하기
+            // 설정한 금액도 띄워보자
+            onChanged: (double value) {
+              setState(() => _sliderVal = value);
+            },
+          ),
         ),
       ],
     );

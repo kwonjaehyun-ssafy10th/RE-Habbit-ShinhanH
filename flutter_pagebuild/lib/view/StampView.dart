@@ -20,6 +20,8 @@ class StampView extends StatelessWidget {
         title: HeaderWidget(),
         backgroundColor: Colors.white,
         toolbarHeight: 130,
+        centerTitle: true,
+        
       ),
         
       
@@ -72,32 +74,39 @@ class StampView extends StatelessWidget {
   }
 }
 
-class HomeIcon extends StatelessWidget {
-  const HomeIcon({Key? key}) : super(key: key);
+// class HomeIcon extends StatelessWidget {
+//   const HomeIcon({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.home_rounded,
-        color: Color.fromARGB(255, 152, 152, 152),
-      ),
-      iconSize: 50,
-      onPressed: () {
-        Get.find<StampController>().goToMain();
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return IconButton(
+//       icon: Icon(
+//         Icons.home_rounded,
+//         color: Color.fromARGB(255, 152, 152, 152),
+//       ),
+//       iconSize: 50,
+//       onPressed: () {
+//         Get.find<StampController>().goToMain();
+//       },
+//     );
+//   }
+// }
 
+// 로고 누르면 메인으로 돌아가게 함 (기능 추가)
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/images/logo-image.png',
-      height: 100,
+    return IconButton.filled(
+      onPressed: () {
+        Get.find<StampController>().goToMain();
+      }, 
+      icon: Image.asset(
+        'assets/images/logo-image.png',
+        // height: 2000,
+      ),
+      iconSize: 200,
     );
   }
 }
@@ -191,4 +200,5 @@ class CalendarAndStamps extends StatelessWidget {
     );
   }
 }
+
 
