@@ -706,6 +706,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
             ),
             DropdownButton<String>(
             // Must be one of items.value.
+
               value: _btn1SelectedVal,
               onChanged: (String? newValue) {
                 if (newValue != null) {
@@ -715,6 +716,7 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
               items: _dropDownMenuItems,
             ),
           ],
+
         ),
       ],
     );
@@ -736,23 +738,33 @@ class _AmountSliderState extends State<AmountSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+
         Text(
           '실패시 적금할 금액',
+
           style: TextStyle(
             fontSize: 25,
           ),
         ),
-        Slider(
-          value: _sliderVal,
-          max: 30000.0,
-          divisions: 30,
+        SliderTheme(
+          data: SliderThemeData(
+            tickMarkShape: SliderTickMarkShape.noTickMark,
+            valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+          ),
+          child: Slider(
 
-          label: '${_sliderVal.round()}',
-          // 이것도 제출하면 state 바꾸도록하기
-          // 설정한 금액도 띄워보자
-          onChanged: (double value) {
-            setState(() => _sliderVal = value);
-          },
+            value: _sliderVal,
+            max: 30000.0,
+            divisions: 30,
+            
+
+            label: '${_sliderVal.round()}',
+            // 이것도 제출하면 state 바꾸도록하기
+            // 설정한 금액도 띄워보자
+            onChanged: (double value) {
+              setState(() => _sliderVal = value);
+            },
+          ),
         ),
         Text(
           '${_sliderVal.round()} 원',
