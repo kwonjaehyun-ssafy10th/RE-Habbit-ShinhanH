@@ -3,12 +3,20 @@ import 'package:flutter_pagebuild/controller/RegisController.dart';
 import 'package:flutter_pagebuild/model/MainModel.dart';
 import 'package:get/get.dart';
 
-class RegisModel {
-  RegisModel.privateConstructor();
+class CheckModel {
+  //얘는 싱글턴일 필요가 없네?
+  String registName = '';
+  String checkBank = '';
+  String checkAccount = '';
+}
 
+class RegisModel {
   //MainModel.inst로 구현
-  static final RegisModel _inst = RegisModel.privateConstructor();
-  static RegisModel get inst => _inst;
+  static final RegisModel _inst = RegisModel._internal();
+  RegisModel._internal();
+  factory RegisModel() {
+    return _inst;
+  }
 
 // 1. 계좌번호 입력
 // 2. 계좌번호를 통한 본인인증
@@ -18,7 +26,6 @@ class RegisModel {
 // --> 이 부분 정리해야 될 것 같음
 // 6. 적금 계좌 연결
 
-  String registName = '';
   String challengeName = '';
 
   int challenge = 0;
