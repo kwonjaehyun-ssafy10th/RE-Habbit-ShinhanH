@@ -40,13 +40,6 @@ class StampView extends StatelessWidget {
             SizedBox(
               height: blankHeight,
             ),
-            // Text(
-            //   '🥕 당근 수 2 / 30',
-            //   // '당근 수 {$carrotCnt} / 30'
-            //   style: TextStyle(
-            //     fontSize: 20,
-            //   ),
-            // ),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -63,10 +56,13 @@ class StampView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     // '\n🥕챌린지 현황🥕\n\n잘하고 있어요! 남은 오늘도 화이팅!\n',
                     '\n🥕챌린지 현황🥕\n\n앗! 야생의 토끼가 나타났어요! \n당근을 지키러 가볼까요?\n',
+
                     // 소비 x 인 경우
-                    // 🥕 오늘의 챌린지 현황\n잘하고 있어요! 남은 오늘도 화이팅!'
+                    // '\n🥕챌린지 현황🥕\n\n잘하고 있어요! 남은 오늘도 화이팅!\n',
+                    
                     // 소비 o 인 경우
-                    // 🥕 오늘의 챌린지 현황\n앗! 야생의 토끼가 나타났어요! 당근을 지키러 가볼까요?
+                    // '\n🥕챌린지 현황🥕\n\n앗! 야생의 토끼가 나타났어요! \n당근을 지키러 가볼까요?\n',
+
                     style: TextStyle(
                       fontSize: 20,
                     ),
