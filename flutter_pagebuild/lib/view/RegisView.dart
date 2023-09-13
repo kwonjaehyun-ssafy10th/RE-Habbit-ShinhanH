@@ -58,8 +58,8 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(context) {
-  //   double screenHeight = MediaQuery.of(context).size.height;
-  //   double appbarHeight = screenHeight * 0.15;
+    //   double screenHeight = MediaQuery.of(context).size.height;
+    //   double appbarHeight = screenHeight * 0.15;
 
     return Image.asset(
       'assets/images/logo-image.png',
@@ -94,7 +94,7 @@ class StartPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18.0),
               ),
               color: Colors.blue,
-              highlightColor: Color.fromARGB(255, 0, 72, 255),
+              highlightColor: const Color.fromARGB(255, 0, 72, 255),
               // 클릭시 색상 다르게 표현
               onPressed: () {
                 Navigator.of(context).push(
@@ -104,7 +104,7 @@ class StartPage extends StatelessWidget {
                   ),
                 );
               },
-                
+
               child: const Text(
                 'Re-Habbit\n생성하기',
                 style: TextStyle(
@@ -115,7 +115,6 @@ class StartPage extends StatelessWidget {
               ),
             ),
           ),
-         
           SizedBox(
             height: imageHeight,
             child: Image.asset(
@@ -134,16 +133,16 @@ class StartPage extends StatelessWidget {
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});
 
+  @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.15;
     double blankHeight = screenHeight * 0.03;
 
-
     return Scaffold(
         appBar: AppBar(
-          title: HeaderWidget(),
+          title: const HeaderWidget(),
           centerTitle: true,
           backgroundColor: Colors.white,
           toolbarHeight: appbarHeight,
@@ -163,9 +162,9 @@ class SecondScreen extends StatelessWidget {
               ),
 
               // 은행과 계좌 받기
-              Container(
-                width: screenWidth*0.8,
-                child: Row(
+              SizedBox(
+                width: screenWidth * 0.8,
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     BankDropdownButton(),
@@ -173,7 +172,7 @@ class SecondScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               SizedBox(
                 height: blankHeight,
               ),
@@ -184,7 +183,8 @@ class SecondScreen extends StatelessWidget {
                     Navigator.of(context).push(
                       //push: 다음 화면을 쌓겠다는 의미
                       CustomRoute(
-                        builder: (BuildContext context) => const AccSelectScreen(),
+                        builder: (BuildContext context) =>
+                            const AccSelectScreen(),
                         settings:
                             const RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
                       ),
@@ -223,7 +223,7 @@ class AccountNum extends StatefulWidget {
 }
 
 class _AccountNumState extends State<AccountNum> {
-  bool _numInputIsValid = true;
+  final bool _numInputIsValid = true;
 
   // Widget _buildNumberTextField() {
   @override
@@ -232,12 +232,11 @@ class _AccountNumState extends State<AccountNum> {
     double screenWidth = MediaQuery.of(context).size.width;
     double textWidth = screenWidth * 0.5;
     return SizedBox(
-      
       width: textWidth,
       child: TextField(
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.number,
         style: Theme.of(context).textTheme.titleSmall,
-        
+
         // 인풋 받아오는 부분인데, 변화할 때마다 받아와서 수정 필요
         // onChanged: (String val) {
         //   final v = val;
@@ -265,7 +264,6 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
     double itemWidth = screenWidth * 0.8;
-
 
     return Scaffold(
       appBar: AppBar(
@@ -297,44 +295,44 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                     // '커피 안 마시기' 선택지가 아닌 경우에만 비활성화합니다.
                     isEnabled = false;
                   }
-            
+
                   return ListTile(
-                      leading: Radio<int>(
-                        value: index,
-                        groupValue: _radioVal,
-                        onChanged: isEnabled
-                            ? (int? value) {
-                                if (value != null) {
-                                  setState(() {
-                                    _radioVal = value;
-                                  });
-                                }
+                    leading: Radio<int>(
+                      value: index,
+                      groupValue: _radioVal,
+                      onChanged: isEnabled
+                          ? (int? value) {
+                              if (value != null) {
+                                setState(() {
+                                  _radioVal = value;
+                                });
                               }
-                            : null, // isEnabled가 false인 경우, onChanged를 null로 설정하여 비활성화 상태로 만듭니다.
+                            }
+                          : null, // isEnabled가 false인 경우, onChanged를 null로 설정하여 비활성화 상태로 만듭니다.
+                    ),
+                    title: Text(
+                      _getLabelText(index),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: isEnabled
+                            ? Colors.black
+                            : Colors.grey, // 비활성화된 경우 색상을 변경합니다.
                       ),
-                      title: Text(
-                        _getLabelText(index),
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: isEnabled ? Colors.black : Colors.grey, // 비활성화된 경우 색상을 변경합니다.
-                        ),
-                      ),
-                    );
-                  
+                    ),
+                  );
                 }).toList(),
               ),
             ),
-
             SizedBox(
               height: blankHeight,
             ),
-
             OutlinedButton(
               onPressed: () {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => const AmountSelectScreen(),
+                    builder: (BuildContext context) =>
+                        const AmountSelectScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
@@ -378,7 +376,6 @@ class AmountSelectScreen extends StatelessWidget {
 
     double contentWidth = screenWidth * 0.8;
 
-    
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
@@ -395,23 +392,24 @@ class AmountSelectScreen extends StatelessWidget {
             ),
             // 선택지들
             SizedBox(
-              width: contentWidth,
-              child: Column(
-                children: [
-                  PeriodDropdownButton(),
-                  SizedBox(
-                    height: blankHeight,
-                  ),
-                  AmountSlider(),
-                ],
-              )
-            ),
-            
+                width: contentWidth,
+                child: Column(
+                  children: [
+                    const PeriodDropdownButton(),
+                    SizedBox(
+                      height: blankHeight,
+                    ),
+                    const AmountSlider(),
+                  ],
+                )),
+
             SizedBox(
               height: blankHeight,
             ),
             OutlinedButton(
               onPressed: () {
+                //계좌번호 받는 위치
+
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
@@ -473,7 +471,6 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
               fontSize: 25,
             ),
           ),
-          
           trailing: DropdownButton<String>(
             // Must be one of items.value.
             value: _btn1SelectedVal,
@@ -511,30 +508,23 @@ class _AmountSliderState extends State<AmountSlider> {
             fontSize: 25,
           ),
         ),
-        SliderTheme(
-          data: SliderThemeData(
-            tickMarkShape: SliderTickMarkShape.noTickMark,
-            valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-          ),
-          child: Slider(
+        Slider(
+          value: _sliderVal,
+          max: 30000.0,
+          divisions: 30,
 
-            value: _sliderVal,
-            max: 30000.0,
-            divisions: 30,
-            
-
-            label: '${_sliderVal.round()}',
-            // 이것도 제출하면 state 바꾸도록하기
-            // 설정한 금액도 띄워보자
-            onChanged: (double value) {
-              setState(() => _sliderVal = value);
-            },
-          ),
+          label: '${_sliderVal.round()}',
+          // 이것도 제출하면 state 바꾸도록하기
+          // 설정한 금액도 띄워보자
+          onChanged: (double value) {
+            setState(() => _sliderVal = value);
+          },
         ),
       ],
     );
   }
 }
+
 // 다섯번째 화면 - 적금계좌 조회 및 선택
 class AccSelectScreen extends StatelessWidget {
   const AccSelectScreen({super.key});
@@ -571,7 +561,8 @@ class AccSelectScreen extends StatelessWidget {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => const ChallSelectScreen(),
+                    builder: (BuildContext context) =>
+                        const ChallSelectScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
@@ -580,7 +571,7 @@ class AccSelectScreen extends StatelessWidget {
                 '연동하기',
                 style: TextStyle(
                   fontSize: 30,
-                ),  
+                ),
               ),
             )
           ],
@@ -590,7 +581,7 @@ class AccSelectScreen extends StatelessWidget {
   }
 }
 
-// 선택 결과 알려주는 창 
+// 선택 결과 알려주는 창
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});
 
@@ -607,7 +598,7 @@ class ResultScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             const Text(
@@ -628,13 +619,13 @@ class ResultScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               '\n시계토끼 님\n신한 110xxx 적금통장\n커피 안 마시기\n30일\n10,000원\n\n...........................................................',
               //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
-              
+
               style: TextStyle(
                 fontSize: 20,
               ),
             ),
-            
-            SizedBox(
+
+            const SizedBox(
               height: 50,
             ),
 
@@ -653,7 +644,7 @@ class ResultScreen extends StatelessWidget {
                 '이대로 생성하기',
                 style: TextStyle(
                   fontSize: 28,
-                ),  
+                ),
               ),
             ),
             // 선택지 2 - 다시 설정하기
@@ -672,7 +663,7 @@ class ResultScreen extends StatelessWidget {
                 style: TextStyle(
                   color: Color.fromARGB(255, 112, 108, 108),
                   fontSize: 18,
-                ),  
+                ),
               ),
             )
           ],
@@ -681,7 +672,6 @@ class ResultScreen extends StatelessWidget {
     );
   }
 }
-
 
 // 마지막 화면 - 토끼 생성 + 메인으로 입장
 class FinalScreen extends StatelessWidget {
@@ -706,7 +696,6 @@ class FinalScreen extends StatelessWidget {
                 fontSize: 28,
               ),
             ),
-
             const SizedBox(
               height: 50,
             ),
@@ -717,7 +706,6 @@ class FinalScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-
             const Text(
               '도전을 시작하세요',
               style: TextStyle(
@@ -727,7 +715,6 @@ class FinalScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-
             OutlinedButton(
               onPressed: () {
                 Get.find<RegisController>().goToMain();
@@ -736,7 +723,7 @@ class FinalScreen extends StatelessWidget {
                 '메인으로 가기',
                 style: TextStyle(
                   fontSize: 30,
-                ),  
+                ),
               ),
             )
           ],
@@ -752,7 +739,7 @@ class Account {
   final String bank;
   final int accNum;
   final int maxAmount;
-  
+
   bool selected = false;
 }
 
@@ -764,7 +751,6 @@ final List<Account> _accounts = <Account>[
   Account('새마을금고', 3058831284, 300000),
   Account('농협은행', 3564775924, 300000),
 ];
-
 
 // row 수 만큼 테이블 만들기
 class AccountTable extends StatefulWidget {
@@ -786,7 +772,6 @@ class _AccountTableState extends State<AccountTable> {
         elevation: 4.0,
         child: Column(
           children: <Widget>[
-            
             // ListView.builder를 사용하여 동적으로 아이템 생성
             ListView.builder(
               shrinkWrap: true,
@@ -797,7 +782,9 @@ class _AccountTableState extends State<AccountTable> {
                   title: Text(account.bank),
                   subtitle: Text('계좌번호: ${account.accNum}'),
                   trailing: Text('월 최대 납부액: ${account.maxAmount}'),
-                  tileColor: selectedRow == index ? const Color.fromARGB(255, 150, 208, 255) : null, // 선택된 로우에 색상 적용
+                  tileColor: selectedRow == index
+                      ? const Color.fromARGB(255, 150, 208, 255)
+                      : null, // 선택된 로우에 색상 적용
                   onTap: () {
                     setState(() {
                       if (selectedRow == index) {
@@ -823,7 +810,7 @@ class Bank {
   Bank(this.bName, this.bCode);
   final String bName;
   final int bCode;
-  
+
   // bool selected = false;
 }
 
@@ -907,7 +894,7 @@ class BankDropdownButton extends StatefulWidget {
 
 class _BankDropdownButtonState extends State<BankDropdownButton> {
   static List<String> bankNames = _banks.map((bank) => bank.bName).toList();
-  
+
   final List<DropdownMenuItem<String>> _dropDownMenuItems = bankNames
       .map(
         (String value) => DropdownMenuItem<String>(
@@ -931,16 +918,13 @@ class _BankDropdownButtonState extends State<BankDropdownButton> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-            value: _btn1SelectedVal,
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                setState(() => _btn1SelectedVal = newValue);
-              }
-            },
-            items: _dropDownMenuItems,
-          );
-        
+      value: _btn1SelectedVal,
+      onChanged: (String? newValue) {
+        if (newValue != null) {
+          setState(() => _btn1SelectedVal = newValue);
+        }
+      },
+      items: _dropDownMenuItems,
+    );
   }
-  
 }
-            

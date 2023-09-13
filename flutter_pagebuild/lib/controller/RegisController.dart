@@ -14,6 +14,14 @@ class RegisController extends GetxController {
     return _inst;
   }
 
+// 1. 계좌번호 입력
+// 2. 계좌번호를 통한 본인인증 
+// 3. 해당 사용자 확인 (페이지 추가 필요) - 데이터 불러오기
+// 4. 지출 확인할 계좌
+// 5. 소비 항목 (주요 키워드)
+// --> 이 부분 정리해야 될 것 같음
+// 6. 적금 계좌 연결
+
 //이름 받아오는 파트
   static TextEditingController inputName = TextEditingController();
   void setUser(String user) {

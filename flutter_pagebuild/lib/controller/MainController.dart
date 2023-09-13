@@ -24,6 +24,14 @@ class resetMainModel with ChangeNotifier {
     return _inst;
   }
 
+  void temptest() {
+    MainModel.inst.challengeSuc = 30;
+    MainModel.inst.savingSuc = 0;
+    MainModel.inst.challengefail = 0;
+
+    resetPieChartMap();
+  }
+
 //MainController에서 바꿔야 할 내용
 //1. 사용자 명
 //2. 챌린지 명
@@ -45,17 +53,17 @@ class resetMainModel with ChangeNotifier {
 //원형 그래프
 
   void resetPieChartMap() {
-//파이 차트에 필요한 내용만 업데이트
-    MainModel.inst.PieChartMap['챌린지 성공'] = MainModel.inst.challengeSuc / 100;
-    MainModel.inst.PieChartMap['적금 성공'] = MainModel.inst.savingSuc / 100;
-    MainModel.inst.PieChartMap['실패'] = MainModel.inst.challengefail / 100;
-//챌린지 달성률 업데이트
+    //챌린지 달성률 업데이트
     MainModel.inst.sucRate =
         MainModel.inst.challengeSuc / MainModel.inst.dayCnt * 100;
     MainModel.inst.failRate =
         MainModel.inst.challengefail / MainModel.inst.dayCnt * 100;
     MainModel.inst.savinRate =
         MainModel.inst.savingSuc / MainModel.inst.dayCnt * 100;
+//파이 차트에 필요한 내용만 업데이트
+    MainModel.inst.PieChartMap['챌린지 성공'] = MainModel.inst.sucRate;
+    MainModel.inst.PieChartMap['적금 성공'] = MainModel.inst.savinRate;
+    MainModel.inst.PieChartMap['실패'] = MainModel.inst.failRate;
 
 //Listener
     notifyListeners();
@@ -64,23 +72,12 @@ class resetMainModel with ChangeNotifier {
 
 //PieChartMap get
   Map<String, double> get getPieChartMap {
-    //비어 있을 경우 -reset콜
-    if (MainModel.inst.PieChartMap == null) {
-      resetPieChartMap();
-    } else if (true) {
-      //변동 사항 있을 경우 -reset콜
-      resetPieChartMap();
-    }
-
     //변동 사항 없으면 그대로 반환
     return MainModel.inst.PieChartMap;
   }
 
 //성공
   String get getSucSavRate {
-    if (MainModel.inst.sucRate == -1) {
-      resetPieChartMap();
-    }
     //소수점 자리 수
     return MainModel.inst.sucRate.toStringAsFixed(1);
   }
