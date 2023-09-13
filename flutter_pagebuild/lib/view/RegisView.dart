@@ -130,7 +130,7 @@ class StartPage extends StatelessWidget {
   }
 }
 
-// 두번째 페이지 - 이름 받기 -> 계좌 받기로 수정
+// 두번째 페이지 - 이름 받기 -> 계좌 받기로 수정(인증용)
 
 //계좌 받기 위한 변수
 TextEditingController _inputName = TextEditingController();
@@ -170,11 +170,18 @@ class SecondScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: screenWidth * 0.3,
+                      height: blankHeight,
+                    ),
+                    SizedBox(
+                      width: screenWidth * 0.35,
                       child: TextField(
+                          decoration: InputDecoration(
+                            // labelText: '이름을 입력해주세요',
+                            border: OutlineInputBorder(),
+                          ),
                           controller: _inputName,
                           keyboardType: TextInputType.text),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -217,8 +224,7 @@ class SecondScreen extends StatelessWidget {
                     Navigator.of(context).push(
                       //push: 다음 화면을 쌓겠다는 의미
                       CustomRoute(
-                        builder: (BuildContext context) =>
-                            const AccSelectScreen(),
+                        builder: (BuildContext context) => const AuthScreen(),
                         settings:
                             const RouteSettings(), //materialpageroute: navigator가 이동할 경로 지정
                       ),
@@ -274,7 +280,156 @@ class _AccountNumState extends State<AccountNum> {
   }
 }
 
-// 세번째 페이지 - 챌린지 선택하기
+// 계좌 인증 페이지
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  int _radioVal = 0;
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double blankHeight = screenHeight * 0.05;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              '계좌로 1원을 전송하였습니다.\n\n인증문구를 입력해주세요.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 23,
+              ),
+            ),
+            SizedBox(
+              height: blankHeight * 0.5,
+            ),
+            SizedBox(
+              width: screenWidth * 0.5,
+              child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'ex) 파란토끼',
+                    border: OutlineInputBorder(),
+                  ),
+                  controller: _inputName,
+                  keyboardType: TextInputType.text),
+            ),
+            SizedBox(
+              height: blankHeight * 0.5,
+            ),
+            // 인풋값과 인증문구를 비교
+            // 맞는 경우
+            OutlinedButton(
+              onPressed: () {
+                // 성공 팝업
+                showDialog(
+                    context: context,
+                    //barrierDismissible - Dialog를 제외한 다른 화면 터치 x
+                    barrierDismissible: true,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        //Dialog Main Title
+                        title: Column(
+                          children: <Widget>[
+                            new Text("계좌 인증"),
+                          ],
+                        ),
+                        //
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "인증에 성공하였습니다.",
+                            ),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          new OutlinedButton(
+                            child: new Text("확인"),
+                            onPressed: () {
+                              // 성공시 다음 페이지로
+                              Navigator.of(context).push(
+                                CustomRoute(
+                                  builder: (BuildContext context) =>
+                                      const AccSelectScreen(),
+                                  settings: const RouteSettings(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    });
+              },
+              child: const Text('인증하기(성공)'),
+            ),
+            // 인증 실패한 경우
+            OutlinedButton(
+              onPressed: () {
+                // 맞지 않는 경우
+                // 실패 팝업
+                showDialog(
+                    context: context,
+                    //barrierDismissible - Dialog를 제외한 다른 화면 터치 x
+                    barrierDismissible: true,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        //Dialog Main Title
+                        title: Column(
+                          children: <Widget>[
+                            new Text("계좌 인증"),
+                          ],
+                        ),
+                        //
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "인증코드가 일치하지 않습니다.",
+                            ),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          new OutlinedButton(
+                            child: new Text("뒤로"),
+                            onPressed: () {
+                              // 다시 인증문구 페이지로
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    });
+              },
+              child: const Text('인증하기(실패)'),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 챌린지 선택하기 페이지
 class ChallSelectScreen extends StatefulWidget {
   const ChallSelectScreen({Key? key}) : super(key: key);
 
@@ -357,8 +512,7 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) =>
-                        const AmountSelectScreen(),
+                    builder: (BuildContext context) => const trackAccScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
@@ -388,7 +542,7 @@ String _getLabelText(int index) {
   }
 }
 
-// 네번째 페이지 - 참여일수 및 금액 받기
+// 챌린지 참여일수 및 금액 받기
 
 class AmountSelectScreen extends StatelessWidget {
   const AmountSelectScreen({super.key});
@@ -474,15 +628,6 @@ class _PeriodDropdownButtonState extends State<PeriodDropdownButton> {
       )
       .toList();
 
-  final List<PopupMenuItem<String>> _popUpMenuItems = menuItems
-      .map(
-        (String value) => PopupMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-      )
-      .toList();
-
   String _btn1SelectedVal = '30일';
 
   @override
@@ -551,7 +696,7 @@ class _AmountSliderState extends State<AmountSlider> {
   }
 }
 
-// 다섯번째 화면 - 적금계좌 조회 및 선택
+// 적금계좌 조회 및 선택
 class AccSelectScreen extends StatelessWidget {
   const AccSelectScreen({super.key});
 
@@ -568,6 +713,12 @@ class AccSelectScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              '시계토끼 님 환영합니다!\n',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
             const Text(
               '연동할 적금 계좌 선택하기',
               style: TextStyle(
@@ -607,12 +758,147 @@ class AccSelectScreen extends StatelessWidget {
   }
 }
 
-// 선택 결과 알려주는 창
-class ResultScreen extends StatelessWidget {
-  const ResultScreen({super.key});
+// 입출금 계좌 조회 및 선택
+class trackAccScreen extends StatelessWidget {
+  const trackAccScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '시계토끼 님 환영합니다!\n',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            const Text(
+              '조회할 입출금계좌 선택하기',
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            // DataTableExample(),
+
+            const AccountTable2(),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            OutlinedButton(
+              onPressed: () {
+                // 다음 단계로
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) =>
+                        const AmountSelectScreen(),
+                    settings: const RouteSettings(),
+                  ),
+                );
+              },
+              child: const Text(
+                '연동하기',
+                style: TextStyle(
+                  fontSize: 30,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 입출금 계좌 테이블 만들 소스들
+// 적금계좌 클래스 선언
+class Account2 {
+  Account2(this.bank, this.accNum);
+  final String bank;
+  final int accNum;
+
+  bool selected = false;
+}
+
+// 데이터 소스
+final List<Account2> _accounts2 = <Account2>[
+  Account2('신한은행', 1104742313),
+  Account2('카카오뱅크', 7432343242),
+  Account2('우리은행', 2623339834),
+  Account2('새마을금고', 3058831284),
+  Account2('농협은행', 3564775924),
+];
+
+// row 수 만큼 테이블 만들기
+class AccountTable2 extends StatefulWidget {
+  const AccountTable2({super.key});
+
+  @override
+  _AccountTableState2 createState() => _AccountTableState2();
+}
+
+class _AccountTableState2 extends State<AccountTable2> {
+  int? selectedRow; // 선택된 로우의 인덱스를 저장하는 변수
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Card(
+        elevation: 4.0,
+        child: Column(
+          children: <Widget>[
+            // ListView.builder를 사용하여 동적으로 아이템 생성
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: _accounts.length,
+              itemBuilder: (context, index) {
+                final account = _accounts[index];
+                return ListTile(
+                  title: Text(account.bank),
+                  // subtitle: Text('계좌번호: ${account.accNum}'),
+                  trailing: Text('계좌번호: ${account.accNum}'),
+                  tileColor: selectedRow == index
+                      ? const Color.fromARGB(255, 150, 208, 255)
+                      : null, // 선택된 로우에 색상 적용
+                  onTap: () {
+                    setState(() {
+                      if (selectedRow == index) {
+                        selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                      } else {
+                        selectedRow = index; // 새로운 로우를 선택
+                      }
+                    });
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 선택 결과 알려주는 창
+class ResultScreen extends StatelessWidget {
+  const ResultScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
@@ -634,16 +920,19 @@ class ResultScreen extends StatelessWidget {
                 fontSize: 28,
               ),
             ),
-            const Text(
-              '\n생성하려는 Re-Habbit이 맞나요?\n\n...........................................................',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
+            SizedBox(
+              width: screenWidth * 0.8,
+              child: const Text(
+                '\n시계토끼님이 선택한 Re-Habbit이 맞나요?\n\n...........................................................',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
             ),
             const Text(
               textAlign: TextAlign.center,
-              '\n시계토끼 님\n신한 110xxx 적금통장\n커피 안 마시기\n30일\n10,000원\n\n...........................................................',
+              '\n신한 620xxx 적금\n커피 안 마시기\n신한 110xxx 입출금\n30일\n10,000원\n\n...........................................................',
               //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
 
               style: TextStyle(
@@ -717,9 +1006,9 @@ class FinalScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              '축하합니다!',
+              '첫 걸음을 내딛은 걸 축하합니다!',
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 25,
               ),
             ),
             const SizedBox(
