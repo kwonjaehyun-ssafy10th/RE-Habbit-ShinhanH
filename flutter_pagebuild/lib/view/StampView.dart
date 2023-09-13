@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pagebuild/controller/RankController.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/StampController.dart';
-
-// final controller = Get.find<StampController>();
+import 'package:flutter_pagebuild/controller/MainController.dart';
 
 class StampView extends StatelessWidget {
-  const StampView({Key? key}) : super(key: key);
+  StampView({Key? key}) : super(key: key);
 
+  final controller = Get.find<StampController>();
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double blankWidth = screenWidth*0.25;
-    double HeaderWidth = screenWidth*0.05;
+    double blankWidth = screenWidth * 0.25;
+    double HeaderWidth = screenWidth * 0.05;
 
     return Scaffold(
       appBar: AppBar(
-        title: HeaderWidget(),
+        title: const HeaderWidget(),
         backgroundColor: Colors.white,
         toolbarHeight: 130,
         centerTitle: true,
-        
       ),
-        
-      
       body: const SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -62,35 +58,12 @@ class StampView extends StatelessWidget {
                 ),
               ],
             ),
-
-
-            
           ],
         ),
       ),
-      
-      );
-      
+    );
   }
 }
-
-// class HomeIcon extends StatelessWidget {
-//   const HomeIcon({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return IconButton(
-//       icon: Icon(
-//         Icons.home_rounded,
-//         color: Color.fromARGB(255, 152, 152, 152),
-//       ),
-//       iconSize: 50,
-//       onPressed: () {
-//         Get.find<StampController>().goToMain();
-//       },
-//     );
-//   }
-// }
 
 // 로고 누르면 메인으로 돌아가게 함 (기능 추가)
 class HeaderWidget extends StatelessWidget {
@@ -100,8 +73,9 @@ class HeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton.filled(
       onPressed: () {
-        Get.find<StampController>().goToMain();
-      }, 
+        var controller = Get.find<StampController>();
+        controller.goToMain();
+      },
       icon: Image.asset(
         'assets/images/logo-image.png',
         // height: 2000,
@@ -117,11 +91,11 @@ class Calendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      padding: EdgeInsets.all(30),
+      padding: const EdgeInsets.all(30),
       crossAxisCount: 3,
       childAspectRatio: 1, // 가로:세로 비율 설정
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+      physics: const NeverScrollableScrollPhysics(), // 스크롤 비활성화
       // physics: FixedExtentScrollPhysics(),
       children: List.generate(30, (index) {
         return Center(
@@ -153,11 +127,11 @@ class Stamps extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      padding: EdgeInsets.all(30),
+      padding: const EdgeInsets.all(30),
       crossAxisCount: 3,
       childAspectRatio: 1, // 가로:세로 비율 설정
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(), // 스크롤 비활성화
+      physics: const NeverScrollableScrollPhysics(), // 스크롤 비활성화
       children: List.generate(5, (index) {
         String imageName;
         // 적용예시) n-1 일차가 rabbit 일 때
@@ -192,7 +166,7 @@ class CalendarAndStamps extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return const Stack(
       children: [
         Calendar(),
         Stamps(),
@@ -200,5 +174,3 @@ class CalendarAndStamps extends StatelessWidget {
     );
   }
 }
-
-

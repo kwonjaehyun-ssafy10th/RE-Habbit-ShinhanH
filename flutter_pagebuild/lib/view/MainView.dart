@@ -17,7 +17,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //초기값 설정용
-    controller.reset.resetPieChartMap();
+    controller.reset.setPieChartMap();
     return ChangeNotifierProvider<resetMainModel>(
       create: (context) => resetMainModel(),
       child: MaterialApp(
