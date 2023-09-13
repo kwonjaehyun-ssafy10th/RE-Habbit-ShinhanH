@@ -12,6 +12,7 @@ class StampView extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double blankWidth = screenWidth * 0.25;
+    double blankHeight = screenHeight * 0.02;
     double HeaderWidth = screenWidth * 0.05;
 
     return Scaffold(
@@ -21,7 +22,7 @@ class StampView extends StatelessWidget {
         toolbarHeight: 130,
         centerTitle: true,
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -30,21 +31,51 @@ class StampView extends StatelessWidget {
               height: 30,
             ),
             Text(
-              '당근 모으는 중',
+              '현재 당근 수 : 2개',
+              // '당근 수 {$carrotCnt} / 30'
               style: TextStyle(
                 fontSize: 28,
               ),
             ),
             SizedBox(
-              height: 10,
+              height: blankHeight,
             ),
-            Text(
-              '🥕 현재 당근 수 2개 🥕',
-              // '현재 당근 수 {$carrotCnt}개'
-              style: TextStyle(
-                fontSize: 20,
+            // Text(
+            //   '🥕 당근 수 2 / 30',
+            //   // '당근 수 {$carrotCnt} / 30'
+            //   style: TextStyle(
+            //     fontSize: 20,
+            //   ),
+            // ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Colors.black,
+                ),
+                color: Colors.white,
+              ),
+              width: screenWidth*0.8,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    textAlign: TextAlign.center,
+                    // '\n🥕챌린지 현황🥕\n\n잘하고 있어요! 남은 오늘도 화이팅!\n',
+                    '\n🥕챌린지 현황🥕\n\n앗! 야생의 토끼가 나타났어요! \n당근을 지키러 가볼까요?\n',
+                    // 소비 x 인 경우
+                    // 🥕 오늘의 챌린지 현황\n잘하고 있어요! 남은 오늘도 화이팅!'
+                    // 소비 o 인 경우
+                    // 🥕 오늘의 챌린지 현황\n앗! 야생의 토끼가 나타났어요! 당근을 지키러 가볼까요?
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+                
               ),
             ),
+            
 
             // 달력 위젯
             Stack(
@@ -90,6 +121,9 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double stampSize = screenWidth * 0.25;
     return GridView.count(
       padding: const EdgeInsets.all(30),
       crossAxisCount: 3,
@@ -106,8 +140,8 @@ class Calendar extends StatelessWidget {
               ),
               color: Color.fromARGB(0, 219, 218, 218),
             ),
-            width: 100, // 원의 크기를 조절
-            height: 100, // 원의 크기를 조절
+            width: stampSize, // 원의 크기를 조절
+            height: stampSize, // 원의 크기를 조절
             padding: const EdgeInsets.all(20),
             child: Text(
               '${index + 1} 일차',
