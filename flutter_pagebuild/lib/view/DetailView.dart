@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 // import 'package:flutter_pagebuild/view/flutter/dev/bots/utils.dart';
 
@@ -111,4 +110,3 @@ class HeaderWidget extends StatelessWidget {
     );
   }
 }
-
