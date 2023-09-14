@@ -11,7 +11,6 @@ class CheckModel {
 }
 
 class RegisModel {
-  //MainModel.inst로 구현
   static final RegisModel _inst = RegisModel._internal();
   RegisModel._internal();
   factory RegisModel() {
@@ -26,12 +25,13 @@ class RegisModel {
 // --> 이 부분 정리해야 될 것 같음
 // 6. 적금 계좌 연결
 
-  String challengeName = '';
+  String? userName;
+  String? challengeName;
 
   int challenge = 0;
   int savingAmount = 0;
 
-  List<Map<Map<String, String>, int>> accountList = [];
+  List<Account> accountList = [];
 
   int temp() {
     return 0;

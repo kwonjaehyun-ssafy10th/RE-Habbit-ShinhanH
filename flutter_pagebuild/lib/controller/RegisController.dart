@@ -14,6 +14,60 @@ import 'package:flutter_pagebuild/controller/MainController.dart';
 // --> 이 부분 정리해야 될 것 같음
 // 6. 적금 계좌 연결
 
+class Account {
+  Account(this.bank, this.accNum);
+  Account.Savings(this.bank, this.accNum, this.maxAmount);
+  String bank;
+  int accNum;
+  int maxAmount = 0;
+
+  bool selected = false;
+}
+
+class AccountList with ChangeNotifier {
+  static final AccountList _inst = AccountList._internal();
+  AccountList._internal();
+  factory AccountList() {
+    return _inst;
+  }
+
+  RegisModel regisModel = RegisModel();
+
+  //입출금 계좌 리스트
+// 데이터 소스
+  List<Account> temp2 = <Account>[
+    Account('신한은행', 1104742313),
+    Account('우리은행', 2623339834),
+    Account('새마을금고', 3058831284),
+    Account('농협은행', 3564775924),
+    Account('카카오뱅크', 7432343242),
+  ];
+  List<Account> temp = <Account>[
+    Account.Savings('신한은행', 1104742313, 300000),
+    // Account('카카오뱅크', 7432343242, 200000),
+    // Account('우리은행', 2623339834, 200000),
+    // Account('새마을금고', 3058831284, 300000),
+    // Account('농협은행', 3564775924, 300000),
+    Account.Savings('농협은행', 3564775924, 300000),
+    Account.Savings('농협은행', 3564775924, 300000),
+    Account.Savings('농협은행', 3564775924, 300000),
+    Account.Savings('농협은행', 3564775924, 300000),
+  ];
+  void setAccountList(List<Account> a) {
+    int idx = 0;
+    regisModel.accountList.clear();
+    while (regisModel.accountList.length < a.length) {
+      regisModel.accountList.add(a[idx++]);
+    }
+
+    notifyListeners();
+  }
+
+  List<Account> get getAccountList {
+    return regisModel.accountList;
+  }
+}
+
 class RegisController extends GetxController {
   //싱글톤 코드가 이것도 있대요....
   static final RegisController _inst = RegisController._internal();
@@ -22,23 +76,36 @@ class RegisController extends GetxController {
     return _inst;
   }
 
+//자료 Model 인스턴스 받아오기
   RegisModel regisModel = RegisModel();
+
+//CheckModel -> 본인 인증 모델
   CheckModel checkInfo = CheckModel();
 
 //이름 받아오는 파트
   static TextEditingController inputName = TextEditingController();
-  void setUser(String user, String bankname, String account) {
+  bool setUser(String user, String bankname, String account) {
+    if (user == '' || account == '') {
+      return false;
+    }
     //사용자 이름 받아오기 user  -> 사용자 이름임
     checkInfo.registName = user;
     checkInfo.checkBank = bankname;
     checkInfo.checkAccount = account;
+
+    return true;
   }
 
-  String get getuserName {
-    return checkInfo.checkAccount;
+  bool verif(String str) {
+    //본인인증 정답
+    String rightVeri = '0000';
+
+    if (str != rightVeri) return false;
+
+    return true;
   }
 
-//함수 해야됨
+//사용자 계좌 연결
 
 //메인 화면 연결
   void goToMain() {
