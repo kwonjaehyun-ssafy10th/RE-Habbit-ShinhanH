@@ -10,6 +10,7 @@ import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:provider/provider.dart';
 
 final controller = Get.find<RegisController>();
+AccountList acList = AccountList();
 
 class RegisView extends StatelessWidget {
   const RegisView({super.key});
@@ -407,7 +408,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     Navigator.of(context).push(
                                       CustomRoute(
                                         builder: (BuildContext context) =>
-                                            AccSelectScreen(),
+                                            trackAccScreen(),
                                         settings: const RouteSettings(),
                                       ),
                                     );
@@ -437,68 +438,6 @@ class _AuthScreenState extends State<AuthScreen> {
 //여기 계좌 선택
 
 int? selectedRow;
-
-// 적금계좌 조회 및 선택
-class AccSelectScreen extends StatelessWidget {
-  AccSelectScreen({super.key});
-  AccountList acList = AccountList();
-
-  @override
-  Widget build(BuildContext context) {
-    acList.setAccountList(acList.temp);
-    return Scaffold(
-      appBar: AppBar(
-        title: const HeaderWidget(),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: 130,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              '시계토끼 님 환영합니다!\n',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            const Text(
-              '연동할 적금 계좌 선택하기',
-              style: TextStyle(
-                fontSize: 24,
-              ),
-            ),
-            // DataTableExample(),
-
-            const AccountTable(),
-
-            OutlinedButton(
-              onPressed: () {
-                if (selectedRow != null) {
-                  // 다음 단계로
-                  selectedRow = null;
-                  Navigator.of(context).push(
-                    CustomRoute(
-                      builder: (BuildContext context) => trackAccScreen(),
-                      settings: const RouteSettings(),
-                    ),
-                  );
-                }
-              },
-              child: const Text(
-                '선택완료',
-                style: TextStyle(
-                  fontSize: 25,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 // 입출금 계좌 조회 및 선택
 class trackAccScreen extends StatelessWidget {
@@ -536,7 +475,9 @@ class trackAccScreen extends StatelessWidget {
             OutlinedButton(
               onPressed: () {
                 if (selectedRow != null) {
+                  acList.setaccountConsum(selectedRow);
                   // 다음 단계로
+                  selectedRow = null;
                   Navigator.of(context).push(
                     CustomRoute(
                       builder: (BuildContext context) =>
@@ -561,8 +502,6 @@ class trackAccScreen extends StatelessWidget {
     );
   }
 }
-
-// row 수 만큼 테이블 만들기
 
 //2가 입출금
 class AccountTable2 extends StatefulWidget {
@@ -714,8 +653,7 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                   // 다음 단계로
                   Navigator.of(context).push(
                     CustomRoute(
-                      builder: (BuildContext context) =>
-                          const AmountSelectScreen(),
+                      builder: (BuildContext context) => AccSelectScreen(),
                       settings: const RouteSettings(),
                     ),
                   );
@@ -741,6 +679,122 @@ String _getLabelText(int index) {
       return '옷 사지 않기';
     default:
       return '';
+  }
+}
+
+// 적금계좌 조회 및 선택
+class AccSelectScreen extends StatelessWidget {
+  AccSelectScreen({super.key});
+  AccountList acList = AccountList();
+
+  @override
+  Widget build(BuildContext context) {
+    acList.setAccountList(acList.temp);
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              '시계토끼 님 환영합니다!\n',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            const Text(
+              '연동할 적금 계좌 선택하기',
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            // DataTableExample(),
+
+            const AccountTable(),
+
+            OutlinedButton(
+              onPressed: () {
+                if (selectedRow != null) {
+                  // 다음 단계로
+                  acList.setaccountSaving(selectedRow);
+                  selectedRow = null;
+                  Navigator.of(context).push(
+                    CustomRoute(
+                      builder: (BuildContext context) =>
+                          const AmountSelectScreen(),
+                      settings: const RouteSettings(),
+                    ),
+                  );
+                }
+              },
+              child: const Text(
+                '선택완료',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AccountTable extends StatefulWidget {
+  const AccountTable({super.key});
+
+  @override
+  _AccountTableState createState() => _AccountTableState();
+}
+
+class _AccountTableState extends State<AccountTable> {
+  // 선택된 로우의 인덱스를 저장하는 변수
+  AccountList acList = AccountList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Card(
+        elevation: 4.0,
+        child: Column(
+          children: <Widget>[
+            // ListView.builder를 사용하여 동적으로 아이템 생성
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: acList.getAccountList.length,
+              itemBuilder: (context, index) {
+                final account = acList.getAccountList[index];
+                return ListTile(
+                  title: Text(account.bank),
+                  subtitle: Text('계좌번호: ${account.accNum}'),
+                  trailing: Text('월 최대 납부액: ${account.maxAmount}'),
+                  tileColor: selectedRow == index
+                      ? const Color.fromARGB(255, 150, 208, 255)
+                      : null, // 선택된 로우에 색상 적용
+                  onTap: () {
+                    setState(() {
+                      if (selectedRow == index) {
+                        selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                      } else {
+                        selectedRow = index; // 새로운 로우를 선택
+                      }
+                    });
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -790,8 +844,6 @@ class AmountSelectScreen extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {
-                //계좌번호 받는 위치
-
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
@@ -1063,61 +1115,6 @@ class FinalScreen extends StatelessWidget {
                 ),
               ),
             )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// 적금계좌 클래스 선언
-
-// row 수 만큼 테이블 만들기
-class AccountTable extends StatefulWidget {
-  const AccountTable({super.key});
-
-  @override
-  _AccountTableState createState() => _AccountTableState();
-}
-
-class _AccountTableState extends State<AccountTable> {
-  // 선택된 로우의 인덱스를 저장하는 변수
-  AccountList acList = AccountList();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Card(
-        elevation: 4.0,
-        child: Column(
-          children: <Widget>[
-            // ListView.builder를 사용하여 동적으로 아이템 생성
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: acList.getAccountList.length,
-              itemBuilder: (context, index) {
-                final account = acList.getAccountList[index];
-                return ListTile(
-                  title: Text(account.bank),
-                  subtitle: Text('계좌번호: ${account.accNum}'),
-                  trailing: Text('월 최대 납부액: ${account.maxAmount}'),
-                  tileColor: selectedRow == index
-                      ? const Color.fromARGB(255, 150, 208, 255)
-                      : null, // 선택된 로우에 색상 적용
-                  onTap: () {
-                    setState(() {
-                      if (selectedRow == index) {
-                        selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                      } else {
-                        selectedRow = index; // 새로운 로우를 선택
-                      }
-                    });
-                  },
-                );
-              },
-            ),
           ],
         ),
       ),
