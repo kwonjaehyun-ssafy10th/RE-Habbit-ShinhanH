@@ -137,7 +137,7 @@ void patchTransaction(String accountNo, String date, int time, String type,
     url,
     body: json.encode(temp),
   );
-  // patchTransactionCnt(accountNo);
+  patchTransactionCnt(accountNo);
   patchBalance(accountNo, withdrawal, deposit);
 }
 
@@ -172,7 +172,7 @@ getCheckingAccountListOf(String name) async {
       if (item.key == name) {
         for (var account in item.value["계좌목록"]) {
           if (account["구분"] == "입출금계좌") {
-            print(account);
+            return account;
           }
         }
       }
@@ -206,52 +206,84 @@ getBalanceOf(accountNo) async {
 }
 
 patchBalance(accountNo, withdrawal, deposit) async {
-  var path = 'v3/balance';
-  final url = Uri.https(domain, path + "/" + accountNo + ".json");
   var balance = await getBalanceOf(accountNo);
+  var newBalance = balance - withdrawal + deposit;
   Map<String, dynamic> map = new Map();
-  map["잔액"] = balance - withdrawal + deposit;
-  await http.patch(
-    url,
-    body: json.encode(map),
-  );
+  map["잔액"] = newBalance;
+  List paths = ['v3/balance', 'v3/account'];
+  for (var path in paths) {
+    final url = Uri.https(domain, path + "/" + accountNo + ".json");
+    await http.patch(
+      url,
+      body: json.encode(map),
+    );
+  }
+
+  var path = 'v3/user';
+  final url = Uri.https(domain, path + ".json");
+  var response = await http.get(url);
+  Map<String, dynamic> userData = json.decode(response.body);
+  userData.forEach((username, user) {
+    var pathUser = username;
+    for (int i = 0; i < (user["계좌목록"]).length; i++) {
+      if (user["계좌목록"][i]["계좌번호"] == accountNo) {
+        final patchUrl = Uri.https(
+            domain, path + "/" + pathUser + "/계좌목록/" + i.toString() + ".json");
+        http.patch(
+          patchUrl,
+          body: json.encode(map),
+        );
+      }
+    }
+  });
 }
 
 getTransactionCnt(accountNo) async {
-  var accountList = await loadData('transaction');
-  for (var item in accountList) {
-    if (item.key == accountNo) {
-      return item.value["거래내역반복횟수"];
-    }
-  }
+  var accountInfo = await getAccountInfo(accountNo);
+  return accountInfo["거래내역반복횟수"];
 }
 
-// 미완성
-// patchTransactionCnt(accountNo) async {
-//   List paths = ['v3/transaction', 'v3/account'];
-//   for (var path in paths) {
-//     final url = Uri.https(domain, path + "/" + accountNo + ".json");
-//     var transactionCnt = await getTransactionCnt(accountNo);
-//     Map<String, dynamic> map = new Map();
-//     map["거래내역반복횟수"] = transactionCnt + 1;
-//     await http.patch(
-//       url,
-//       body: json.encode(map),
-//     );
-//   }
+patchTransactionCnt(accountNo) async {
+  var transactionCnt = await getTransactionCnt(accountNo);
+  List paths = ['v3/transaction', 'v3/account'];
+  for (var path in paths) {
+    final url = Uri.https(domain, path + "/" + accountNo + ".json");
+    Map<String, dynamic> map = new Map();
+    map["거래내역반복횟수"] = transactionCnt + 1;
+    await http.patch(
+      url,
+      body: json.encode(map),
+    );
+  }
 
-// 미완성
-//   var path = 'v3/user';
-//   // var accountList = await
-//   final url = Uri.https(domain, path + ".json");
-//   var transactionCnt = await getTransactionCnt(accountNo);
-//   Map<String, dynamic> map = new Map();
-//   map["거래내역반복횟수"] = transactionCnt + 1;
-//   await http.patch(
-//     url,
-//     // body: json.encode(map),
-//   )
-// }
+  var path = 'v3/user';
+  final url = Uri.https(domain, path + ".json");
+  var response = await http.get(url);
+  Map<String, dynamic> userData = json.decode(response.body);
+  userData.forEach((username, user) {
+    var pathUser = username;
+    for (int i = 0; i < (user["계좌목록"]).length; i++) {
+      if (user["계좌목록"][i]["계좌번호"] == accountNo) {
+        final patchUrl = Uri.https(
+            domain, path + "/" + pathUser + "/계좌목록/" + i.toString() + ".json");
+        Map<String, dynamic> map = new Map();
+        map["거래내역반복횟수"] = transactionCnt + 1;
+        http.patch(
+          patchUrl,
+          body: json.encode(map),
+        );
+      }
+    }
+  });
+}
+
+getAccountInfo(accountNo) async {
+  var path = 'v3/account';
+  final url = Uri.https(domain, path + "/" + accountNo + ".json");
+  final response = await http.get(url);
+  var result = json.decode(response.body);
+  return result;
+}
 
 void transfer(date, time, from, to, amount, memoFrom, memoTo, type) async {
   var balance = await getBalanceOf(from);
@@ -284,7 +316,7 @@ request1transfer() async {
 }
 
 // 유효한 계좌인지 체크하는 메서드
-validAccountcheck() async {
+validAccountCheck() async {
   var response = await request1transfer();
   return json.decode(response.body)["dataHeader"]["successCode"] == "0";
 }
@@ -293,6 +325,18 @@ validAccountcheck() async {
 // 현재 1원이체 메시지가 1234로 고정되어 있기 때문에, 1234입력하면 인증 성공, 다른 값 입력하면 인증 실패
 auth1transfer(String input) {
   return input == "1234";
+}
+
+getList(action) async {
+  var path = api3[action]['path'];
+  final url = Uri.https(domain, path + ".json");
+  var response = await http.get(url);
+  var list = response.body;
+  return list;
+}
+
+timeToDate(int time) {
+  return "09${((time / 24).toInt() + 1).toString().padLeft(2, '0')}";
 }
 
 void main() async {
@@ -311,8 +355,44 @@ void main() async {
 
   // patchBalance("121735", 5000, 0);
 
-  // transfer("0913", 185, "171290", "129793", 7500, "보낸사람 메모", "받는사람 메모", "신한체크");
+  // transfer("0913", 185, "105039", "165169", 7500, "보낸사람 메모", "받는사람 메모", "신한체크");
   // var response = await request1transfer();
   // var check = await validAccountcheck();
-  getSavingAccountListOf("도레미");
+  // getSavingAccountListOf("도레미");
+
+  // for (var userEntry in userData.entries) {
+  //   var username = userEntry.key;
+  //   var user = userEntry.value;
+
+  //   Map<String, dynamic> accountList = user['accountList'];
+  //   // for (var accountEntry in accountList.entries)
+  //   print(accountList);
+  // }
+  // for (var item in .entries) {
+  //   print(item.value);
+
+  // var accountList = await
+  // final url = Uri.https(domain, path + ".json");
+  // Map<String, dynamic> map = new Map();
+  // map["거래내역반복횟수"] = transactionCnt + 1;
+  // await http.patch(
+  //   url,
+  //   body: json.encode(map),
+  // );
+  test();
+}
+
+void test() async {
+  String user1 = "도레미";
+  String user2 = "쏠";
+  // initUser(user1);
+  // initUser(user2);
+  var user1Account = await getCheckingAccountListOf(user1);
+  var user2Account = await getCheckingAccountListOf(user2);
+  var user1AccountNo = user1Account["계좌번호"];
+  var user2AccountNo = user2Account["계좌번호"];
+  int time = 365;
+  String date = timeToDate(time);
+  transfer(
+      date, time, user1AccountNo, user2AccountNo, 5000, "스타벅스", user1, "신한체크");
 }
