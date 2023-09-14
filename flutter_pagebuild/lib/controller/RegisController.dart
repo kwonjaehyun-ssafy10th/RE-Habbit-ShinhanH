@@ -5,6 +5,7 @@ import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
+import 'package:flutter_pagebuild/DB/light_api.dart';
 
 // 1. 계좌번호&이름 입력
 // 2. 계좌번호를 통한 본인인증
@@ -53,6 +54,7 @@ class AccountList with ChangeNotifier {
     Account.Savings('농협은행', 3564775924, 300000),
     Account.Savings('농협은행', 3564775924, 300000),
   ];
+
   void setAccountList(List<Account> a) {
     int idx = 0;
     regisModel.accountList.clear();
@@ -63,7 +65,7 @@ class AccountList with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Account> get getAccountList {
+  List<Account>? get getAccountList {
     return regisModel.accountList;
   }
 

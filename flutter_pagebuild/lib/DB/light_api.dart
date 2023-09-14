@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:math';
 
-Random random = new Random();
+Random random = Random();
 String domain = 'shb-hackton-ad177-default-rtdb.firebaseio.com';
 
 Map<String, dynamic> api3 = {
@@ -32,7 +32,7 @@ void patchToFirebase(action, map) async {
   var path = api3[action]['path'];
   var keyName = keyMap3[action];
   final url = Uri.https(domain, path + ".json");
-  Map<String, dynamic> temp = new Map();
+  Map<String, dynamic> temp = {};
   temp[map[keyName]] = map;
   await http.patch(
     url,
@@ -41,9 +41,9 @@ void patchToFirebase(action, map) async {
 }
 
 Map<String, dynamic> userToMap(String name) {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map['고객명'] = name;
-  Map<String, dynamic> temp = new Map();
+  Map<String, dynamic> temp = {};
   temp['0'] = accountToMap(name, (random.nextInt(100000) + 100000).toString(),
       "입출금계좌", "쏠편한입출금통장", 100000, 0);
   temp['1'] = accountToMap(name, (random.nextInt(100000) + 100000).toString(),
@@ -54,7 +54,7 @@ Map<String, dynamic> userToMap(String name) {
 
 Map<String, dynamic> accountToMap(String name, String accountNo, String type,
     String title, int balance, int transactionCnt) {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map['고객명'] = name;
   map['계좌번호'] = accountNo;
   map['구분'] = type;
@@ -65,14 +65,14 @@ Map<String, dynamic> accountToMap(String name, String accountNo, String type,
 }
 
 Map<String, dynamic> balanceToMap(int balance) {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map['잔액'] = balance;
   return map;
 }
 
 Map<String, dynamic> transactionToMap(String date, int time, String type,
     int withdrawal, int deposit, String memo, String counterparty) {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map['거래일자'] = date;
   map['거래시간'] = time;
   map['적요'] = type;
@@ -98,7 +98,7 @@ void initAccount(Map account) {
 }
 
 void initBalance(String accountNo, int balance) {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map['계좌번호'] = accountNo;
   map['잔액'] = balance;
   patchToFirebase('balance', map);
@@ -109,14 +109,14 @@ void initTransaction(String accountNo, Map transaction) async {
 }
 
 void initTransactionList(String accountNo) async {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map["계좌번호"] = accountNo;
   map["거래내역반복횟수"] = 0;
   map["거래내역"] = null;
-  Map<String, dynamic> temp = new Map();
+  Map<String, dynamic> temp = {};
   temp[accountNo] = map;
   var path = 'v3/transaction';
-  final url = Uri.https(domain, path + ".json");
+  final url = Uri.https(domain, "$path.json");
   await http.patch(
     url,
     body: json.encode(temp),
@@ -126,8 +126,8 @@ void initTransactionList(String accountNo) async {
 void patchTransaction(String accountNo, String date, int time, String type,
     int withdrawal, int deposit, String memo, String counterparty) async {
   var path = 'v3/transaction';
-  final url = Uri.https(domain, path + "/" + accountNo + "/거래내역" + ".json");
-  Map<String, dynamic> temp = new Map();
+  final url = Uri.https(domain, "$path/$accountNo/거래내역.json");
+  Map<String, dynamic> temp = {};
   var cnt = await getTransactionCnt(accountNo);
   temp[cnt.toString()] = transactionToMap(
       date, time, type, withdrawal, deposit, memo, counterparty);
@@ -153,27 +153,25 @@ Future<List> loadData(action) async {
   return loadedData;
 }
 
-getAccountListOf(String name) async {
+getAccountListOf(String? name) async {
+  List list = [];
   var loadedData = await loadData('user');
-  if (loadedData != null) {
-    for (var item in loadedData) {
-      if (item.key == name) {
-        print(item.value);
-      }
+  for (var item in loadedData) {
+    if (item.key == name) {
+      list.add(item.value);
     }
   }
+  return list;
 }
 
 // 이름 입력하면 입출금계좌 리스트 출력
 getCheckingAccountListOf(String name) async {
   var loadedData = await loadData('user');
-  if (loadedData != null) {
-    for (var item in loadedData) {
-      if (item.key == name) {
-        for (var account in item.value["계좌목록"]) {
-          if (account["구분"] == "입출금계좌") {
-            return account;
-          }
+  for (var item in loadedData) {
+    if (item.key == name) {
+      for (var account in item.value["계좌목록"]) {
+        if (account["구분"] == "입출금계좌") {
+          print(account);
         }
       }
     }
@@ -183,13 +181,11 @@ getCheckingAccountListOf(String name) async {
 // 이름 입력하면 적금계좌 리스트 출력
 getSavingAccountListOf(String name) async {
   var loadedData = await loadData('user');
-  if (loadedData != null) {
-    for (var item in loadedData) {
-      if (item.key == name) {
-        for (var account in item.value["계좌목록"]) {
-          if (account["구분"] == "자유적금") {
-            print(account);
-          }
+  for (var item in loadedData) {
+    if (item.key == name) {
+      for (var account in item.value["계좌목록"]) {
+        if (account["구분"] == "자유적금") {
+          print(account);
         }
       }
     }
@@ -206,36 +202,15 @@ getBalanceOf(accountNo) async {
 }
 
 patchBalance(accountNo, withdrawal, deposit) async {
+  var path = 'v3/balance';
+  final url = Uri.https(domain, "${"$path/" + accountNo}.json");
   var balance = await getBalanceOf(accountNo);
-  var newBalance = balance - withdrawal + deposit;
-  Map<String, dynamic> map = new Map();
-  map["잔액"] = newBalance;
-  List paths = ['v3/balance', 'v3/account'];
-  for (var path in paths) {
-    final url = Uri.https(domain, path + "/" + accountNo + ".json");
-    await http.patch(
-      url,
-      body: json.encode(map),
-    );
-  }
-
-  var path = 'v3/user';
-  final url = Uri.https(domain, path + ".json");
-  var response = await http.get(url);
-  Map<String, dynamic> userData = json.decode(response.body);
-  userData.forEach((username, user) {
-    var pathUser = username;
-    for (int i = 0; i < (user["계좌목록"]).length; i++) {
-      if (user["계좌목록"][i]["계좌번호"] == accountNo) {
-        final patchUrl = Uri.https(
-            domain, path + "/" + pathUser + "/계좌목록/" + i.toString() + ".json");
-        http.patch(
-          patchUrl,
-          body: json.encode(map),
-        );
-      }
-    }
-  });
+  Map<String, dynamic> map = {};
+  map["잔액"] = balance - withdrawal + deposit;
+  await http.patch(
+    url,
+    body: json.encode(map),
+  );
 }
 
 getTransactionCnt(accountNo) async {
@@ -248,7 +223,7 @@ patchTransactionCnt(accountNo) async {
   List paths = ['v3/transaction', 'v3/account'];
   for (var path in paths) {
     final url = Uri.https(domain, path + "/" + accountNo + ".json");
-    Map<String, dynamic> map = new Map();
+    Map<String, dynamic> map = {};
     map["거래내역반복횟수"] = transactionCnt + 1;
     await http.patch(
       url,
@@ -257,16 +232,15 @@ patchTransactionCnt(accountNo) async {
   }
 
   var path = 'v3/user';
-  final url = Uri.https(domain, path + ".json");
+  final url = Uri.https(domain, "$path.json");
   var response = await http.get(url);
   Map<String, dynamic> userData = json.decode(response.body);
   userData.forEach((username, user) {
     var pathUser = username;
     for (int i = 0; i < (user["계좌목록"]).length; i++) {
       if (user["계좌목록"][i]["계좌번호"] == accountNo) {
-        final patchUrl = Uri.https(
-            domain, path + "/" + pathUser + "/계좌목록/" + i.toString() + ".json");
-        Map<String, dynamic> map = new Map();
+        final patchUrl = Uri.https(domain, "$path/$pathUser/계좌목록/$i.json");
+        Map<String, dynamic> map = {};
         map["거래내역반복횟수"] = transactionCnt + 1;
         http.patch(
           patchUrl,
@@ -279,7 +253,7 @@ patchTransactionCnt(accountNo) async {
 
 getAccountInfo(accountNo) async {
   var path = 'v3/account';
-  final url = Uri.https(domain, path + "/" + accountNo + ".json");
+  final url = Uri.https(domain, "${"$path/" + accountNo}.json");
   final response = await http.get(url);
   var result = json.decode(response.body);
   return result;
@@ -304,7 +278,7 @@ request1transfer() async {
     "입금통장메모": "1234 SSAFY"
   };
   final url = Uri.https('shbhack.shinhan.com', path);
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map["dataHeader"] = {"apikey": "2023_Shinhan_SSAFY_Hackathon"};
   map["dataBody"] = dataBody;
   final response = await http.post(
@@ -336,7 +310,7 @@ getList(action) async {
 }
 
 timeToDate(int time) {
-  return "09${((time / 24).toInt() + 1).toString().padLeft(2, '0')}";
+  return "09${(time ~/ 24 + 1).toString().padLeft(2, '0')}";
 }
 
 void main() async {
