@@ -565,13 +565,15 @@ class ChallSelectScreen extends StatefulWidget {
 }
 
 class _ChallSelectScreenState extends State<ChallSelectScreen> {
-  int _radioVal = 0;
+  final int _radioVal = 0;
+  AccountList acList = AccountList();
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
     double itemWidth = screenWidth * 0.8;
+    Color? col;
 
     return Scaffold(
         appBar: AppBar(
@@ -590,11 +592,11 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                 decoration: BoxDecoration(
                     border: Border.all(),
                     borderRadius: BorderRadius.circular(10)),
-                child: const Text(
+                child: Text(
                   textAlign: TextAlign.center,
-                  '🔎 신한 110xxxxxxxxx 계좌에서 oo 지출이 있으시네요!',
-                  style: TextStyle(
-                    fontSize: 20,
+                  '🔎 ${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum}\n 내 계좌에서 발생한 \n 소비내역을 바탕으로 구성했어요',
+                  style: const TextStyle(
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -609,40 +611,75 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
               ),
               SizedBox(
                 width: itemWidth,
-                child: ListView(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                  ),
                   shrinkWrap: true,
-                  children: [0, 1, 2, 3].map((int index) {
-                    bool isEnabled = true; // 기본적으로 모든 선택지를 활성화합니다.
-                    if (index != 0) {
-                      // '커피 안 마시기' 선택지가 아닌 경우에만 비활성화합니다.
-                      isEnabled = false;
-                    }
+                  itemCount: 4,
+                  itemBuilder: (BuildContext context, int index) {
+                    bool isEnabled = true;
 
-                    return ListTile(
-                      leading: Radio<int>(
-                        value: index,
-                        groupValue: _radioVal,
-                        onChanged: isEnabled
-                            ? (int? value) {
-                                if (value != null) {
-                                  setState(() {
-                                    _radioVal = value;
-                                  });
-                                }
-                              }
-                            : null, // isEnabled가 false인 경우, onChanged를 null로 설정하여 비활성화 상태로 만듭니다.
-                      ),
-                      title: Text(
-                        _getLabelText(index),
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: isEnabled
-                              ? Colors.black
-                              : Colors.grey, // 비활성화된 경우 색상을 변경합니다.
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (selectedRow == index) {
+                            selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                          } else {
+                            selectedRow = index; // 새로운 로우를 선택
+                          }
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                          color: selectedRow == index
+                              ? Colors.amber[200]
+                              : Colors.white, // 조건부로 배경색 결정
+                          borderRadius:
+                              BorderRadius.circular(10), // 모서리 둥글기 값 설정
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                //소비 종류와 관련된 버튼
+                                _getLabelText(index),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: isEnabled ? Colors.black : Colors.grey,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(10.0),
+                                margin: const EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  color: selectedRow == index
+                                      //색은 바꿔주세용
+                                      ? Colors.green[100]
+                                      : Colors.white, // 조건부로 배경색 결정
+                                  borderRadius:
+                                      BorderRadius.circular(10), // 모서리 둥글기 값 설정
+                                ),
+                                child: Text(
+                                  "여기에 새로운 텍스트를 넣으세요", // 여기에 원하는 텍스트를 넣으십시오.
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color:
+                                        isEnabled ? Colors.black : Colors.grey,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );
-                  }).toList(),
+                  },
                 ),
               ),
               SizedBox(
