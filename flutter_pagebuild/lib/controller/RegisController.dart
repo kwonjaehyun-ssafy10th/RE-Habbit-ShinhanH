@@ -5,6 +5,9 @@ import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
+
+import 'package:flutter_pagebuild/DB/RegisApi.dart';
+
 import 'package:flutter_pagebuild/DB/light_account.dart';
 
 // 1. 계좌번호&이름 입력
@@ -15,20 +18,16 @@ import 'package:flutter_pagebuild/DB/light_account.dart';
 // --> 이 부분 정리해야 될 것 같음
 // 6. 적금 계좌 연결
 
-//Future async
-// 변수 타입은 그대로
-// async만 써도 되나? -- 확인 필요
-
+//계좌 인스턴스 생성
 class Account {
-  Account(this.bank, this.accNum);
-  Account.Savings(this.bank, this.accNum, this.maxAmount);
-  String bank;
+  Account(this.accName, this.accNum);
+  String accName;
   String accNum;
-  int maxAmount = 0;
 
   bool selected = false;
 }
 
+//계좌 리스트 관리 클래스
 class AccountList with ChangeNotifier {
   static final AccountList _inst = AccountList._internal();
   AccountList._internal();
@@ -36,34 +35,17 @@ class AccountList with ChangeNotifier {
     return _inst;
   }
 
+//RegisModel - 싱글턴
   RegisModel regisModel = RegisModel();
 
-  //입출금 계좌 리스트
-// 데이터 소스
-  List<Account> temp = <Account>[
-    Account('신한은행', '1104742313'),
-    Account('우리은행', '2623339834'),
-    Account('새마을금고', '3058831284'),
-    Account('농협은행', '3564775924'),
-    Account('카카오뱅크', '7432343242'),
-  ];
-  List<Account> temp2 = <Account>[
-    Account.Savings('신한은행', '1104742313', 300000),
-    // Account('카카오뱅크', 7432343242, 200000),
-    // Account('우리은행', 2623339834, 200000),
-    // Account('새마을금고', 3058831284, 300000),
-    // Account('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', '3564775924', 300000),
-    Account.Savings('농협은행', '3564775924', 300000),
-    // Account.Savings('농협은행', 3564775924, 300000),
-    // Account.Savings('농협은행', 3564775924, 300000),
-  ];
-
-  dataToAccount(account) {
-    String bank = account["상품명"];
-    String accNum = account["계좌번호"];
-    return Account(bank, accNum);
-  }
+//입출금 계좌 리스트(임시) - 삭제
+  // List<Account> temp2 = <Account>[
+  //   Account.Savings('신한은행', '1104742313', 300000),
+  //   Account('카카오뱅크', 7432343242, 200000),
+  //   Account('우리은행', 2623339834, 200000),
+  //   Account('새마을금고', 3058831284, 300000),
+  //   Account('농협은행', 3564775924, 300000),
+  // ];
 
   int listlength = 0;
 
@@ -73,10 +55,10 @@ class AccountList with ChangeNotifier {
     int idx = 0;
     regisModel.accountList.clear();
     while (regisModel.accountList.length < tmplist.length) {
-      regisModel.accountList.add(dataToAccount(tmplist[idx++]));
+      regisModel.accountList.add(dataToAccount(tmplist[idx++], true));
     }
     listlength = idx;
-    notifyListeners();
+    //notifyListeners();
   }
 
   Future<List<Account>> get getAccountList async {

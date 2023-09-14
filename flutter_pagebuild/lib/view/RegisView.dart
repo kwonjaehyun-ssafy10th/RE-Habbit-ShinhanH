@@ -551,7 +551,7 @@ class _AccountTableState2 extends State<AccountTable2> {
                           itemBuilder: (context, index) {
                             final account = snapshot.data![index];
                             return ListTile(
-                              title: Text(account.bank),
+                              title: Text(account.accName),
                               // subtitle: Text('계좌번호: ${account.accNum}'),
                               trailing: Text('계좌번호: ${account.accNum}'),
                               tileColor: selectedRow == index
@@ -615,7 +615,7 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
                   textAlign: TextAlign.center,
-                  '🔎 ${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum}\n 내 계좌에서 발생한 \n 소비내역을 바탕으로 구성했어요',
+                  '🔎 ${acList.getaccountConsum?.accName} ${acList.getaccountConsum?.accNum}\n 내 계좌에서 발생한 \n 소비내역을 바탕으로 구성했어요',
                   style: const TextStyle(
                     fontSize: 18,
                   ),
@@ -1085,7 +1085,7 @@ class ResultScreen extends StatelessWidget {
                 } else {
                   return Text(
                     textAlign: TextAlign.center,
-                    '\n ${acList.getaccountSaving?.bank} ${acList.getaccountSaving?.accNum} 적금\n커피 안 마시기\n${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum} 입출금\n30일\n10,000원\n\n...........................................................',
+                    '\n ${acList.getaccountSaving?.accName} ${acList.getaccountSaving?.accNum} 적금\n커피 안 마시기\n${acList.getaccountConsum?.accName} ${acList.getaccountConsum?.accNum} 입출금\n30일\n10,000원\n\n...........................................................',
                     //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
 
                     style: const TextStyle(
