@@ -35,14 +35,14 @@ class AccountList with ChangeNotifier {
 
   //입출금 계좌 리스트
 // 데이터 소스
-  List<Account> temp2 = <Account>[
+  List<Account> temp = <Account>[
     Account('신한은행', 1104742313),
     Account('우리은행', 2623339834),
     Account('새마을금고', 3058831284),
     Account('농협은행', 3564775924),
     Account('카카오뱅크', 7432343242),
   ];
-  List<Account> temp = <Account>[
+  List<Account> temp2 = <Account>[
     Account.Savings('신한은행', 1104742313, 300000),
     // Account('카카오뱅크', 7432343242, 200000),
     // Account('우리은행', 2623339834, 200000),
@@ -95,7 +95,26 @@ class pickChallenge {
     return _inst;
   }
 
+  RegisModel regisModel = RegisModel();
+
   //1.여태까지의 소비내역 반환
+  void setconsumList() {
+    //소비내역을 걸러내는 로직
+    regisModel.consumList.add('스타벅스');
+    regisModel.consumList.add('배민');
+    regisModel.consumList.add('택시');
+    regisModel.consumList.add('무신사');
+    regisModel.consumList;
+  }
+
+  List get getconsumList {
+    //소비내역 반환
+    return regisModel.consumList;
+  }
+
+  List get getconsumLabel {
+    return regisModel.consumLabel;
+  }
 }
 
 class RegisController extends GetxController {
@@ -111,6 +130,9 @@ class RegisController extends GetxController {
 
 //CheckModel -> 본인 인증 모델
   CheckModel checkInfo = CheckModel();
+
+//MainController불러오기
+  resetMainModel resetMainM = resetMainModel();
 
 //이름 받아오는 파트
   static TextEditingController inputName = TextEditingController();

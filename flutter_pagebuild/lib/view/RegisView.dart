@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 final controller = Get.find<RegisController>();
 AccountList acList = AccountList();
+pickChallenge pickchallinst = pickChallenge();
 
 class RegisView extends StatelessWidget {
   const RegisView({super.key});
@@ -458,6 +459,12 @@ class trackAccScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              '${controller.checkInfo.registName} 님 환영합니다!\n',
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
             const Text(
               '조회할 입출금계좌 선택하기',
               style: TextStyle(
@@ -573,8 +580,8 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
     double itemWidth = screenWidth * 0.8;
-    Color? col;
 
+    pickchallinst.setconsumList();
     return Scaffold(
         appBar: AppBar(
           title: const HeaderWidget(),
@@ -648,7 +655,7 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                             children: [
                               Text(
                                 //소비 종류와 관련된 버튼
-                                _getLabelText(index),
+                                pickchallinst.getconsumLabel[index],
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: isEnabled ? Colors.black : Colors.grey,
@@ -666,7 +673,8 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                                       BorderRadius.circular(10), // 모서리 둥글기 값 설정
                                 ),
                                 child: Text(
-                                  "여기에 새로운 텍스트를 넣으세요", // 여기에 원하는 텍스트를 넣으십시오.
+                                  pickchallinst.getconsumList[
+                                      index], // 여기에 원하는 텍스트를 넣으십시오.
                                   style: TextStyle(
                                     fontSize: 13,
                                     color:
@@ -704,20 +712,6 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
 }
 
 // 라디오 버튼에 대한 레이블을 반환하는 함수
-String _getLabelText(int index) {
-  switch (index) {
-    case 0:
-      return '커피 안 마시기';
-    case 1:
-      return '야식 안 먹기';
-    case 2:
-      return '택시 타지 않기';
-    case 3:
-      return '옷 사지 않기';
-    default:
-      return '';
-  }
-}
 
 // 적금계좌 조회 및 선택
 class AccSelectScreen extends StatelessWidget {
@@ -738,9 +732,9 @@ class AccSelectScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              '시계토끼 님 환영합니다!\n',
-              style: TextStyle(
+            Text(
+              '${controller.checkInfo.registName} 님 환영합니다!\n',
+              style: const TextStyle(
                 fontSize: 18,
               ),
             ),
@@ -1033,20 +1027,20 @@ class ResultScreen extends StatelessWidget {
             ),
             SizedBox(
               width: screenWidth * 0.8,
-              child: const Text(
-                '\n시계토끼님이 선택하신 \nRe-Habbit이 맞나요?\n\n...........................................................',
+              child: Text(
+                '\n${controller.checkInfo.registName}님이 선택하신 \nRe-Habbit이 맞나요?\n\n...........................................................',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                 ),
               ),
             ),
-            const Text(
+            Text(
               textAlign: TextAlign.center,
-              '\n신한 620xxx 적금\n커피 안 마시기\n신한 110xxx 입출금\n30일\n10,000원\n\n...........................................................',
+              '\n ${acList.getaccountSaving?.bank} ${acList.getaccountSaving?.accNum} 적금\n커피 안 마시기\n${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum} 입출금\n30일\n10,000원\n\n...........................................................',
               //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
 
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
               ),
             ),
