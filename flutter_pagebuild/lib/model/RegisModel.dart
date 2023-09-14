@@ -33,6 +33,19 @@ class RegisModel {
 
   List<Account> accountList = [];
 
+  List consumList = [];
+
   Account? accountConsum;
   Account? accountSaving;
 }
+
+//Regis Controller에 등록되어 있음
+// class Account {
+//   Account(this.bank, this.accNum);
+//   Account.Savings(this.bank, this.accNum, this.maxAmount);
+//   String bank;
+//   int accNum;
+//   int maxAmount = 0;
+
+//   bool selected = false;
+// }

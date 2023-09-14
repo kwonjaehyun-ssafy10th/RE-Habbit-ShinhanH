@@ -67,6 +67,7 @@ class AccountList with ChangeNotifier {
     return regisModel.accountList;
   }
 
+//사용자가 고른 계좌 정보 등록
   void setaccountConsum(int? selecRow) {
     if (selecRow == null) return;
     regisModel.accountConsum = regisModel.accountList[selecRow];
@@ -76,6 +77,25 @@ class AccountList with ChangeNotifier {
     if (selecRow == null) return;
     regisModel.accountSaving = regisModel.accountList[selecRow];
   }
+
+  Account? get getaccountConsum {
+    return regisModel.accountConsum;
+  }
+
+  Account? get getaccountSaving {
+    return regisModel.accountSaving;
+  }
+}
+
+class pickChallenge {
+  // 챌린지 고르는 클래스
+  static final pickChallenge _inst = pickChallenge._internal();
+  pickChallenge._internal();
+  factory pickChallenge() {
+    return _inst;
+  }
+
+  //1.여태까지의 소비내역 반환
 }
 
 class RegisController extends GetxController {
@@ -116,6 +136,8 @@ class RegisController extends GetxController {
   }
 
 //사용자 계좌 연결
+
+//소비내역을 받아오기
 
 //메인 화면 연결
   void goToMain() {
