@@ -100,8 +100,19 @@ getList(action) async {
   return list;
 }
 
-timeToDate(int time) {
-  return "09${(time ~/ 24 + 1).toString().padLeft(2, '0')}";
+timestampToDateTime(int timestamp) {
+  List list = [];
+  list.add("09${(timestamp ~/ 24 + 1).toString().padLeft(2, '0')}");
+  list.add("${(timestamp % 24).toString().padLeft(2, '0')}00");
+  return list;
+}
+
+timeToString(int time) {
+  return time.toString().padLeft(2, '0') + "00";
+}
+
+timestamp(date, time) {
+  return int.parse(date.substring(2)) * 24 + int.parse(time.substring(0, 2));
 }
 
 void main() async {
