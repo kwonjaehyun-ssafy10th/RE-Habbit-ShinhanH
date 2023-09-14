@@ -66,6 +66,16 @@ class AccountList with ChangeNotifier {
   List<Account> get getAccountList {
     return regisModel.accountList;
   }
+
+  void setaccountConsum(int? selecRow) {
+    if (selecRow == null) return;
+    regisModel.accountConsum = regisModel.accountList[selecRow];
+  }
+
+  void setaccountSaving(int? selecRow) {
+    if (selecRow == null) return;
+    regisModel.accountSaving = regisModel.accountList[selecRow];
+  }
 }
 
 class RegisController extends GetxController {

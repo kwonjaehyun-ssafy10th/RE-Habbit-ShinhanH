@@ -33,7 +33,6 @@ class RegisModel {
 
   List<Account> accountList = [];
 
-  int temp() {
-    return 0;
-  }
+  Account? accountConsum;
+  Account? accountSaving;
 }
