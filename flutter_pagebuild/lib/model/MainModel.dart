@@ -7,7 +7,7 @@ class User {
   static final User _instUser = User.privateConstructor();
 
   //사용자명
-  String username = '';
+  String username = '김신한';
 
   //챌린지명
   String challengeName = '';
@@ -36,16 +36,12 @@ class MainModel {
 
   //성공율
 
-  //성공 판에서 성공여부 체크 하는 리스트
+  
+
 
   //현재까지 진행된 스탬프 갯수
   int challenge = 30;
-
   int stampCnt = 0;
-
-  // 0 - 커피x [성공]
-  // 1 - 커피o / 적금 o [성공]
-  // -1 - 커피o / 적금 x [실패]
 
   //case 종류
   // challengeSuc = 커피 x
@@ -53,10 +49,22 @@ class MainModel {
   // fail = 커피 o 적금 x
   // savingBonus = 커피 x 적금 o
 
-  int challengeSuc = 15;
+  // 0 - 커피x [성공]
+  // 1 - 커피o / 적금 o [성공]
+  // -1 - 커피o / 적금 x [실패]
+
+  //성공 판에서 성공여부 체크 하는 map = 스탬프 화면에 올릴 정보들
+  // key = 몇일차인지 : value = 성공여부
+  Map<int, int> check = {1:-1, 2:-1, 3:0, 4:0};
+  // List<int> stampList = [];
+
+  int challengeSuc = 11;
   int savingSuc = 10;
   int challengefail = 5;
   int savingBonus = 3;
+
+  // 현황 나타내는 문장
+  String status = '앗! 야생의 토끼가 나타났어요!\n당근을 지키러 가볼까요?';
 
 //PieChart reset시 갱신해야하는 데이터들
   Map<String, double> PieChartMap = {};
@@ -66,5 +74,4 @@ class MainModel {
 
   int dayCnt = 30;
 
-  List<int> stampList = [];
 }
