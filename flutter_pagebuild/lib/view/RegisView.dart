@@ -237,10 +237,10 @@ class SecondScreen extends StatelessWidget {
               children: [
                 OutlinedButton(
                     onPressed: () {
-                      if (_inputAccount != 'null') {
-                        controller.setUser(_inputAccount.text, 'et', 'et');
+                      if (!controller.setUser(_inputName.text, _inputBank.text,
+                          _inputAccount.text)) {
+                        return;
                       }
-
                       // 조회 후 다음 단계로
                       Navigator.of(context).pop();
                       Navigator.of(context).push(
@@ -277,7 +277,7 @@ class CustomRoute<T> extends MaterialPageRoute<T> {
   }
 }
 
-// 인풋 받기 : (수정) 이름 -> 계좌
+// 인풋 받기 : 이름 & 계좌
 class AccountNum extends StatefulWidget {
   const AccountNum({Key? key}) : super(key: key);
 
@@ -314,7 +314,10 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final int _radioVal = 0;
   @override
+  TextEditingController inputVeriN = TextEditingController();
+  @override
   Widget build(BuildContext context) {
+    final controller = Get.find<RegisController>();
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
@@ -354,11 +357,11 @@ class _AuthScreenState extends State<AuthScreen> {
             SizedBox(
               width: screenWidth * 0.5,
               child: TextField(
+                  controller: inputVeriN,
                   decoration: const InputDecoration(
                     labelText: 'ex) 파란토끼',
                     border: OutlineInputBorder(),
                   ),
-                  controller: _inputName,
                   keyboardType: TextInputType.text),
             ),
             SizedBox(
@@ -384,30 +387,39 @@ class _AuthScreenState extends State<AuthScreen> {
                           ],
                         ),
                         //
-                        content: const Column(
+                        content: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              "인증에 성공하였습니다.",
-                            ),
+                            (controller.verif(inputVeriN.text))
+                                ? const Text("인증에 성공하였습니다.")
+                                : const Text("인증에 실패하였습니다."),
                           ],
                         ),
                         actions: <Widget>[
-                          OutlinedButton(
-                            child: const Text("확인"),
-                            onPressed: () {
-                              // 성공시 다음 페이지로
-                              Navigator.of(context).pop();
-                              Navigator.of(context).push(
-                                CustomRoute(
-                                  builder: (BuildContext context) =>
-                                      const AccSelectScreen(),
-                                  settings: const RouteSettings(),
+                          (controller.verif(inputVeriN.text))
+                              ? OutlinedButton(
+                                  child: const Text("확인"),
+                                  onPressed: () {
+                                    // 성공시 다음 페이지로
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).push(
+                                      CustomRoute(
+                                        builder: (BuildContext context) =>
+                                            AccSelectScreen(),
+                                        settings: const RouteSettings(),
+                                      ),
+                                    );
+                                  },
+                                )
+                              : OutlinedButton(
+                                  child: const Text("뒤로"),
+                                  onPressed: () {
+                                    // 다시 인증문구 페이지로
+                                    Navigator.pop(context);
+                                  },
                                 ),
-                              );
-                            },
-                          ),
                         ],
                       );
                     });
@@ -415,48 +427,189 @@ class _AuthScreenState extends State<AuthScreen> {
               child: const Text('인증하기'),
             ),
             // 인증 실패한 경우
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//여기 계좌 선택
+
+int? selectedRow;
+
+// 적금계좌 조회 및 선택
+class AccSelectScreen extends StatelessWidget {
+  AccSelectScreen({super.key});
+  AccountList acList = AccountList();
+
+  @override
+  Widget build(BuildContext context) {
+    acList.setAccountList(acList.temp);
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              '시계토끼 님 환영합니다!\n',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            const Text(
+              '연동할 적금 계좌 선택하기',
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            // DataTableExample(),
+
+            const AccountTable(),
+
             OutlinedButton(
               onPressed: () {
-                // 맞지 않는 경우
-                // 실패 팝업
-                showDialog(
-                    context: context,
-                    //barrierDismissible - Dialog를 제외한 다른 화면 터치 x
-                    barrierDismissible: true,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        //Dialog Main Title
-                        title: const Column(
-                          children: <Widget>[
-                            Text("계좌 인증"),
-                          ],
-                        ),
-                        //
-                        content: const Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "인증코드가 일치하지 않습니다.",
-                            ),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          OutlinedButton(
-                            child: const Text("뒤로"),
-                            onPressed: () {
-                              // 다시 인증문구 페이지로
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      );
-                    });
+                if (selectedRow != null) {
+                  // 다음 단계로
+                  selectedRow = null;
+                  Navigator.of(context).push(
+                    CustomRoute(
+                      builder: (BuildContext context) => trackAccScreen(),
+                      settings: const RouteSettings(),
+                    ),
+                  );
+                }
               },
-              child: const Text('인증하기(실패)'),
+              child: const Text(
+                '선택완료',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 입출금 계좌 조회 및 선택
+class trackAccScreen extends StatelessWidget {
+  AccountList acList = AccountList();
+  trackAccScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    acList.setAccountList(acList.temp2);
+    return Scaffold(
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 130,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              '조회할 입출금계좌 선택하기',
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            // DataTableExample(),
+
+            AccountTable2(),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            OutlinedButton(
+              onPressed: () {
+                if (selectedRow != null) {
+                  // 다음 단계로
+                  Navigator.of(context).push(
+                    CustomRoute(
+                      builder: (BuildContext context) =>
+                          const ChallSelectScreen(),
+                      settings: const RouteSettings(),
+                    ),
+                  );
+                } else {
+                  return;
+                }
+              },
+              child: const Text(
+                '조회하기',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// row 수 만큼 테이블 만들기
+
+//2가 입출금
+class AccountTable2 extends StatefulWidget {
+  AccountTable2({super.key});
+
+  //ac리스트 재 생성
+  AccountList acList = AccountList();
+  @override
+  _AccountTableState2 createState() => _AccountTableState2();
+}
+
+class _AccountTableState2 extends State<AccountTable2> {
+  AccountList acList = AccountList();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Card(
+        elevation: 4.0,
+        child: Column(
+          children: <Widget>[
+            // ListView.builder를 사용하여 동적으로 아이템 생성
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: acList.getAccountList.length,
+              itemBuilder: (context, index) {
+                final account = acList.getAccountList[index];
+                return ListTile(
+                  title: Text(account.bank),
+                  // subtitle: Text('계좌번호: ${account.accNum}'),
+                  trailing: Text('계좌번호: ${account.accNum}'),
+                  tileColor: selectedRow == index
+                      ? const Color.fromARGB(255, 150, 208, 255)
+                      : null, // 선택된 로우에 색상 적용
+                  onTap: () {
+                    setState(() {
+                      if (selectedRow == index) {
+                        selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                      } else {
+                        selectedRow = index; // 새로운 로우를 선택
+                      }
+                    });
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -760,196 +913,6 @@ class _AmountSliderState extends State<AmountSlider> {
   }
 }
 
-// 적금계좌 조회 및 선택
-class AccSelectScreen extends StatelessWidget {
-  const AccSelectScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const HeaderWidget(),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: 130,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              '시계토끼 님 환영합니다!\n',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            const Text(
-              '연동할 적금 계좌 선택하기',
-              style: TextStyle(
-                fontSize: 24,
-              ),
-            ),
-            // DataTableExample(),
-
-            const AccountTable(),
-
-            OutlinedButton(
-              onPressed: () {
-                // 다음 단계로
-                Navigator.of(context).push(
-                  CustomRoute(
-                    builder: (BuildContext context) => const trackAccScreen(),
-                    settings: const RouteSettings(),
-                  ),
-                );
-              },
-              child: const Text(
-                '선택완료',
-                style: TextStyle(
-                  fontSize: 25,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// 입출금 계좌 조회 및 선택
-class trackAccScreen extends StatelessWidget {
-  const trackAccScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const HeaderWidget(),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        toolbarHeight: 130,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // const Text(
-            //   '시계토끼 님 환영합니다!\n',
-            //   style: TextStyle(
-            //     fontSize: 18,
-            //   ),
-            // ),
-            const Text(
-              '조회할 입출금계좌 선택하기',
-              style: TextStyle(
-                fontSize: 24,
-              ),
-            ),
-            // DataTableExample(),
-
-            const AccountTable2(),
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            OutlinedButton(
-              onPressed: () {
-                // 다음 단계로
-                Navigator.of(context).push(
-                  CustomRoute(
-                    builder: (BuildContext context) =>
-                        const ChallSelectScreen(),
-                    settings: const RouteSettings(),
-                  ),
-                );
-              },
-              child: const Text(
-                '조회하기',
-                style: TextStyle(
-                  fontSize: 25,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// 입출금 계좌 테이블 만들 소스들
-// 적금계좌 클래스 선언
-class Account2 {
-  Account2(this.bank, this.accNum);
-  final String bank;
-  final int accNum;
-
-  bool selected = false;
-}
-
-// 데이터 소스
-final List<Account2> _accounts2 = <Account2>[
-  Account2('신한은행', 1104742313),
-  Account2('카카오뱅크', 7432343242),
-  Account2('우리은행', 2623339834),
-  Account2('새마을금고', 3058831284),
-  Account2('농협은행', 3564775924),
-];
-
-// row 수 만큼 테이블 만들기
-class AccountTable2 extends StatefulWidget {
-  const AccountTable2({super.key});
-
-  @override
-  _AccountTableState2 createState() => _AccountTableState2();
-}
-
-class _AccountTableState2 extends State<AccountTable2> {
-  int? selectedRow; // 선택된 로우의 인덱스를 저장하는 변수
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Card(
-        elevation: 4.0,
-        child: Column(
-          children: <Widget>[
-            // ListView.builder를 사용하여 동적으로 아이템 생성
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: _accounts.length,
-              itemBuilder: (context, index) {
-                final account = _accounts[index];
-                return ListTile(
-                  title: Text(account.bank),
-                  // subtitle: Text('계좌번호: ${account.accNum}'),
-                  trailing: Text('계좌번호: ${account.accNum}'),
-                  tileColor: selectedRow == index
-                      ? const Color.fromARGB(255, 150, 208, 255)
-                      : null, // 선택된 로우에 색상 적용
-                  onTap: () {
-                    setState(() {
-                      if (selectedRow == index) {
-                        selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                      } else {
-                        selectedRow = index; // 새로운 로우를 선택
-                      }
-                    });
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 // 선택 결과 알려주는 창
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});
@@ -1027,7 +990,7 @@ class ResultScreen extends StatelessWidget {
                 // 적금 선택 단계로
                 Navigator.of(context).push(
                   CustomRoute(
-                    builder: (BuildContext context) => const AccSelectScreen(),
+                    builder: (BuildContext context) => AccSelectScreen(),
                     settings: const RouteSettings(),
                   ),
                 );
@@ -1108,23 +1071,6 @@ class FinalScreen extends StatelessWidget {
 }
 
 // 적금계좌 클래스 선언
-class Account {
-  Account(this.bank, this.accNum, this.maxAmount);
-  final String bank;
-  final int accNum;
-  final int maxAmount;
-
-  bool selected = false;
-}
-
-// 데이터 소스
-final List<Account> _accounts = <Account>[
-  Account('신한은행', 1104742313, 300000),
-  Account('카카오뱅크', 7432343242, 200000),
-  Account('우리은행', 2623339834, 200000),
-  Account('새마을금고', 3058831284, 300000),
-  Account('농협은행', 3564775924, 300000),
-];
 
 // row 수 만큼 테이블 만들기
 class AccountTable extends StatefulWidget {
@@ -1135,7 +1081,8 @@ class AccountTable extends StatefulWidget {
 }
 
 class _AccountTableState extends State<AccountTable> {
-  int? selectedRow; // 선택된 로우의 인덱스를 저장하는 변수
+  // 선택된 로우의 인덱스를 저장하는 변수
+  AccountList acList = AccountList();
 
   @override
   Widget build(BuildContext context) {
@@ -1149,9 +1096,9 @@ class _AccountTableState extends State<AccountTable> {
             // ListView.builder를 사용하여 동적으로 아이템 생성
             ListView.builder(
               shrinkWrap: true,
-              itemCount: _accounts.length,
+              itemCount: acList.getAccountList.length,
               itemBuilder: (context, index) {
-                final account = _accounts[index];
+                final account = acList.getAccountList[index];
                 return ListTile(
                   title: Text(account.bank),
                   subtitle: Text('계좌번호: ${account.accNum}'),
