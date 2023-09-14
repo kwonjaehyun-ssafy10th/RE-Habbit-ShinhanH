@@ -33,6 +33,7 @@ class RegisModel {
 
   List<Account> accountList = [];
 
+  List consumLabel = ['커피 안 마시기', '배달 음식 안 먹기', '택시 안 타기', '옷 사지 않기'];
   List consumList = [];
 
   Account? accountConsum;
