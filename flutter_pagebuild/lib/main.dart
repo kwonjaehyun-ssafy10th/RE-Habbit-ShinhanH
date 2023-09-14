@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: '아리따-돋움',
-        ),
+      ),
       home: RegisView(),
     );
   }

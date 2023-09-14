@@ -447,7 +447,7 @@ class trackAccScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    acList.setAccountList(acList.temp2);
+    acList.setAccountList();
     return Scaffold(
         appBar: AppBar(
           title: const HeaderWidget(),
@@ -528,10 +528,10 @@ class _AccountTableState2 extends State<AccountTable2> {
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Card(
             elevation: 4.0,
-            child: FutureBuilder<String>(
-                future: (), //Future-객체 ->
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+            child: FutureBuilder<List<Account>?>(
+                future: acList.getAccountList, //Future-객체 ->
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Account>?> snapshot) {
                   // 연결 중인 경우
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator(); // 로딩 인디케이터 표시
@@ -547,9 +547,9 @@ class _AccountTableState2 extends State<AccountTable2> {
                         // ListView.builder를 사용하여 동적으로 아이템 생성
                         ListView.builder(
                           shrinkWrap: true,
-                          itemCount: acList.getAccountList.length,
+                          itemCount: acList.listlength,
                           itemBuilder: (context, index) {
-                            final account = acList.getAccountList[index];
+                            final account = snapshot.data![index];
                             return ListTile(
                               title: Text(account.bank),
                               // subtitle: Text('계좌번호: ${account.accNum}'),
@@ -630,9 +630,10 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
               SizedBox(
                 height: blankHeight,
               ),
-              FutureBuilder<int>(
-                future: (), //Future - 객체
-                builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+              FutureBuilder<dynamic>(
+                future: acList.getAccountList, //Future - 객체
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
@@ -698,8 +699,8 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                                             10), // 모서리 둥글기 값 설정
                                       ),
                                       child: Text(
-                                        pickchallinst.getconsumList[
-                                            index], // 여기에 원하는 텍스트를 넣으십시오.
+                                        'test',
+                                        //pickchallinst.getconsumList[index], // 여기에 원하는 텍스트를 넣으십시오.
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: isEnabled
@@ -749,7 +750,7 @@ class AccSelectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    acList.setAccountList(acList.temp);
+    acList.setAccountList();
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
@@ -824,9 +825,9 @@ class _AccountTableState extends State<AccountTable> {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Card(
           elevation: 4.0,
-          child: FutureBuilder<int>(
-            future: (), //Future-객체 ->
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+          child: FutureBuilder<dynamic>(
+            future: acList.getAccountList, //Future-객체 ->
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
@@ -837,9 +838,9 @@ class _AccountTableState extends State<AccountTable> {
                     // ListView.builder를 사용하여 동적으로 아이템 생성
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: acList.getAccountList.length,
+                      itemCount: acList.listlength,
                       itemBuilder: (context, index) {
-                        final account = acList.getAccountList[index];
+                        final account = snapshot.data![index];
                         return ListTile(
                           title: Text(account.bank),
                           subtitle: Text('계좌번호: ${account.accNum}'),
@@ -1074,9 +1075,9 @@ class ResultScreen extends StatelessWidget {
                 ),
               ),
             ),
-            FutureBuilder<int>(
-              future: (), //Future-객체
-              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            FutureBuilder<dynamic>(
+              future: acList.getAccountList, //Future-객체
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {

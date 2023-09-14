@@ -5,7 +5,7 @@ import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
-import 'package:flutter_pagebuild/DB/light_api.dart';
+import 'package:flutter_pagebuild/DB/light_account.dart';
 
 // 1. 계좌번호&이름 입력
 // 2. 계좌번호를 통한 본인인증
@@ -23,7 +23,7 @@ class Account {
   Account(this.bank, this.accNum);
   Account.Savings(this.bank, this.accNum, this.maxAmount);
   String bank;
-  int accNum;
+  String accNum;
   int maxAmount = 0;
 
   bool selected = false;
@@ -41,35 +41,46 @@ class AccountList with ChangeNotifier {
   //입출금 계좌 리스트
 // 데이터 소스
   List<Account> temp = <Account>[
-    Account('신한은행', 1104742313),
-    Account('우리은행', 2623339834),
-    Account('새마을금고', 3058831284),
-    Account('농협은행', 3564775924),
-    Account('카카오뱅크', 7432343242),
+    Account('신한은행', '1104742313'),
+    Account('우리은행', '2623339834'),
+    Account('새마을금고', '3058831284'),
+    Account('농협은행', '3564775924'),
+    Account('카카오뱅크', '7432343242'),
   ];
   List<Account> temp2 = <Account>[
-    Account.Savings('신한은행', 1104742313, 300000),
+    Account.Savings('신한은행', '1104742313', 300000),
     // Account('카카오뱅크', 7432343242, 200000),
     // Account('우리은행', 2623339834, 200000),
     // Account('새마을금고', 3058831284, 300000),
     // Account('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
+    Account.Savings('농협은행', '3564775924', 300000),
+    Account.Savings('농협은행', '3564775924', 300000),
+    // Account.Savings('농협은행', 3564775924, 300000),
+    // Account.Savings('농협은행', 3564775924, 300000),
   ];
 
-  void setAccountList(List<Account> a) async {
+  dataToAccount(account) {
+    String bank = account["상품명"];
+    String accNum = account["계좌번호"];
+    return Account(bank, accNum);
+  }
+
+  int listlength = 0;
+
+  Future<void> setAccountList() async {
+    List<dynamic> tmplist = await getAccountListOf('최쏠'); //Map을 담은 리스트
+
     int idx = 0;
     regisModel.accountList.clear();
-    while (regisModel.accountList.length < a.length) {
-      regisModel.accountList.add(a[idx++]);
+    while (regisModel.accountList.length < tmplist.length) {
+      regisModel.accountList.add(dataToAccount(tmplist[idx++]));
     }
-
+    listlength = idx;
     notifyListeners();
   }
 
-  Future<List<Account>>? get getAccountList async {
+  Future<List<Account>> get getAccountList async {
+    await setAccountList();
     return regisModel.accountList;
   }
 

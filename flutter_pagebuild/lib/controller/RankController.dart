@@ -20,6 +20,6 @@ class RankController extends GetxController {
   }
 
   void showRank() {
-    //Get.to(RankView());
+    Get.to(RankView());
   }
 }
