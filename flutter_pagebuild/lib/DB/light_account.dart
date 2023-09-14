@@ -31,8 +31,10 @@ getAccountInfo(accountNo) async {
   var path = 'v$version/account';
   final url = Uri.https(domain, "${"$path/" + accountNo}.json");
   final response = await http.get(url);
-  var result = json.decode(response.body);
-  return result;
+  if (response != null) {
+    var result = json.decode(response.body);
+    return result;
+  }
 }
 
 // 이름 입력하면 계좌 목록 반환
@@ -53,14 +55,16 @@ getAccountListOf(String name) async {
 getCheckingAccountListOf(String name) async {
   List<dynamic> list = [];
   var loadedData = await loadData('user');
-  for (var item in loadedData) {
-    if (item.key == name) {
-      for (var account in item.value["계좌목록"]) {
-        if (account["구분"] == "입출금계좌") {
-          list.add(account);
+  if ( loadedData != null) {
+    for (var item in loadedData) {
+      if (item.key == name) {
+        for (var account in item.value["계좌목록"]) {
+          if (account["구분"] == "입출금계좌") {
+            list.add(account);
+          }
         }
+        return list;
       }
-      return list;
     }
   }
 }
@@ -69,14 +73,16 @@ getCheckingAccountListOf(String name) async {
 getSavingAccountListOf(String name) async {
   List<dynamic> list = [];
   var loadedData = await loadData('user');
-  for (var item in loadedData) {
-    if (item.key == name) {
-      for (var account in item.value["계좌목록"]) {
-        if (account["구분"] == "자유적금") {
-          list.add(account);
+  if (loadedData != null) {
+    for (var item in loadedData) {
+      if (item.key == name) {
+        for (var account in item.value["계좌목록"]) {
+          if (account["구분"] == "자유적금") {
+            list.add(account);
+          }
         }
+        return list;
       }
-      return list;
     }
   }
 }
