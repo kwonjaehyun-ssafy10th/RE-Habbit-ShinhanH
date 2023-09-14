@@ -10,7 +10,7 @@ import 'shb_api.dart';
 
 Map<String, dynamic> accountToMap(String name, String accountNo, String type,
     String title, int balance, int transactionCnt) {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map['고객명'] = name;
   map['계좌번호'] = accountNo;
   map['구분'] = type;
@@ -28,8 +28,8 @@ void initAccount(Map account) {
 
 // 계좌번호 입력하면 계좌 정보 반환
 getAccountInfo(accountNo) async {
-  var path = 'v' + version + '/' + 'account';
-  final url = Uri.https(domain, path + "/" + accountNo + ".json");
+  var path = 'v$version/account';
+  final url = Uri.https(domain, "${"$path/" + accountNo}.json");
   final response = await http.get(url);
   var result = json.decode(response.body);
   return result;
@@ -37,17 +37,13 @@ getAccountInfo(accountNo) async {
 
 // 이름 입력하면 계좌 목록 반환
 getAccountListOf(String name) async {
-  List<dynamic> list = [];
-  print(list);
   var loadedData = await loadData('user');
   if (loadedData != null) {
     for (var item in loadedData) {
       if (item.key == name) {
-        list.add(item.value["계좌목록"]);
+        return (item.value["계좌목록"]);
       }
     }
-    print(list);
-    return list;
   } else {
     print("존재하지 않는 사용자입니다.");
   }
@@ -57,16 +53,14 @@ getAccountListOf(String name) async {
 getCheckingAccountListOf(String name) async {
   List<dynamic> list = [];
   var loadedData = await loadData('user');
-  if (loadedData != null) {
-    for (var item in loadedData) {
-      if (item.key == name) {
-        for (var account in item.value["계좌목록"]) {
-          if (account["구분"] == "입출금계좌") {
-            list.add(account);
-          }
+  for (var item in loadedData) {
+    if (item.key == name) {
+      for (var account in item.value["계좌목록"]) {
+        if (account["구분"] == "입출금계좌") {
+          list.add(account);
         }
-        return list;
       }
+      return list;
     }
   }
 }
@@ -75,16 +69,14 @@ getCheckingAccountListOf(String name) async {
 getSavingAccountListOf(String name) async {
   List<dynamic> list = [];
   var loadedData = await loadData('user');
-  if (loadedData != null) {
-    for (var item in loadedData) {
-      if (item.key == name) {
-        for (var account in item.value["계좌목록"]) {
-          if (account["구분"] == "자유적금") {
-            list.add(account);
-          }
+  for (var item in loadedData) {
+    if (item.key == name) {
+      for (var account in item.value["계좌목록"]) {
+        if (account["구분"] == "자유적금") {
+          list.add(account);
         }
-        return list;
       }
+      return list;
     }
   }
 }

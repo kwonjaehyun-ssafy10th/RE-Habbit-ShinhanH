@@ -5,6 +5,7 @@ import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
+import 'package:flutter_pagebuild/DB/light_account.dart';
 
 // 1. 계좌번호&이름 입력
 // 2. 계좌번호를 통한 본인인증
@@ -14,11 +15,15 @@ import 'package:flutter_pagebuild/controller/MainController.dart';
 // --> 이 부분 정리해야 될 것 같음
 // 6. 적금 계좌 연결
 
+//Future async
+// 변수 타입은 그대로
+// async만 써도 되나? -- 확인 필요
+
 class Account {
   Account(this.bank, this.accNum);
   Account.Savings(this.bank, this.accNum, this.maxAmount);
   String bank;
-  int accNum;
+  String accNum;
   int maxAmount = 0;
 
   bool selected = false;
@@ -36,44 +41,56 @@ class AccountList with ChangeNotifier {
   //입출금 계좌 리스트
 // 데이터 소스
   List<Account> temp = <Account>[
-    Account('신한은행', 1104742313),
-    Account('우리은행', 2623339834),
-    Account('새마을금고', 3058831284),
-    Account('농협은행', 3564775924),
-    Account('카카오뱅크', 7432343242),
+    Account('신한은행', '1104742313'),
+    Account('우리은행', '2623339834'),
+    Account('새마을금고', '3058831284'),
+    Account('농협은행', '3564775924'),
+    Account('카카오뱅크', '7432343242'),
   ];
   List<Account> temp2 = <Account>[
-    Account.Savings('신한은행', 1104742313, 300000),
+    Account.Savings('신한은행', '1104742313', 300000),
     // Account('카카오뱅크', 7432343242, 200000),
     // Account('우리은행', 2623339834, 200000),
     // Account('새마을금고', 3058831284, 300000),
     // Account('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
+    Account.Savings('농협은행', '3564775924', 300000),
+    Account.Savings('농협은행', '3564775924', 300000),
+    // Account.Savings('농협은행', 3564775924, 300000),
+    // Account.Savings('농협은행', 3564775924, 300000),
   ];
-  void setAccountList(List<Account> a) {
+
+  dataToAccount(account) {
+    String bank = account["상품명"];
+    String accNum = account["계좌번호"];
+    return Account(bank, accNum);
+  }
+
+  int listlength = 0;
+
+  Future<void> setAccountList() async {
+    List<dynamic> tmplist = await getAccountListOf('최쏠'); //Map을 담은 리스트
+
     int idx = 0;
     regisModel.accountList.clear();
-    while (regisModel.accountList.length < a.length) {
-      regisModel.accountList.add(a[idx++]);
+    while (regisModel.accountList.length < tmplist.length) {
+      regisModel.accountList.add(dataToAccount(tmplist[idx++]));
     }
-
+    listlength = idx;
     notifyListeners();
   }
 
-  List<Account> get getAccountList {
+  Future<List<Account>> get getAccountList async {
+    await setAccountList();
     return regisModel.accountList;
   }
 
 //사용자가 고른 계좌 정보 등록
-  void setaccountConsum(int? selecRow) {
+  void setaccountConsum(int? selecRow) async {
     if (selecRow == null) return;
     regisModel.accountConsum = regisModel.accountList[selecRow];
   }
 
-  void setaccountSaving(int? selecRow) {
+  void setaccountSaving(int? selecRow) async {
     if (selecRow == null) return;
     regisModel.accountSaving = regisModel.accountList[selecRow];
   }
@@ -107,7 +124,7 @@ class pickChallenge {
     regisModel.consumList;
   }
 
-  List get getconsumList {
+  Future<List> get getconsumList async {
     //소비내역 반환
     return regisModel.consumList;
   }

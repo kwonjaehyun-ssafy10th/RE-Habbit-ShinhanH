@@ -9,7 +9,7 @@ import 'light_transfer.dart';
 import 'light_user.dart';
 import 'shb_api.dart';
 
-Random random = new Random();
+Random random = Random();
 String domain = 'shb-hackton-ad177-default-rtdb.firebaseio.com';
 String version = '3';
 
@@ -37,10 +37,10 @@ Map<String, dynamic> keyMap3 = {
 };
 
 void patchToFirebase(action, map) async {
-  var path = 'v' + version + '/' + api3[action]['path'];
+  var path = 'v$version/' + api3[action]['path'];
   var keyName = keyMap3[action];
-  final url = Uri.https(domain, path + ".json");
-  Map<String, dynamic> temp = new Map();
+  final url = Uri.https(domain, "$path.json");
+  Map<String, dynamic> temp = {};
   temp[map[keyName]] = map;
   await http.patch(
     url,
@@ -49,8 +49,8 @@ void patchToFirebase(action, map) async {
 }
 
 Future<List> loadData(action) async {
-  var path = 'v' + version + '/' + api3[action]['path'];
-  final url = Uri.https(domain, path + ".json");
+  var path = 'v$version/' + api3[action]['path'];
+  final url = Uri.https(domain, "$path.json");
   final response = await http.get(url);
   final Map<String, dynamic> listData = json.decode(response.body);
   final List<Object> loadedData = [];
@@ -69,7 +69,7 @@ request1transfer() async {
     "입금통장메모": "1234 SSAFY"
   };
   final url = Uri.https('shbhack.shinhan.com', path);
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map["dataHeader"] = {"apikey": "2023_Shinhan_SSAFY_Hackathon"};
   map["dataBody"] = dataBody;
   final response = await http.post(
@@ -93,15 +93,15 @@ auth1transfer(String input) {
 }
 
 getList(action) async {
-  var path = 'v' + version + '/' + api3[action]['path'];
-  final url = Uri.https(domain, path + ".json");
+  var path = 'v$version/' + api3[action]['path'];
+  final url = Uri.https(domain, "$path.json");
   var response = await http.get(url);
   var list = response.body;
   return list;
 }
 
 timeToDate(int time) {
-  return "09${((time / 24).toInt() + 1).toString().padLeft(2, '0')}";
+  return "09${(time ~/ 24 + 1).toString().padLeft(2, '0')}";
 }
 
 void main() async {
