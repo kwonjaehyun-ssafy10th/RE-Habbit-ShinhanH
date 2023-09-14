@@ -26,7 +26,7 @@ class MainView extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: '아리따-돋움',
         ),
-        home: const MyHomePage(title: 'Flutter Chart'),
+        home: MyHomePage(title: 'Flutter Chart'),
       ),
     );
   }
@@ -82,7 +82,7 @@ class MyHomePage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         print('test');
-                        // controller.reset.temptest();
+                        controller.reset.temptest();
                         controller.goToRank();
                       },
                       child: const Text(
@@ -120,8 +120,8 @@ class MyHomePage extends StatelessWidget {
 
               Consumer<resetMainModel>(builder: (context, resetmodel, child) {
                 return
-                    // 달성률 관련 위젯들 묶음
-                    Stack(
+                  // 달성률 관련 위젯들 묶음
+                  Stack(
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -246,7 +246,7 @@ class UserWidget extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return const Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
@@ -254,8 +254,8 @@ class UserWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '시계토끼 ',
-              // '${user_name}'
+              // '시계토끼 ',
+              '${controller.reset.getUser().username}',
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             Text(
