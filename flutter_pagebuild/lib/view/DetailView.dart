@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_pagebuild/view/flutter/dev/bots/utils.dart';
+//import 'package:flutter_pagebuild/view/flutter/dev/bots/utils.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/DetailController.dart';

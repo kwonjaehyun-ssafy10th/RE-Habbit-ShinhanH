@@ -129,6 +129,7 @@ class MainController extends GetxController {
 //하단부 -  컨트롤러들
   void goToRank() {
     Get.find<RankController>();
+    Get.to(() => RankView());
   }
 
   void goToDetail() {}
