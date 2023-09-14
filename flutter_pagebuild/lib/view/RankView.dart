@@ -6,6 +6,8 @@ import 'package:flutter_pagebuild/controller/MainController.dart';
 // import 'package:sorted_list/sorted_list.dart';
 import 'package:categorized_dropdown/categorized_dropdown.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+//dropdown
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 class RankView extends StatelessWidget {
   RankView({Key? key}) : super(key: key);
@@ -14,6 +16,14 @@ class RankView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double blankHeight = screenHeight * 0.02;
+    double blankWidth = screenWidth * 0.05;
+    double startHeight = screenHeight * 0.1;
+    double startWidth = screenWidth * 0.1;
+    double contentWidth = screenWidth * 0.8;
+
     // final controller = Get.find<RankController>();
     return Scaffold(
       appBar: AppBar(
@@ -28,21 +38,43 @@ class RankView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 16),
+            // SizedBox(height: 16),
             //더보기버튼
             Container(
+              // color: Colors.blue,
+              height: startHeight,
+              width: screenWidth,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SeeMoreBtn(),
+                  // Text('ㅎㅎ'),
+                  Container(
+                    child: SeeMoreBtn(),
+                    height: startHeight * 0.4,
+                    width: screenWidth * 0.4,
+                    color: Colors.amber,
+                  )
                 ],
               ),
             ),
 
             //평균 Rabbit Text
             Container(
+              // color: Colors.amber,
+              width: screenWidth,
               child: Column(
-                children: const [Text('평균 Rabbit 지속 시간'), Text('상위% 기간')],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  paddingOnly(left: 10),
+                  Text(
+                    '평균 Rabbit 지속 시간',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    '상위%      기간',
+                    style: TextStyle(color: Colors.grey, fontSize: 10),
+                  ),
+                ],
               ),
             ),
             //평균 Rabbit Graph
@@ -89,18 +121,7 @@ class RankView extends StatelessWidget {
       // ),
     );
   }
-
-  widget({required Container child}) {}
 }
-
-//  '커피',
-//     '여성',
-//     '남성',
-//     '10대',
-//     '20대',
-//     '30대',
-//     '40대',
-//     '50대 이상's
 
 //더보기 버튼_provider
 //https://pub.dev/packages/dropdown_button2
@@ -114,14 +135,14 @@ class SeeMoreBtn extends StatefulWidget {
 
 class _SeeMoreBtnState extends State<SeeMoreBtn> {
   final List<String> items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6',
-    'Item7',
-    'Item8',
+    '커피',
+    '여성',
+    '남성',
+    '10대',
+    '20대',
+    '30대',
+    '40대',
+    '50대 이상',
   ];
   String? selectedValue;
 
@@ -137,18 +158,19 @@ class _SeeMoreBtnState extends State<SeeMoreBtn> {
                 Icon(
                   Icons.list,
                   size: 16,
-                  color: Colors.yellow,
+                  color: Color.fromARGB(255, 28, 28, 28),
                 ),
                 SizedBox(
                   width: 4,
                 ),
                 Expanded(
                   child: Text(
-                    'Select Item',
+                    '전체',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.yellow,
+                      // fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 28, 28, 28),
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -181,10 +203,10 @@ class _SeeMoreBtnState extends State<SeeMoreBtn> {
               padding: const EdgeInsets.only(left: 14, right: 14),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: Colors.black26,
-                ),
-                color: Colors.redAccent,
+                // border: Border.all(
+                //   color: Colors.black26,
+                // ),
+                color: Color.fromARGB(255, 190, 227, 236),
               ),
               elevation: 2,
             ),
@@ -193,7 +215,7 @@ class _SeeMoreBtnState extends State<SeeMoreBtn> {
                 Icons.arrow_forward_ios_outlined,
               ),
               iconSize: 14,
-              iconEnabledColor: Colors.yellow,
+              iconEnabledColor: Color.fromARGB(255, 28, 28, 28),
               iconDisabledColor: Colors.grey,
             ),
             dropdownStyleData: DropdownStyleData(
@@ -201,7 +223,7 @@ class _SeeMoreBtnState extends State<SeeMoreBtn> {
               width: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
-                color: Colors.redAccent,
+                color: Color.fromARGB(255, 190, 227, 236),
               ),
               offset: const Offset(-20, 0),
               scrollbarTheme: ScrollbarThemeData(
@@ -239,11 +261,13 @@ class RankGraph1State extends State<RankGraph1> {
   void initState() {
     data = [
       //Controller, Data 유기적으로 작동해야 할 부분
-      _ChartData('~5%🥕', 30),
-      //아래는 고정값
-      _ChartData('~10%', 15),
+      //고정값(3개)
+      _ChartData('~40%', 6.4),
       _ChartData('~20%', 12),
-      _ChartData('~40%', 6.4)
+      _ChartData('~10%', 15),
+
+      //(w/Controller)
+      _ChartData('~5%🥕', 30),
     ];
     _tooltip = TooltipBehavior(enable: true);
     super.initState();
@@ -253,7 +277,7 @@ class RankGraph1State extends State<RankGraph1> {
   Widget build(BuildContext context) {
     return SfCartesianChart(
       primaryXAxis: CategoryAxis(),
-      primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
+      primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 5),
       tooltipBehavior: _tooltip,
       series: <ChartSeries<_ChartData, String>>[
         BarSeries<_ChartData, String>(
@@ -292,12 +316,12 @@ class RankGraph2State extends State<RankGraph2> {
   void initState() {
     data = [
       //고정값
-      _ChartData('~5%', 30),
-      //Controller, Data 유기적으로 작동해야 할 부분
+      _ChartData('~40%', 6.4),
+      _ChartData('~20%', 12),
+      //(w/Controller)
       _ChartData('~10%🥕', 15),
       //고정값
-      _ChartData('~20%', 12),
-      _ChartData('~40%', 6.4)
+      _ChartData('~5%', 30),
     ];
     _tooltip = TooltipBehavior(enable: true);
     super.initState();
@@ -307,7 +331,7 @@ class RankGraph2State extends State<RankGraph2> {
   Widget build(BuildContext context) {
     return SfCartesianChart(
       primaryXAxis: CategoryAxis(),
-      primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
+      primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 5),
       tooltipBehavior: _tooltip,
       series: <ChartSeries<_ChartData, String>>[
         BarSeries<_ChartData, String>(
@@ -322,15 +346,22 @@ class RankGraph2State extends State<RankGraph2> {
   }
 }
 
-//HeaderWidget
+// 로고 누르면 메인으로 돌아가게 함 (기능 추가)
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/images/logo-image.png',
-      height: 150,
+    return IconButton.filled(
+      onPressed: () {
+        var controller = Get.find<RankController>();
+        controller.goToMain();
+      },
+      icon: Image.asset(
+        'assets/images/logo-image.png',
+        // height: 2000,
+      ),
+      iconSize: 200,
     );
   }
 }

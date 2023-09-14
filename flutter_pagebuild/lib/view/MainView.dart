@@ -82,7 +82,7 @@ class MyHomePage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         print('test');
-                        // controller.reset.temptest();
+                        controller.reset.temptest();
                         controller.goToRank();
                       },
                       child: const Text(
