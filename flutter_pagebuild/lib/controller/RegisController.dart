@@ -15,6 +15,10 @@ import 'package:flutter_pagebuild/DB/light_api.dart';
 // --> 이 부분 정리해야 될 것 같음
 // 6. 적금 계좌 연결
 
+//Future async
+// 변수 타입은 그대로
+// async만 써도 되나? -- 확인 필요
+
 class Account {
   Account(this.bank, this.accNum);
   Account.Savings(this.bank, this.accNum, this.maxAmount);
@@ -55,7 +59,7 @@ class AccountList with ChangeNotifier {
     Account.Savings('농협은행', 3564775924, 300000),
   ];
 
-  void setAccountList(List<Account> a) {
+  void setAccountList(List<Account> a) async {
     int idx = 0;
     regisModel.accountList.clear();
     while (regisModel.accountList.length < a.length) {
@@ -65,17 +69,17 @@ class AccountList with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Account>? get getAccountList {
+  Future<List<Account>>? get getAccountList async {
     return regisModel.accountList;
   }
 
 //사용자가 고른 계좌 정보 등록
-  void setaccountConsum(int? selecRow) {
+  void setaccountConsum(int? selecRow) async {
     if (selecRow == null) return;
     regisModel.accountConsum = regisModel.accountList[selecRow];
   }
 
-  void setaccountSaving(int? selecRow) {
+  void setaccountSaving(int? selecRow) async {
     if (selecRow == null) return;
     regisModel.accountSaving = regisModel.accountList[selecRow];
   }
@@ -109,7 +113,7 @@ class pickChallenge {
     regisModel.consumList;
   }
 
-  List get getconsumList {
+  Future<List> get getconsumList async {
     //소비내역 반환
     return regisModel.consumList;
   }
