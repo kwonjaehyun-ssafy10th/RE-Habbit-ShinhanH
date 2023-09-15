@@ -4,7 +4,12 @@ import 'package:flutter_pagebuild/model/MainModel.dart';
 import 'package:get/get.dart';
 
 class CheckModel {
-  //얘는 싱글턴일 필요가 없네?
+  static final CheckModel _inst = CheckModel._internal();
+  CheckModel._internal();
+  factory CheckModel() {
+    return _inst;
+  }
+
   String registName = '';
   String checkBank = '';
   String checkAccount = '';
