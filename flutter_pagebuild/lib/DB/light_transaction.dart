@@ -8,7 +8,7 @@ import 'light_transfer.dart';
 import 'light_user.dart';
 import 'shb_api.dart';
 
-Map<String, dynamic> transactionToMap(String date, int time, String type,
+Map<String, dynamic> transactionToMap(String date, String time, String type,
     int withdrawal, int deposit, String memo, String counterparty) {
   Map<String, dynamic> map = new Map();
   map['거래일자'] = date;
@@ -40,7 +40,7 @@ void initTransactionList(String accountNo) async {
   );
 }
 
-void patchTransaction(String accountNo, String date, int time, String type,
+void patchTransaction(String accountNo, String date, String time, String type,
     int withdrawal, int deposit, String memo, String counterparty) async {
   var path = 'v' + version + '/' + 'transaction';
   final url = Uri.https(domain, path + "/" + accountNo + "/거래내역" + ".json");

@@ -8,6 +8,22 @@ import 'light_transfer.dart';
 import 'light_user.dart';
 import 'shb_api.dart';
 
+Map<String, dynamic> reference = {
+  'user': 'account',
+  'transactionCnt': 'transaction',
+  'balance': 'balance',
+  'type': 'account',
+  'title': 'account'
+};
+
+Map<String, dynamic> accountKeyMap = {
+  'user': '고객명',
+  'transactionCnt': '거래내역반복횟수',
+  'balance': '잔액',
+  'type': '구분',
+  'title': '상품명'
+};
+
 Map<String, dynamic> accountToMap(String name, String accountNo, String type,
     String title, int balance, int transactionCnt) {
   Map<String, dynamic> map = {};
@@ -24,6 +40,7 @@ void initAccount(Map account) {
   patchToFirebase('account', account);
   initBalance(account["계좌번호"], account["잔액"]);
   initTransactionList(account["계좌번호"]);
+  patchUserByAccount(account);
 }
 
 // 계좌번호 입력하면 계좌 정보 반환
@@ -31,8 +48,10 @@ getAccountInfo(accountNo) async {
   var path = 'v$version/account';
   final url = Uri.https(domain, "${"$path/" + accountNo}.json");
   final response = await http.get(url);
-  var result = json.decode(response.body);
-  return result;
+  if (response != null) {
+    var result = json.decode(response.body);
+    return result;
+  }
 }
 
 // 이름 입력하면 계좌 목록 반환
@@ -53,14 +72,16 @@ getAccountListOf(String name) async {
 getCheckingAccountListOf(String name) async {
   List<dynamic> list = [];
   var loadedData = await loadData('user');
-  for (var item in loadedData) {
-    if (item.key == name) {
-      for (var account in item.value["계좌목록"]) {
-        if (account["구분"] == "입출금계좌") {
-          list.add(account);
+  if ( loadedData != null) {
+    for (var item in loadedData) {
+      if (item.key == name) {
+        for (var account in item.value["계좌목록"]) {
+          if (account["구분"] == "입출금계좌") {
+            list.add(account);
+          }
         }
+        return list;
       }
-      return list;
     }
   }
 }
@@ -69,16 +90,31 @@ getCheckingAccountListOf(String name) async {
 getSavingAccountListOf(String name) async {
   List<dynamic> list = [];
   var loadedData = await loadData('user');
-  for (var item in loadedData) {
-    if (item.key == name) {
-      for (var account in item.value["계좌목록"]) {
-        if (account["구분"] == "자유적금") {
-          list.add(account);
+  if (loadedData != null) {
+    for (var item in loadedData) {
+      if (item.key == name) {
+        for (var account in item.value["계좌목록"]) {
+          if (account["구분"] == "자유적금") {
+            list.add(account);
+          }
         }
+        return list;
       }
-      return list;
     }
   }
+}
+
+getInfoValueOf(accountNo, key) async {
+  var accountList = await loadData(reference[key]);
+  for (var item in accountList) {
+    if (item.key == accountNo) {
+      return item.value[accountKeyMap[key]];
+    }
+  }
+}
+
+String createAccountNo() {
+  return (random.nextInt(100000) + 100000).toString();
 }
 
 void main() {

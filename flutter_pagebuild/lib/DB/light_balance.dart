@@ -21,13 +21,8 @@ void initBalance(String accountNo, int balance) {
   patchToFirebase('balance', map);
 }
 
-getBalanceOf(accountNo) async {
-  var accountList = await loadData('balance');
-  for (var item in accountList) {
-    if (item.key == accountNo) {
-      return item.value["잔액"];
-    }
-  }
+getBalanceOf(accountNo) {
+  return getInfoValueOf(accountNo, 'balance');
 }
 
 patchBalance(accountNo, withdrawal, deposit) async {

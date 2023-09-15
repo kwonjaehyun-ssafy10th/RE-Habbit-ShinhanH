@@ -32,16 +32,32 @@ void patchUser(name) {
   patchToFirebase('user', userToMap(name));
 }
 
-void patchUserByAccount(account) {}
+void patchUserByAccount(Map account) {
+  var userMap = userToMap(account["고객명"]);
+  Map<String, dynamic> temp = {};
+  temp['0'] = account;
+  userMap['계좌목록'] = temp;
+  patchToFirebase('user', userMap);
+}
+
+getNameOf(accountNo) {
+  return getInfoValueOf(accountNo, 'user');
+}
+
+List lastNameList = ["김", "이", "박", "최", "정"];
+List firstNameList = ["쏠", "몰리", "리노", "슈", "도레미", "서퍼", "플리", "레이"];
+
+String createName() {
+  var name = lastNameList[random.nextInt(lastNameList.length)] +
+      firstNameList[random.nextInt(firstNameList.length)];
+  return name;
+}
 
 void main() {
   test();
 }
 
 void test() {
-  List lastNameList = ["김", "이", "박", "최", "정"];
-  List firstNameList = ["쏠", "몰리", "리노", "슈", "도레미", "서퍼", "플리", "레이"];
-  var name = lastNameList[random.nextInt(lastNameList.length)] +
-      firstNameList[random.nextInt(firstNameList.length)];
-  initUser(name);
+  // initUser(createName());
+  patchUser(createName());
 }
