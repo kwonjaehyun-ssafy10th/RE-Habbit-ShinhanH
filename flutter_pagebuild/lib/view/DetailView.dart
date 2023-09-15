@@ -14,9 +14,9 @@ class DetailView extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.01;
-    double blankWidth = screenWidth * 0.05;
-    double startHeight = screenHeight * 0.27;
+    double mainHeight = screenHeight * 0.2;
     double contentWidth = screenWidth * 0.5;
+    double appbarHeight = screenHeight * 0.12;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 228, 247, 247),
@@ -24,10 +24,11 @@ class DetailView extends StatelessWidget {
         title: const HeaderWidget(),
         centerTitle: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 130,
+        toolbarHeight: appbarHeight,
       ),
       // resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
+        // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -37,7 +38,7 @@ class DetailView extends StatelessWidget {
               // padding: EdgeInsets.all(10),
               margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
 
-              height: startHeight,
+              // height: mainHeight,
               child: Column(
                 // color: Colors.red,
                 children: [
@@ -49,7 +50,9 @@ class DetailView extends StatelessWidget {
                           margin: EdgeInsets.only(left: 0),
                           // padding: EdgeInsets.only(right: 20),
                           child: Image.asset('assets/images/profile-img.png',
-                              width: contentWidth, fit: BoxFit.contain),
+                              width: contentWidth, 
+                              fit: BoxFit.contain
+                          ),
                         ),
                         Container(
                           width: 1,
@@ -64,7 +67,7 @@ class DetailView extends StatelessWidget {
                             children: [
                               //챌린지 시작 날짜
                               Text(
-                                '챌린지 시작 날짜',
+                                '챌린지 시작날짜',
                                 style: TextStyle(
                                     fontSize: 23, color: Colors.purple),
                               ),
@@ -511,7 +514,7 @@ class HeaderWidget extends StatelessWidget {
         'assets/images/logo-image.png',
         // height: 2000,
       ),
-      iconSize: 200,
+      iconSize: 250,
     );
   }
 }
