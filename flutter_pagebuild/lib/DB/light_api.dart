@@ -168,7 +168,7 @@ void test() async {
   var user1AccountNo = user1Account["계좌번호"];
   var user2AccountNo = user2Account["계좌번호"];
   int time = 365;
-  String date = timeToDate(time);
-  transfer(
-      date, time, user1AccountNo, user2AccountNo, 5000, "스타벅스", user1, "신한체크");
+  // String date = timeToDate(time);
+  // transfer(
+  //     date, time, user1AccountNo, user2AccountNo, 5000, "스타벅스", user1, "신한체크");
 }
