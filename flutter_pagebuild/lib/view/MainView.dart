@@ -67,7 +67,7 @@ class MyHomePage extends StatelessWidget {
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                   textStyle: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     decoration: TextDecoration.underline,
                   ),
                 ),
@@ -75,7 +75,7 @@ class MyHomePage extends StatelessWidget {
               ),
 
               // 랭킹 및 현황 버튼들
-              Container(
+              Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -120,8 +120,8 @@ class MyHomePage extends StatelessWidget {
 
               Consumer<resetMainModel>(builder: (context, resetmodel, child) {
                 return
-                  // 달성률 관련 위젯들 묶음
-                  Stack(
+                    // 달성률 관련 위젯들 묶음
+                    Stack(
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -170,7 +170,7 @@ class MyHomePage extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      top: 130,
+                      top: 120,
                       left: 60,
                       child: PieChart(
                         // 달성률 차트
@@ -229,16 +229,7 @@ final colorList = <Color>[
   const Color.fromARGB(255, 157, 157, 157),
 ];
 
-// 헤더위젯
-// 안 띄우는 게 나을수도
-class HeaderWidget extends StatelessWidget {
-  const HeaderWidget({super.key});
-
-  @override
-  Widget build(context) {
-    return const Text('오늘도 갓생 가자');
-  }
-}
+// 헤더위젯 - 삭제
 
 // 유저위젯
 class UserWidget extends StatelessWidget {
@@ -255,7 +246,7 @@ class UserWidget extends StatelessWidget {
           children: [
             Text(
               // '시계토끼 ',
-              '${controller.reset.getUser().username}',
+              '${controller.reset.getUser().username} ',
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             Text(
