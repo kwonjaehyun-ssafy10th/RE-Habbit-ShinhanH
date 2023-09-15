@@ -83,8 +83,10 @@ class StartPage extends StatelessWidget {
   Widget build(context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double buttonHeight = screenHeight * 0.1;
+    double buttonHeight2 = screenHeight * 0.05;
+
     double imageHeight = screenHeight * 0.4;
-    double startHeight = screenHeight * 0.15;
+    double startHeight = screenHeight * 0.1;
     double blankHeight = screenHeight * 0.03;
 
     return Center(
@@ -126,6 +128,36 @@ class StartPage extends StatelessWidget {
           ),
           SizedBox(
             height: blankHeight,
+          ),
+          SizedBox(
+            height: buttonHeight2,
+            width: 200,
+            child: MaterialButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              color: Color.fromARGB(255, 178, 255, 205),
+              highlightColor: Color.fromARGB(255, 107, 255, 134),
+              // 클릭시 색상 다르게 표현
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) => const SecondScreen(),
+                    settings: const RouteSettings(),
+                  ),
+                );
+              },
+
+              child: const Text(
+                '로그인 하기',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
           SizedBox(
             height: imageHeight,
@@ -1198,7 +1230,7 @@ class ResultScreen extends StatelessWidget {
                           ]),
                           DataRow(cells: [
                             const DataCell(Text('실패시 적금금액')),
-                            DataCell(Text(' ${pickchallinst.getSavingAmount}')),
+                            DataCell(Text('${pickchallinst.getSavingAmount}')),
                             // DataCell(Text('${amount}')),
                           ]),
                         ]),
