@@ -7,6 +7,7 @@ import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
 
 import 'package:flutter_pagebuild/DB/light_account.dart';
+import 'package:flutter_pagebuild/DB/light_transaction.dart';
 
 // 1. 계좌번호&이름 입력
 // 2. 계좌번호를 통한 본인인증
@@ -101,23 +102,21 @@ class pickChallenge {
 
   RegisModel regisModel = RegisModel();
 
-  //1.여태까지의 소비내역 반환
-  void setconsumList() {
-    //소비내역을 걸러내는 로직
-    regisModel.consumList.add('스타벅스');
-    regisModel.consumList.add('배민');
-    regisModel.consumList.add('택시');
-    regisModel.consumList.add('무신사');
-    regisModel.consumList;
-  }
-
-  Future<List> get getconsumList async {
+  get getconsumList {
     //소비내역 반환
     return regisModel.consumList;
   }
 
   List get getconsumLabel {
     return regisModel.consumLabel;
+  }
+
+  void setSavingAmount(int amount) {
+    regisModel.savingAmount = amount;
+  }
+
+  get getSavingAmount {
+    return regisModel.savingAmount;
   }
 }
 
