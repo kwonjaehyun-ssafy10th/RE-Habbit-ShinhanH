@@ -1288,7 +1288,8 @@ class FinalScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.12;
-    double startHeight = screenHeight * 0.03;
+    double startHeight = screenHeight * 0.25;
+    double blankHeight = screenHeight * 0.03;
 
     return Scaffold(
       appBar: AppBar(
@@ -1298,46 +1299,60 @@ class FinalScreen extends StatelessWidget {
         toolbarHeight: appbarHeight,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              '천리길도 한 걸음부터!',
-              style: TextStyle(
-                fontSize: 25,
+        child: Container(
+          width: screenWidth,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage('assets/images/background-img.png'), // 배경 이미지
+            ),
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: startHeight,
               ),
-            ),
-            // const SizedBox(
-            //   height: 50,
-            // ),
-            Image.asset(
-              'assets/images/profile-img.png',
-              height: 300,
-            ),
-            // const SizedBox(
-            //   height: 30,
-            // ),
-            const Text(
-              '도전이 시작되었습니다.',
-              style: TextStyle(
-                fontSize: 25,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            OutlinedButton(
-              onPressed: () {
-                Get.find<RegisController>().goToMain();
-              },
-              child: const Text(
-                '메인으로',
+              Text(
+                '천리길도 한 걸음부터!',
                 style: TextStyle(
                   fontSize: 25,
                 ),
               ),
-            )
-          ],
+              SizedBox(
+                height: blankHeight,
+              ),
+              Text(
+                '도전이 시작되었습니다.',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              SizedBox(
+                height: blankHeight,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.find<RegisController>().goToMain();
+                },
+                child: const Text(
+                  '메인으로',
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+              // const SizedBox(
+              //   height: 50,
+              // ),
+              Image.asset(
+                'assets/images/profile-img.png',
+                height: 300,
+              ),
+              // const SizedBox(
+              //   height: 30,
+              // ),
+            ],
+          ),
         ),
       ),
     );
