@@ -81,7 +81,7 @@ class MyHomePage extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        controller.reset.temptest();
+                        //controller.reset.temptest();
                         controller.goToRank();
                       },
                       child: const Text(
