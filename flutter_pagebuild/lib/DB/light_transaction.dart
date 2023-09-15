@@ -63,6 +63,13 @@ getTransactionCnt(accountNo) async {
   return accountInfo["거래내역반복횟수"];
 }
 
+getTransactionListByAccountNo(accountNo) async {
+  var path = 'v' + version + '/' + 'transaction/$accountNo';
+  final url = Uri.https(domain, path + ".json");
+  var list = json.decode((await http.get(url)).body)["거래내역"];
+  return list;
+}
+
 patchTransactionCnt(accountNo) async {
   var transactionCnt = await getTransactionCnt(accountNo);
   Map<String, dynamic> map = new Map();
