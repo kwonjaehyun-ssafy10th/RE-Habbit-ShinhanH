@@ -49,16 +49,18 @@ class AccountList with ChangeNotifier {
 
   int listlength = 0;
 
-  Future<void> setAccountList() async {
+  Future<List<dynamic>> setAccountList() async {
     List<dynamic> tmplist = await getAccountListOf('최쏠'); //Map을 담은 리스트
 
     int idx = 0;
     regisModel.accountList.clear();
-    while (regisModel.accountList.length < tmplist.length) {
-      regisModel.accountList.add(dataToAccount(tmplist[idx++], true));
+    while (idx < tmplist.length) {
+      Account tmp = dataToAccount(tmplist[idx], true);
+      regisModel.accountList.add(tmp);
+      idx++;
     }
-    listlength = idx;
-    //notifyListeners();
+
+    return regisModel.accountList;
   }
 
   Future<List<Account>> get getAccountList async {

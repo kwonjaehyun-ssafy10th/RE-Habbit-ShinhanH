@@ -43,6 +43,10 @@ void initAccount(Map account) {
   patchUserByAccount(account);
 }
 
+void patchDiffBankAccount(accountNo, name) {
+  patchToFirebase('account', {'고객명': name, '계좌번호': accountNo});
+}
+
 // 계좌번호 입력하면 계좌 정보 반환
 getAccountInfo(accountNo) async {
   var path = 'v$version/account';

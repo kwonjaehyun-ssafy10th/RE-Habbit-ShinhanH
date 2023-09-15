@@ -17,6 +17,8 @@ class RegisView extends StatelessWidget {
   const RegisView({super.key});
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double appbarHeight = screenHeight * 0.12;
     //초기값 설정용
     //controller.reset.resetPieChartMap();
     return MaterialApp(
@@ -36,7 +38,7 @@ class RegisView extends StatelessWidget {
             title: const HeaderWidget(),
             centerTitle: true,
             backgroundColor: Colors.white,
-            toolbarHeight: 130,
+            toolbarHeight: appbarHeight,
           ),
           body: const SingleChildScrollView(
             child: Padding(
@@ -147,11 +149,12 @@ class SecondScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double appbarHeight = screenHeight * 0.15;
+    double appbarHeight = screenHeight * 0.12;
     double blankHeight = screenHeight * 0.03;
     double startHeight = screenHeight * 0.15;
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const HeaderWidget(),
           centerTitle: true,
@@ -204,7 +207,7 @@ class SecondScreen extends StatelessWidget {
             SizedBox(
               width: screenWidth * 0.8,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -216,9 +219,9 @@ class SecondScreen extends StatelessWidget {
                   SizedBox(
                     height: blankHeight,
                   ),
-                  SizedBox(
-                    width: screenWidth * 0.8,
-                    child: const Row(
+                  const SizedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         BankDropdownButton(),
                         AccountNum(),
@@ -321,16 +324,18 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     final controller = Get.find<RegisController>();
     double screenHeight = MediaQuery.of(context).size.height;
+    double appbarHeight = screenHeight * 0.12;
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
     double startHeight = screenHeight * 0.15;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const HeaderWidget(),
         centerTitle: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 130,
+        toolbarHeight: appbarHeight,
       ),
       body: Center(
         child: Column(
@@ -447,13 +452,17 @@ class trackAccScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double appbarHeight = screenHeight * 0.12;
+    double blankHeight = screenHeight * 0.1;
+
     acList.setAccountList();
     return Scaffold(
         appBar: AppBar(
           title: const HeaderWidget(),
           centerTitle: true,
           backgroundColor: Colors.white,
-          toolbarHeight: 130,
+          toolbarHeight: appbarHeight,
         ),
         body: Center(
           child: Column(
@@ -497,12 +506,15 @@ class trackAccScreen extends StatelessWidget {
                   }
                 },
                 child: const Text(
-                  '조회하기',
+                  '제출',
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 23,
                   ),
                 ),
-              )
+              ),
+              SizedBox(
+                height: blankHeight,
+              ),
             ],
           ),
         ));
@@ -521,6 +533,15 @@ class AccountTable2 extends StatefulWidget {
 
 class _AccountTableState2 extends State<AccountTable2> {
   AccountList acList = AccountList();
+
+  late Future<List<dynamic>> _accListFuture;
+  @override
+  void initState() {
+    super.initState();
+
+    _accListFuture = acList.setAccountList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -528,13 +549,22 @@ class _AccountTableState2 extends State<AccountTable2> {
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Card(
             elevation: 4.0,
-            child: FutureBuilder<List<Account>?>(
-                future: acList.getAccountList, //Future-객체 ->
+            child: FutureBuilder<List<dynamic>>(
+                future: _accListFuture, //Future-객체 ->
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<Account>?> snapshot) {
+                    AsyncSnapshot<List<dynamic>> snapshot) {
                   // 연결 중인 경우
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator(); // 로딩 인디케이터 표시
+                    return const SizedBox(
+                      child: Center(
+                        child: SizedBox(
+                          height: 25,
+                          width: 25,
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+                    // 로딩 인디케이터 표시
                   }
                   // 에러 발생 시
                   else if (snapshot.hasError) {
@@ -547,13 +577,13 @@ class _AccountTableState2 extends State<AccountTable2> {
                         // ListView.builder를 사용하여 동적으로 아이템 생성
                         ListView.builder(
                           shrinkWrap: true,
-                          itemCount: acList.listlength,
+                          itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             final account = snapshot.data![index];
                             return ListTile(
                               title: Text(account.accName),
                               // subtitle: Text('계좌번호: ${account.accNum}'),
-                              trailing: Text('계좌번호: ${account.accNum}'),
+                              trailing: Text('${account.accNum}'),
                               tileColor: selectedRow == index
                                   ? const Color.fromARGB(255, 150, 208, 255)
                                   : null, // 선택된 로우에 색상 적용
@@ -592,152 +622,183 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double blankHeight = screenHeight * 0.05;
+    double blankHeight = screenHeight * 0.02;
+    double startHeight = screenHeight * 0.05;
+
     double itemWidth = screenWidth * 0.8;
+    double appbarHeight = screenHeight * 0.12;
 
     pickchallinst.setconsumList();
     return Scaffold(
-        appBar: AppBar(
-          title: const HeaderWidget(),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          toolbarHeight: 130,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: itemWidth,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  textAlign: TextAlign.center,
-                  '🔎 ${acList.getaccountConsum?.accName} ${acList.getaccountConsum?.accNum}\n 내 계좌에서 발생한 \n 소비내역을 바탕으로 구성했어요',
-                  style: const TextStyle(
-                    fontSize: 18,
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: appbarHeight,
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: startHeight,
+                ),
+                Container(
+                  width: itemWidth,
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    '🔎 선택하신 [${acList.getaccountConsum?.accName}] 계좌의 소비내역을 바탕으로 구성했어요',
+                    // '선택하신 ${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum} 계좌에서 발생한 소비내역을 바탕으로 구성했어요🔎',
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
-              ),
-              const Text(
-                '\n참여할 챌린지를 선택하세요.',
-                style: TextStyle(
-                  fontSize: 25,
+                const Text(
+                  '\n참여할 챌린지를 선택하세요.',
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: blankHeight,
-              ),
-              FutureBuilder<dynamic>(
-                future: acList.getAccountList, //Future - 객체
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return SizedBox(
-                      width: itemWidth,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1,
-                          mainAxisSpacing: 10.0,
-                          crossAxisSpacing: 10.0,
+                SizedBox(
+                  height: blankHeight,
+                ),
+                FutureBuilder<dynamic>(
+                  future: acList.getAccountList, //Future - 객체
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SizedBox(
+                        child: Center(
+                          child: SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (BuildContext context, int index) {
-                          bool isEnabled = true;
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return SizedBox(
+                        width: itemWidth,
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1,
+                            mainAxisSpacing: 10.0,
+                            crossAxisSpacing: 10.0,
+                          ),
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          itemBuilder: (BuildContext context, int index) {
+                            bool isEnabled = true;
 
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                if (selectedRow == index) {
-                                  selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                                } else {
-                                  selectedRow = index; // 새로운 로우를 선택
-                                }
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(3.0),
-                              decoration: BoxDecoration(
-                                color: selectedRow == index
-                                    ? Colors.amber[200]
-                                    : Colors.white, // 조건부로 배경색 결정
-                                borderRadius:
-                                    BorderRadius.circular(10), // 모서리 둥글기 값 설정
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      //소비 종류와 관련된 버튼
-                                      pickchallinst.getconsumLabel[index],
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: isEnabled
-                                            ? Colors.black
-                                            : Colors.grey,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(10.0),
-                                      margin: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                        color: selectedRow == index
-                                            //색은 바꿔주세용
-                                            ? Colors.green[100]
-                                            : Colors.white, // 조건부로 배경색 결정
-                                        borderRadius: BorderRadius.circular(
-                                            10), // 모서리 둥글기 값 설정
-                                      ),
-                                      child: Text(
-                                        'test',
-                                        //pickchallinst.getconsumList[index], // 여기에 원하는 텍스트를 넣으십시오.
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (selectedRow == index) {
+                                    selectedRow =
+                                        null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                                  } else {
+                                    selectedRow = index; // 새로운 로우를 선택
+                                  }
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(3.0),
+                                decoration: BoxDecoration(
+                                  color: selectedRow == index
+                                      ? const Color.fromARGB(255, 255, 241, 200)
+                                      : const Color.fromARGB(
+                                          255, 255, 255, 255), // 조건부로 배경색 결정
+                                  borderRadius:
+                                      BorderRadius.circular(10), // 모서리 둥글기 값 설정
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        //소비 종류와 관련된 버튼
+                                        pickchallinst.getconsumLabel[index],
                                         style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: 20,
                                           color: isEnabled
                                               ? Colors.black
                                               : Colors.grey,
                                         ),
                                       ),
-                                    )
-                                  ],
+                                      Container(
+                                        padding: const EdgeInsets.all(10.0),
+                                        margin: const EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                          color: selectedRow == index
+                                              //색은 바꿔주세용
+                                              ? const Color.fromARGB(
+                                                  255, 199, 224, 201)
+                                              : Colors.white, // 조건부로 배경색 결정
+                                          borderRadius: BorderRadius.circular(
+                                              10), // 모서리 둥글기 값 설정
+                                        ),
+                                        child: Text(
+                                          'test',
+                                          //pickchallinst.getconsumList[index], // 여기에 원하는 텍스트를 넣으십시오.
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: isEnabled
+                                                ? Colors.black
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: blankHeight,
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    // 다음 단계로
+                    Navigator.of(context).push(
+                      CustomRoute(
+                        builder: (BuildContext context) => AccSelectScreen(),
+                        settings: const RouteSettings(),
                       ),
                     );
-                  }
-                },
-              ),
-              SizedBox(
-                height: blankHeight,
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  // 다음 단계로
-                  Navigator.of(context).push(
-                    CustomRoute(
-                      builder: (BuildContext context) => AccSelectScreen(),
-                      settings: const RouteSettings(),
+                  },
+                  child: const Text(
+                    '제출',
+                    style: TextStyle(
+                      fontSize: 23,
                     ),
-                  );
-                },
-                child: const Text('제출'),
-              ),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -750,13 +811,16 @@ class AccSelectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    acList.setAccountList();
+    double screenHeight = MediaQuery.of(context).size.height;
+    double appbarHeight = screenHeight * 0.12;
+    double blankHeight = screenHeight * 0.1;
+
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
         centerTitle: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 130,
+        toolbarHeight: appbarHeight,
       ),
       body: Center(
         child: Column(
@@ -794,12 +858,15 @@ class AccSelectScreen extends StatelessWidget {
                 }
               },
               child: const Text(
-                '선택완료',
+                '선택',
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 23,
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              height: blankHeight,
+            ),
           ],
         ),
       ),
@@ -817,6 +884,13 @@ class AccountTable extends StatefulWidget {
 class _AccountTableState extends State<AccountTable> {
   // 선택된 로우의 인덱스를 저장하는 변수
   AccountList acList = AccountList();
+  late Future<List<dynamic>> _accListFuture;
+  @override
+  void initState() {
+    super.initState();
+
+    _accListFuture = acList.setAccountList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -826,10 +900,18 @@ class _AccountTableState extends State<AccountTable> {
       child: Card(
           elevation: 4.0,
           child: FutureBuilder<dynamic>(
-            future: acList.getAccountList, //Future-객체 ->
+            future: _accListFuture, //Future-객체 ->
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return const SizedBox(
+                  child: Center(
+                    child: SizedBox(
+                      height: 25,
+                      width: 25,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
@@ -838,13 +920,12 @@ class _AccountTableState extends State<AccountTable> {
                     // ListView.builder를 사용하여 동적으로 아이템 생성
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: acList.listlength,
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         final account = snapshot.data![index];
                         return ListTile(
-                          title: Text(account.bank),
+                          title: Text(account.accName),
                           subtitle: Text('계좌번호: ${account.accNum}'),
-                          trailing: Text('월 최대 납부액: ${account.maxAmount}'),
                           tileColor: selectedRow == index
                               ? const Color.fromARGB(255, 150, 208, 255)
                               : null, // 선택된 로우에 색상 적용
@@ -880,15 +961,15 @@ class AmountSelectScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
     double startHeight = screenHeight * 0.2;
-
     double contentWidth = screenWidth * 0.8;
+    double appbarHeight = screenHeight * 0.12;
 
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
         centerTitle: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 130,
+        toolbarHeight: appbarHeight,
       ),
       body: Center(
         child: Column(
@@ -915,6 +996,8 @@ class AmountSelectScreen extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {
+                // 선택한 값 적용하기
+
                 // 다음 단계로
                 Navigator.of(context).push(
                   CustomRoute(
@@ -923,7 +1006,12 @@ class AmountSelectScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('제출'),
+              child: const Text(
+                '제출',
+                style: TextStyle(
+                  fontSize: 23,
+                ),
+              ),
             )
           ],
         ),
@@ -1014,8 +1102,9 @@ class _AmountSliderState extends State<AmountSlider> {
           ),
           child: Slider(
             value: sliderVal,
+            min: 1000.0,
             max: 30000.0,
-            divisions: 30,
+            divisions: 29,
 
             label: '${sliderVal.round()}',
             // 이것도 제출하면 state 바꾸도록하기
@@ -1028,7 +1117,7 @@ class _AmountSliderState extends State<AmountSlider> {
         Text(
           '${sliderVal.round()} 원',
           style: const TextStyle(
-            fontSize: 25,
+            fontSize: 22,
           ),
         ),
       ],
@@ -1043,101 +1132,162 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    double appbarHeight = screenHeight * 0.12;
+    double startHeight = screenHeight * 0.03;
 
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
         centerTitle: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 130,
+        toolbarHeight: appbarHeight,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 50,
-            ),
-            const Text(
-              '===============\n\n** RECEIPT **\n\n===============',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 28,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: startHeight,
               ),
-            ),
-            SizedBox(
-              width: screenWidth * 0.8,
-              child: Text(
-                '\n${controller.checkInfo.registName}님이 선택하신 \nRe-Habbit이 맞나요?\n\n...........................................................',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                ),
+
+                // padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 48.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '\n===============\n\n** RECEIPT **\n\n===============',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 28,
+                      ),
+                    ),
+                    SizedBox(
+                      width: screenWidth * 0.8,
+                      child: Text(
+                        '\n${controller.checkInfo.registName}님이 선택하신 \nRe-Habbit이 맞나요?\n\n................................................................',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    FutureBuilder<dynamic>(
+                      future: acList.getAccountList, //Future-객체
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          // return Text(
+                          //   textAlign: TextAlign.center,
+                          //   '\n ${acList.getaccountSaving?.bank} ${acList.getaccountSaving?.accNum} 적금\n${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum} 입출금\n커피 안 마시기\n30일\n10,000원',
+                          //   //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
+
+                          //   style: const TextStyle(
+                          //     fontSize: 20,
+                          //   ),
+                          // );
+                          return DataTable(
+                              headingTextStyle: const TextStyle(
+                                fontFamily: '아리따-돋움',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              dataTextStyle: const TextStyle(
+                                fontFamily: '아리따-돋움',
+                                color: Colors.black,
+                              ),
+                              columns: const [
+                                DataColumn(label: Text('항목')),
+                                DataColumn(label: Text('선택')),
+                              ],
+                              rows: [
+                                DataRow(cells: [
+                                  const DataCell(Text('연동된 적금')),
+                                  DataCell(Text(
+                                      '${acList.getaccountSaving?.accName} ${acList.getaccountSaving?.accNum}')),
+                                ]),
+                                DataRow(cells: [
+                                  const DataCell(Text('챌린지 계좌')),
+                                  DataCell(Text(
+                                      '${acList.getaccountConsum?.accName} ${acList.getaccountConsum?.accNum}')),
+                                ]),
+                                const DataRow(cells: [
+                                  DataCell(Text('도전 항목')),
+                                  DataCell(Text('커피 안 마시기')),
+                                ]),
+                                const DataRow(cells: [
+                                  DataCell(Text('도전 기간')),
+                                  DataCell(Text('30일')),
+                                ]),
+                                const DataRow(cells: [
+                                  DataCell(Text('실패시 적금금액')),
+                                  DataCell(Text('10,000원')),
+                                  // DataCell(Text('${amount}')),
+                                ]),
+                              ]);
+                        }
+                      },
+                    ),
+                    const Text(
+                      '................................................................\n',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            FutureBuilder<dynamic>(
-              future: acList.getAccountList, //Future-객체
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return Text(
-                    textAlign: TextAlign.center,
-                    '\n ${acList.getaccountSaving?.accName} ${acList.getaccountSaving?.accNum} 적금\n커피 안 마시기\n${acList.getaccountConsum?.accName} ${acList.getaccountConsum?.accNum} 입출금\n30일\n10,000원\n\n...........................................................',
-                    //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
-
-                    style: const TextStyle(
-                      fontSize: 20,
+              SizedBox(
+                height: startHeight,
+              ),
+              // 선택지 1 - 토끼 생성
+              OutlinedButton(
+                onPressed: () {
+                  // 다음 단계로
+                  Navigator.of(context).push(
+                    CustomRoute(
+                      builder: (BuildContext context) => const FinalScreen(),
+                      settings: const RouteSettings(),
                     ),
                   );
-                }
-              },
-            ),
-
-            const SizedBox(
-              height: 50,
-            ),
-
-            // 선택지 1 - 토끼 생성
-            OutlinedButton(
-              onPressed: () {
-                // 다음 단계로
-                Navigator.of(context).push(
-                  CustomRoute(
-                    builder: (BuildContext context) => const FinalScreen(),
-                    settings: const RouteSettings(),
+                },
+                child: const Text(
+                  '이대로 생성하기',
+                  style: TextStyle(
+                    fontSize: 23,
                   ),
-                );
-              },
-              child: const Text(
-                '이대로 생성하기',
-                style: TextStyle(
-                  fontSize: 28,
                 ),
               ),
-            ),
-            // 선택지 2 - 다시 설정하기
-            TextButton(
-              onPressed: () {
-                // 적금 선택 단계로
-                Navigator.of(context).push(
-                  CustomRoute(
-                    builder: (BuildContext context) => AccSelectScreen(),
-                    settings: const RouteSettings(),
+
+              // 선택지 2 - 다시 설정하기
+              TextButton(
+                onPressed: () {
+                  // 적금 선택 단계로
+                  Navigator.of(context).push(
+                    CustomRoute(
+                      builder: (BuildContext context) => AccSelectScreen(),
+                      settings: const RouteSettings(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  '수정하기',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 112, 108, 108),
+                    fontSize: 18,
                   ),
-                );
-              },
-              child: const Text(
-                '수정하기',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 112, 108, 108),
-                  fontSize: 18,
                 ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -1150,54 +1300,74 @@ class FinalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double appbarHeight = screenHeight * 0.12;
+    double startHeight = screenHeight * 0.25;
+    double blankHeight = screenHeight * 0.03;
+
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
         centerTitle: true,
         backgroundColor: Colors.white,
-        toolbarHeight: 130,
+        toolbarHeight: appbarHeight,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              '천리길도 한 걸음부터!',
-              style: TextStyle(
-                fontSize: 25,
+        child: Container(
+          width: screenWidth,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage('assets/images/background-img.png'), // 배경 이미지
+            ),
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: startHeight,
               ),
-            ),
-            // const SizedBox(
-            //   height: 50,
-            // ),
-            Image.asset(
-              'assets/images/profile-img.png',
-              height: 300,
-            ),
-            // const SizedBox(
-            //   height: 30,
-            // ),
-            const Text(
-              '도전이 시작되었습니다.',
-              style: TextStyle(
-                fontSize: 25,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            OutlinedButton(
-              onPressed: () {
-                Get.find<RegisController>().goToMain();
-              },
-              child: const Text(
-                '메인으로',
+              const Text(
+                '천리길도 한 걸음부터!',
                 style: TextStyle(
                   fontSize: 25,
                 ),
               ),
-            )
-          ],
+              SizedBox(
+                height: blankHeight,
+              ),
+              const Text(
+                '도전이 시작되었습니다.',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              SizedBox(
+                height: blankHeight,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.find<RegisController>().goToMain();
+                },
+                child: const Text(
+                  '메인으로',
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+              // const SizedBox(
+              //   height: 50,
+              // ),
+              Image.asset(
+                'assets/images/profile-img.png',
+                height: 300,
+              ),
+              // const SizedBox(
+              //   height: 30,
+              // ),
+            ],
+          ),
         ),
       ),
     );
@@ -1309,6 +1479,7 @@ class _BankDropdownButtonState extends State<BankDropdownButton> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
+      alignment: Alignment.center,
       value: btn1SelectedVal,
       onChanged: (String? newValue) {
         if (newValue != null) {
