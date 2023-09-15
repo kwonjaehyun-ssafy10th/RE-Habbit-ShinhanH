@@ -246,6 +246,8 @@ class SecondScreen extends StatelessWidget {
                           _inputAccount.text)) {
                         return;
                       }
+                      controller.setUser(
+                          _inputName.text, _inputBank.text, _inputAccount.text);
                       // 조회 후 다음 단계로
                       Navigator.of(context).pop();
                       Navigator.of(context).push(
@@ -456,7 +458,6 @@ class trackAccScreen extends StatelessWidget {
     double appbarHeight = screenHeight * 0.12;
     double blankHeight = screenHeight * 0.1;
 
-    acList.setAccountList();
     return Scaffold(
         appBar: AppBar(
           title: const HeaderWidget(),
@@ -539,7 +540,7 @@ class _AccountTableState2 extends State<AccountTable2> {
   void initState() {
     super.initState();
 
-    _accListFuture = acList.setAccountList();
+    _accListFuture = acList.setAccountList(false);
   }
 
   @override
@@ -582,7 +583,7 @@ class _AccountTableState2 extends State<AccountTable2> {
                             final account = snapshot.data![index];
                             return ListTile(
                               title: Text(account.accName),
-                              // subtitle: Text('계좌번호: ${account.accNum}'),
+                              subtitle: Text('계좌번호: ${account.accNum}'),
                               trailing: Text('${account.accNum}'),
                               tileColor: selectedRow == index
                                   ? const Color.fromARGB(255, 150, 208, 255)
@@ -673,7 +674,8 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                   height: blankHeight,
                 ),
                 FutureBuilder<dynamic>(
-                  future: acList.getAccountList, //Future - 객체
+                  //수정필요
+                  future: acList.setAccountList(true), //Future - 객체
                   builder:
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -874,6 +876,7 @@ class AccSelectScreen extends StatelessWidget {
   }
 }
 
+//적금 리스트업
 class AccountTable extends StatefulWidget {
   const AccountTable({super.key});
 
@@ -889,7 +892,7 @@ class _AccountTableState extends State<AccountTable> {
   void initState() {
     super.initState();
 
-    _accListFuture = acList.setAccountList();
+    _accListFuture = acList.setAccountList(true);
   }
 
   @override
@@ -1175,67 +1178,45 @@ class ResultScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    FutureBuilder<dynamic>(
-                      future: acList.getAccountList, //Future-객체
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          // return Text(
-                          //   textAlign: TextAlign.center,
-                          //   '\n ${acList.getaccountSaving?.bank} ${acList.getaccountSaving?.accNum} 적금\n${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum} 입출금\n커피 안 마시기\n30일\n10,000원',
-                          //   //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
-
-                          //   style: const TextStyle(
-                          //     fontSize: 20,
-                          //   ),
-                          // );
-                          return DataTable(
-                              headingTextStyle: const TextStyle(
-                                fontFamily: '아리따-돋움',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                              dataTextStyle: const TextStyle(
-                                fontFamily: '아리따-돋움',
-                                color: Colors.black,
-                              ),
-                              columns: const [
-                                DataColumn(label: Text('항목')),
-                                DataColumn(label: Text('선택')),
-                              ],
-                              rows: [
-                                DataRow(cells: [
-                                  const DataCell(Text('연동된 적금')),
-                                  DataCell(Text(
-                                      '${acList.getaccountSaving?.accName} ${acList.getaccountSaving?.accNum}')),
-                                ]),
-                                DataRow(cells: [
-                                  const DataCell(Text('챌린지 계좌')),
-                                  DataCell(Text(
-                                      '${acList.getaccountConsum?.accName} ${acList.getaccountConsum?.accNum}')),
-                                ]),
-                                const DataRow(cells: [
-                                  DataCell(Text('도전 항목')),
-                                  DataCell(Text('커피 안 마시기')),
-                                ]),
-                                const DataRow(cells: [
-                                  DataCell(Text('도전 기간')),
-                                  DataCell(Text('30일')),
-                                ]),
-                                const DataRow(cells: [
-                                  DataCell(Text('실패시 적금금액')),
-                                  DataCell(Text('10,000원')),
-                                  // DataCell(Text('${amount}')),
-                                ]),
-                              ]);
-                        }
-                      },
-                    ),
+                    DataTable(
+                        headingTextStyle: const TextStyle(
+                          fontFamily: '아리따-돋움',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        dataTextStyle: const TextStyle(
+                          fontFamily: '아리따-돋움',
+                          color: Colors.black,
+                        ),
+                        columns: const [
+                          DataColumn(label: Text('항목')),
+                          DataColumn(label: Text('선택')),
+                        ],
+                        rows: [
+                          DataRow(cells: [
+                            const DataCell(Text('연동된 적금')),
+                            DataCell(Text(
+                                '${acList.getaccountSaving?.accName} ${acList.getaccountSaving?.accNum}')),
+                          ]),
+                          DataRow(cells: [
+                            const DataCell(Text('챌린지 계좌')),
+                            DataCell(Text(
+                                '${acList.getaccountConsum?.accName} ${acList.getaccountConsum?.accNum}')),
+                          ]),
+                          const DataRow(cells: [
+                            DataCell(Text('도전 항목')),
+                            DataCell(Text('커피 안 마시기')),
+                          ]),
+                          const DataRow(cells: [
+                            DataCell(Text('도전 기간')),
+                            DataCell(Text('30일')),
+                          ]),
+                          const DataRow(cells: [
+                            DataCell(Text('실패시 적금금액')),
+                            DataCell(Text('10,000원')),
+                            // DataCell(Text('${amount}')),
+                          ]),
+                        ]),
                     const Text(
                       '................................................................\n',
                       style: TextStyle(

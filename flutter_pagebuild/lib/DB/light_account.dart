@@ -52,10 +52,8 @@ getAccountInfo(accountNo) async {
   var path = 'v$version/account';
   final url = Uri.https(domain, "${"$path/" + accountNo}.json");
   final response = await http.get(url);
-  if (response != null) {
-    var result = json.decode(response.body);
-    return result;
-  }
+  var result = json.decode(response.body);
+  return result;
 }
 
 // 이름 입력하면 계좌 목록 반환
@@ -76,16 +74,14 @@ getAccountListOf(String name) async {
 getCheckingAccountListOf(String name) async {
   List<dynamic> list = [];
   var loadedData = await loadData('user');
-  if ( loadedData != null) {
-    for (var item in loadedData) {
-      if (item.key == name) {
-        for (var account in item.value["계좌목록"]) {
-          if (account["구분"] == "입출금계좌") {
-            list.add(account);
-          }
+  for (var item in loadedData) {
+    if (item.key == name) {
+      for (var account in item.value["계좌목록"]) {
+        if (account["구분"] == "입출금계좌") {
+          list.add(account);
         }
-        return list;
       }
+      return list;
     }
   }
 }
@@ -94,16 +90,14 @@ getCheckingAccountListOf(String name) async {
 getSavingAccountListOf(String name) async {
   List<dynamic> list = [];
   var loadedData = await loadData('user');
-  if (loadedData != null) {
-    for (var item in loadedData) {
-      if (item.key == name) {
-        for (var account in item.value["계좌목록"]) {
-          if (account["구분"] == "자유적금") {
-            list.add(account);
-          }
+  for (var item in loadedData) {
+    if (item.key == name) {
+      for (var account in item.value["계좌목록"]) {
+        if (account["구분"] == "자유적금") {
+          list.add(account);
         }
-        return list;
       }
+      return list;
     }
   }
 }
@@ -121,17 +115,30 @@ String createAccountNo() {
   return (random.nextInt(100000) + 100000).toString();
 }
 
-void main() {
-  // var account = getAccountInfo("150422").then((res) => {print(res)});
-  // print(account);
-  // print(getAccountInfo("150422"));
+Map<String, dynamic> api3 = {
+  'account': {
+    'path': 'account',
+  },
+  'transaction': {
+    'path': 'transaction',
+  },
+  'balance': {
+    'path': 'balance',
+  },
+  'user': {
+    'path': 'user',
+  }
+};
 
-  // var accountList = await getAccountListOf("쏠");
-  // print(accountList);
+Map<String, dynamic> keyMap3 = {
+  'user': '고객명',
+  'account': '계좌번호',
+  'balance': '계좌번호',
+  'transaction': '계좌번호',
+  'notificatoin': '고객명'
+};
 
-  // var checkingAccount = await getCheckingAccountListOf("쏠");
-  // print(checkingAccount);
+//계좌 받아오는 로직 true-적금 false-입출금
 
-  // var savingAccount = await getSavingAccountListOf("쏠");
-  // print(savingAccount);
-}
+//
+

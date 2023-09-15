@@ -6,8 +6,6 @@ import 'package:get/get.dart';
 import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
 
-import 'package:flutter_pagebuild/DB/RegisApi.dart';
-
 import 'package:flutter_pagebuild/DB/light_account.dart';
 
 // 1. 계좌번호&이름 입력
@@ -37,34 +35,39 @@ class AccountList with ChangeNotifier {
 
 //RegisModel - 싱글턴
   RegisModel regisModel = RegisModel();
+  CheckModel checkInfo = CheckModel();
 
-//입출금 계좌 리스트(임시) - 삭제
-  // List<Account> temp2 = <Account>[
-  //   Account.Savings('신한은행', '1104742313', 300000),
-  //   Account('카카오뱅크', 7432343242, 200000),
-  //   Account('우리은행', 2623339834, 200000),
-  //   Account('새마을금고', 3058831284, 300000),
-  //   Account('농협은행', 3564775924, 300000),
-  // ];
+  dataToAccount(account, bool saving) {
+    if (saving) {
+      if (account["구분"]?.contains("적금")) {
+        String accName = account["상품명"];
+        String accNum = account["계좌번호"];
+        return Account(accName, accNum);
+      }
+    } else {
+      if (account["구분"]?.contains("입출금")) {
+        String accName = account["상품명"];
+        String accNum = account["계좌번호"];
+        return Account(accName, accNum);
+      }
+    }
+  }
 
-  int listlength = 0;
-
-  Future<List<dynamic>> setAccountList() async {
-    List<dynamic> tmplist = await getAccountListOf('최쏠'); //Map을 담은 리스트
+  Future<List<dynamic>> setAccountList(bool saving) async {
+    List<dynamic> tmplist =
+        await getAccountListOf(checkInfo.registName); //Map을 담은 리스트
 
     int idx = 0;
     regisModel.accountList.clear();
     while (idx < tmplist.length) {
-      Account tmp = dataToAccount(tmplist[idx], true);
-      regisModel.accountList.add(tmp);
+      dynamic tmp = dataToAccount(tmplist[idx], saving);
+      if (tmp != null) {
+        regisModel.accountList.add(tmp);
+      }
+
       idx++;
     }
 
-    return regisModel.accountList;
-  }
-
-  Future<List<Account>> get getAccountList async {
-    await setAccountList();
     return regisModel.accountList;
   }
 
