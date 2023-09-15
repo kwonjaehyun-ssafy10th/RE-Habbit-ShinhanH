@@ -132,7 +132,10 @@ class MainController extends GetxController {
     Get.to(() => RankView());
   }
 
-  void goToDetail() {}
+  void goToDetail() {
+    Get.find<DetailController>();
+    Get.to(() => DetailView());
+  }
 
   void goToStamp() {
     Get.find<StampController>();
