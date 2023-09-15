@@ -634,13 +634,11 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
     double itemWidth = screenWidth * 0.8;
     double appbarHeight = screenHeight * 0.12;
 
-
-    pickchallinst.setconsumList();
+    //pickchallinst.setconsumList();
 
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
-
         backgroundColor: Colors.white,
         centerTitle: true,
         toolbarHeight: appbarHeight,
@@ -648,9 +646,8 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 0.0),
-
-
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -685,136 +682,80 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                 SizedBox(
                   width: itemWidth,
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    itemBuilder: (BuildContext context, int index) {
-                      bool isEnabled = true;
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1,
+                        mainAxisSpacing: 10.0,
+                        crossAxisSpacing: 10.0,
+                      ),
+                      shrinkWrap: true,
+                      itemCount: 4,
+                      itemBuilder: (BuildContext context, int index) {
+                        bool isEnabled = true;
 
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (selectedRow == index) {
-                              selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                            } else {
-                              selectedRow = index; // 새로운 로우를 선택
-                            }
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(3.0),
-                          decoration: BoxDecoration(
-                            color: selectedRow == index
-                                ? const Color.fromARGB(255, 255, 241, 200)
-                                : const Color.fromARGB(
-                                    255, 255, 255, 255), // 조건부로 배경색 결정
-                            borderRadius:
-                                BorderRadius.circular(10), // 모서리 둥글기 값 설정
-                          ),
-
-                          shrinkWrap: true,
-                          itemCount: 4,
-                          itemBuilder: (BuildContext context, int index) {
-                            bool isEnabled = true;
-
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (selectedRow == index) {
-                                    selectedRow =
-                                        null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                                  } else {
-                                    selectedRow = index; // 새로운 로우를 선택
-                                  }
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(3.0),
-                                decoration: BoxDecoration(
-                                  color: selectedRow == index
-                                      ? Color.fromARGB(255, 255, 241, 200)
-                                      : Color.fromARGB(
-                                          255, 255, 255, 255), // 조건부로 배경색 결정
-                                  borderRadius:
-                                      BorderRadius.circular(10), // 모서리 둥글기 값 설정
-                                ),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        //소비 종류와 관련된 버튼
-                                        pickchallinst.getconsumLabel[index],
+                        return InkWell(
+                            onTap: () {
+                              setState(() {
+                                if (selectedRow == index) {
+                                  selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                                } else {
+                                  selectedRow = index; // 새로운 로우를 선택
+                                }
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                color: selectedRow == index
+                                    ? const Color.fromARGB(255, 255, 241, 200)
+                                    : const Color.fromARGB(
+                                        255, 255, 255, 255), // 조건부로 배경색 결정
+                                borderRadius:
+                                    BorderRadius.circular(10), // 모서리 둥글기 값 설정
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      //소비 종류와 관련된 버튼
+                                      pickchallinst.getconsumLabel[index],
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: isEnabled
+                                            ? Colors.black
+                                            : Colors.grey,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.all(5),
+                                      margin: const EdgeInsets.all(10.0),
+                                      decoration: BoxDecoration(
+                                        color: selectedRow == index
+                                            //색은 바꿔주세용
+                                            ? const Color.fromARGB(
+                                                255, 199, 224, 201)
+                                            : Colors.white, // 조건부로 배경색 결정
+                                        borderRadius: BorderRadius.circular(
+                                            10), // 모서리 둥글기 값 설정
+                                      ),
+                                      child: Text(
+                                        '# test',
+                                        //pickchallinst.getconsumList[index], // 여기에 원하는 텍스트를 넣으십시오.
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 13,
                                           color: isEnabled
                                               ? Colors.black
                                               : Colors.grey,
                                         ),
                                       ),
-                                      Container(
-                                        padding: EdgeInsets.all(5),
-                                        margin: const EdgeInsets.all(10.0),
-                                        decoration: BoxDecoration(
-                                          color: selectedRow == index
-                                              //색은 바꿔주세용
-                                              ? Color.fromARGB(
-                                                  255, 199, 224, 201)
-                                              : Colors.white, // 조건부로 배경색 결정
-                                          borderRadius: BorderRadius.circular(
-                                              10), // 모서리 둥글기 값 설정
-                                        ),
-                                        child: Text(
-                                          '# test',
-                                          //pickchallinst.getconsumList[index], // 여기에 원하는 텍스트를 넣으십시오.
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: isEnabled
-                                                ? Colors.black
-                                                : Colors.grey,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-
-                                  ),
+                                    )
+                                  ],
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.all(10.0),
-                                  margin: const EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                    color: selectedRow == index
-                                        //색은 바꿔주세용
-                                        ? const Color.fromARGB(
-                                            255, 199, 224, 201)
-                                        : Colors.white, // 조건부로 배경색 결정
-                                    borderRadius: BorderRadius.circular(
-                                        10), // 모서리 둥글기 값 설정
-                                  ),
-                                  child: Text(
-                                    pickchallinst.getconsumList[index],
-                                    //pickchallinst.getconsumList[index]
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: isEnabled
-                                          ? Colors.black
-                                          : Colors.grey,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                              ),
+                            ));
+                      }),
                 ),
                 SizedBox(
                   height: blankHeight,
@@ -995,7 +936,7 @@ class _AccountTableState extends State<AccountTable> {
 }
 
 // 챌린지 참여일수 및 금액 받기
-late final int slidervalre;
+late int slidervalre;
 
 class AmountSelectScreen extends StatelessWidget {
   const AmountSelectScreen({super.key});
@@ -1362,9 +1303,8 @@ class FinalScreen extends StatelessWidget {
                 height: blankHeight,
               ),
 
-              Text(
+              const Text(
                 '당신의 도전을 응원합니다.',
-
                 style: TextStyle(
                   fontSize: 25,
                 ),

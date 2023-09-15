@@ -162,8 +162,6 @@ class RegisController extends GetxController {
 
 //사용자 계좌 연결
 
-//소비내역을 받아오기
-
 //메인 화면 연결
   void goToMain() {
     Get.put(MainController());
