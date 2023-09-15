@@ -24,6 +24,7 @@ void initAccount(Map account) {
   patchToFirebase('account', account);
   initBalance(account["계좌번호"], account["잔액"]);
   initTransactionList(account["계좌번호"]);
+  patchUserByAccount(account);
 }
 
 // 계좌번호 입력하면 계좌 정보 반환
@@ -85,6 +86,10 @@ getSavingAccountListOf(String name) async {
       }
     }
   }
+}
+
+String createAccountNo() {
+  return (random.nextInt(100000) + 100000).toString();
 }
 
 void main() {
