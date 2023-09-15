@@ -1127,136 +1127,151 @@ class ResultScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 48.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Text(
-                  '===============\n\n** RECEIPT **\n\n===============',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                  ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: startHeight,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
                 ),
-                SizedBox(
-                  width: screenWidth * 0.8,
-                  child: Text(
-                    '\n${controller.checkInfo.registName}님이 선택하신 \nRe-Habbit이 맞나요?\n\n................................................................',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                FutureBuilder<dynamic>(
-                  future: acList.getAccountList, //Future-객체
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      // return Text(
-                      //   textAlign: TextAlign.center,
-                      //   '\n ${acList.getaccountSaving?.bank} ${acList.getaccountSaving?.accNum} 적금\n${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum} 입출금\n커피 안 마시기\n30일\n10,000원',
-                      //   //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
 
-                      //   style: const TextStyle(
-                      //     fontSize: 20,
-                      //   ),
-                      // );
-                      return DataTable(
-                          headingTextStyle: TextStyle(
-                            fontFamily: '아리따-돋움',
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                          dataTextStyle: TextStyle(
-                            fontFamily: '아리따-돋움',
-                            color: Colors.black,
-                          ),
-                          columns: [
-                            DataColumn(label: Text('항목')),
-                            DataColumn(label: Text('선택')),
-                          ],
-                          rows: [
-                            DataRow(cells: [
-                              DataCell(Text('연동된 적금')),
-                              DataCell(Text(
-                                  '${acList.getaccountSaving?.bank} ${acList.getaccountSaving?.accNum}')),
-                            ]),
-                            DataRow(cells: [
-                              DataCell(Text('챌린지 계좌')),
-                              DataCell(Text(
-                                  '${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum}')),
-                            ]),
-                            DataRow(cells: [
-                              DataCell(Text('도전 항목')),
-                              DataCell(Text('커피 안 마시기')),
-                            ]),
-                            DataRow(cells: [
-                              DataCell(Text('도전 기간')),
-                              DataCell(Text('30일')),
-                            ]),
-                            DataRow(cells: [
-                              DataCell(Text('실패시 적금금액')),
-                              DataCell(Text('10,000원')),
-                              // DataCell(Text('${amount}')),
-                            ]),
-                          ]);
-                    }
-                  },
+                // padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 48.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '\n===============\n\n** RECEIPT **\n\n===============',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 28,
+                      ),
+                    ),
+                    SizedBox(
+                      width: screenWidth * 0.8,
+                      child: Text(
+                        '\n${controller.checkInfo.registName}님이 선택하신 \nRe-Habbit이 맞나요?\n\n................................................................',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    FutureBuilder<dynamic>(
+                      future: acList.getAccountList, //Future-객체
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          // return Text(
+                          //   textAlign: TextAlign.center,
+                          //   '\n ${acList.getaccountSaving?.bank} ${acList.getaccountSaving?.accNum} 적금\n${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum} 입출금\n커피 안 마시기\n30일\n10,000원',
+                          //   //'${userName} 님\n${challengeName}\n30일\n${amount}원\n${accountNum}',
+
+                          //   style: const TextStyle(
+                          //     fontSize: 20,
+                          //   ),
+                          // );
+                          return DataTable(
+                              headingTextStyle: TextStyle(
+                                fontFamily: '아리따-돋움',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              dataTextStyle: TextStyle(
+                                fontFamily: '아리따-돋움',
+                                color: Colors.black,
+                              ),
+                              columns: [
+                                DataColumn(label: Text('항목')),
+                                DataColumn(label: Text('선택')),
+                              ],
+                              rows: [
+                                DataRow(cells: [
+                                  DataCell(Text('연동된 적금')),
+                                  DataCell(Text(
+                                      '${acList.getaccountSaving?.bank} ${acList.getaccountSaving?.accNum}')),
+                                ]),
+                                DataRow(cells: [
+                                  DataCell(Text('챌린지 계좌')),
+                                  DataCell(Text(
+                                      '${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum}')),
+                                ]),
+                                DataRow(cells: [
+                                  DataCell(Text('도전 항목')),
+                                  DataCell(Text('커피 안 마시기')),
+                                ]),
+                                DataRow(cells: [
+                                  DataCell(Text('도전 기간')),
+                                  DataCell(Text('30일')),
+                                ]),
+                                DataRow(cells: [
+                                  DataCell(Text('실패시 적금금액')),
+                                  DataCell(Text('10,000원')),
+                                  // DataCell(Text('${amount}')),
+                                ]),
+                              ]);
+                        }
+                      },
+                    ),
+                    Text(
+                      '................................................................\n',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  '................................................................\n',
+              ),
+              SizedBox(
+                height: startHeight,
+              ),
+              // 선택지 1 - 토끼 생성
+              OutlinedButton(
+                onPressed: () {
+                  // 다음 단계로
+                  Navigator.of(context).push(
+                    CustomRoute(
+                      builder: (BuildContext context) => const FinalScreen(),
+                      settings: const RouteSettings(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  '이대로 생성하기',
                   style: TextStyle(
+                    fontSize: 23,
+                  ),
+                ),
+              ),
+
+              // 선택지 2 - 다시 설정하기
+              TextButton(
+                onPressed: () {
+                  // 적금 선택 단계로
+                  Navigator.of(context).push(
+                    CustomRoute(
+                      builder: (BuildContext context) => AccSelectScreen(),
+                      settings: const RouteSettings(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  '수정하기',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 112, 108, 108),
                     fontSize: 18,
                   ),
                 ),
-
-                // 선택지 1 - 토끼 생성
-                OutlinedButton(
-                  onPressed: () {
-                    // 다음 단계로
-                    Navigator.of(context).push(
-                      CustomRoute(
-                        builder: (BuildContext context) => const FinalScreen(),
-                        settings: const RouteSettings(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    '이대로 생성하기',
-                    style: TextStyle(
-                      fontSize: 23,
-                    ),
-                  ),
-                ),
-                // 선택지 2 - 다시 설정하기
-                TextButton(
-                  onPressed: () {
-                    // 적금 선택 단계로
-                    Navigator.of(context).push(
-                      CustomRoute(
-                        builder: (BuildContext context) => AccSelectScreen(),
-                        settings: const RouteSettings(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    '수정하기',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 112, 108, 108),
-                      fontSize: 18,
-                    ),
-                  ),
-                )
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
