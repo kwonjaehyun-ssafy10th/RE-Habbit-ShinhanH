@@ -26,7 +26,7 @@ class MainView extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: '아리따-돋움',
         ),
-        home: MyHomePage(title: 'Flutter Chart'),
+        home: const MyHomePage(title: 'Flutter Chart'),
       ),
     );
   }
@@ -75,13 +75,12 @@ class MyHomePage extends StatelessWidget {
               ),
 
               // 랭킹 및 현황 버튼들
-              Expanded(
+              Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        print('test');
                         controller.reset.temptest();
                         controller.goToRank();
                       },
@@ -247,9 +246,9 @@ class UserWidget extends StatelessWidget {
             Text(
               // '시계토끼 ',
               '${controller.reset.getUser().username} ',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
-            Text(
+            const Text(
               '님',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
