@@ -40,6 +40,10 @@ void patchUserByAccount(Map account) {
   patchToFirebase('user', userMap);
 }
 
+getNameOf(accountNo) {
+  return getInfoValueOf(accountNo, 'user');
+}
+
 List lastNameList = ["김", "이", "박", "최", "정"];
 List firstNameList = ["쏠", "몰리", "리노", "슈", "도레미", "서퍼", "플리", "레이"];
 
