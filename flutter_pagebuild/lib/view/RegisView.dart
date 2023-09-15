@@ -85,6 +85,7 @@ class StartPage extends StatelessWidget {
     double buttonHeight = screenHeight * 0.1;
     double imageHeight = screenHeight * 0.4;
     double startHeight = screenHeight * 0.15;
+    double blankHeight = screenHeight * 0.03;
 
     return Center(
       child: Column(
@@ -122,6 +123,9 @@ class StartPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
+          ),
+          SizedBox(
+            height: blankHeight,
           ),
           SizedBox(
             height: imageHeight,
@@ -630,18 +634,23 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
     double itemWidth = screenWidth * 0.8;
     double appbarHeight = screenHeight * 0.12;
 
+
+    pickchallinst.setconsumList();
+
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
-        centerTitle: true,
+
         backgroundColor: Colors.white,
+        centerTitle: true,
         toolbarHeight: appbarHeight,
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
+            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 0.0),
+
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -708,17 +717,72 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                             borderRadius:
                                 BorderRadius.circular(10), // 모서리 둥글기 값 설정
                           ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  //소비 종류와 관련된 버튼
-                                  pickchallinst.getconsumLabel[index],
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color:
-                                        isEnabled ? Colors.black : Colors.grey,
+
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          itemBuilder: (BuildContext context, int index) {
+                            bool isEnabled = true;
+
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (selectedRow == index) {
+                                    selectedRow =
+                                        null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                                  } else {
+                                    selectedRow = index; // 새로운 로우를 선택
+                                  }
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(3.0),
+                                decoration: BoxDecoration(
+                                  color: selectedRow == index
+                                      ? Color.fromARGB(255, 255, 241, 200)
+                                      : Color.fromARGB(
+                                          255, 255, 255, 255), // 조건부로 배경색 결정
+                                  borderRadius:
+                                      BorderRadius.circular(10), // 모서리 둥글기 값 설정
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        //소비 종류와 관련된 버튼
+                                        pickchallinst.getconsumLabel[index],
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: isEnabled
+                                              ? Colors.black
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        margin: const EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                          color: selectedRow == index
+                                              //색은 바꿔주세용
+                                              ? Color.fromARGB(
+                                                  255, 199, 224, 201)
+                                              : Colors.white, // 조건부로 배경색 결정
+                                          borderRadius: BorderRadius.circular(
+                                              10), // 모서리 둥글기 값 설정
+                                        ),
+                                        child: Text(
+                                          '# test',
+                                          //pickchallinst.getconsumList[index], // 여기에 원하는 텍스트를 넣으십시오.
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: isEnabled
+                                                ? Colors.black
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+
                                   ),
                                 ),
                                 Container(
@@ -1234,7 +1298,7 @@ class ResultScreen extends StatelessWidget {
                   // 적금 선택 단계로
                   Navigator.of(context).push(
                     CustomRoute(
-                      builder: (BuildContext context) => AccSelectScreen(),
+                      builder: (BuildContext context) => trackAccScreen(),
                       settings: const RouteSettings(),
                     ),
                   );
@@ -1264,7 +1328,7 @@ class FinalScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.12;
-    double startHeight = screenHeight * 0.25;
+    double startHeight = screenHeight * 0.20;
     double blankHeight = screenHeight * 0.03;
 
     return Scaffold(
@@ -1297,8 +1361,10 @@ class FinalScreen extends StatelessWidget {
               SizedBox(
                 height: blankHeight,
               ),
-              const Text(
-                '도전이 시작되었습니다.',
+
+              Text(
+                '당신의 도전을 응원합니다.',
+
                 style: TextStyle(
                   fontSize: 25,
                 ),
