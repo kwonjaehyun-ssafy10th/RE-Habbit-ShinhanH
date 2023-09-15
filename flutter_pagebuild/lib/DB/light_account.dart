@@ -8,6 +8,22 @@ import 'light_transfer.dart';
 import 'light_user.dart';
 import 'shb_api.dart';
 
+Map<String, dynamic> reference = {
+  'user': 'account',
+  'transactionCnt': 'transaction',
+  'balance': 'balance',
+  'type': 'account',
+  'title': 'account'
+};
+
+Map<String, dynamic> accountKeyMap = {
+  'user': '고객명',
+  'transactionCnt': '거래내역반복횟수',
+  'balance': '잔액',
+  'type': '구분',
+  'title': '상품명'
+};
+
 Map<String, dynamic> accountToMap(String name, String accountNo, String type,
     String title, int balance, int transactionCnt) {
   Map<String, dynamic> map = {};
@@ -84,6 +100,15 @@ getSavingAccountListOf(String name) async {
         }
         return list;
       }
+    }
+  }
+}
+
+getInfoValueOf(accountNo, key) async {
+  var accountList = await loadData(reference[key]);
+  for (var item in accountList) {
+    if (item.key == accountNo) {
+      return item.value[accountKeyMap[key]];
     }
   }
 }
