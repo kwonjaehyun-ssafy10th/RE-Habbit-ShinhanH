@@ -3,6 +3,7 @@ import 'dart:convert';
 
 String domain = 'shb-hackton-ad177-default-rtdb.firebaseio.com';
 
+//사용자 정보 가져오는 리스트
 Future getDataMapOf(user) async {
   var path = 'service/user/$user';
   final url = Uri.https(domain, "$path.json");
@@ -10,7 +11,9 @@ Future getDataMapOf(user) async {
   return json.decode(response.body);
 }
 
-Map<String, dynamic> dataToMap(String name, String accountNo1, String accountNo2) {
+//사용자 정보 업로드 하는 함수
+Map<String, dynamic> dataToMap(
+    String name, String accountNo1, String accountNo2) {
   Map<String, dynamic> map = {};
   map['고객명'] = name;
   Map<String, dynamic> account = {};
@@ -30,8 +33,8 @@ void patchUserData(user, accountNo1, accountNo2) async {
   var path = 'service/user/$user';
   final url = Uri.https(domain, "$path.json");
   await http.patch(
-  url,
-  body: json.encode(dataToMap(user, accountNo1, accountNo2)),
+    url,
+    body: json.encode(dataToMap(user, accountNo1, accountNo2)),
   );
 }
 

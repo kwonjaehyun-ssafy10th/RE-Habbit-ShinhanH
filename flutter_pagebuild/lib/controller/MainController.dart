@@ -16,20 +16,18 @@ import 'package:flutter_pagebuild/controller/DetailController.dart';
 import 'package:flutter_pagebuild/controller/RankController.dart';
 import 'package:flutter_pagebuild/controller/StampController.dart';
 
+import 'package:flutter_pagebuild/DB/service.dart';
+
 class resetMainModel with ChangeNotifier {
   //싱글턴
   static final resetMainModel _inst = resetMainModel._internal();
-  resetMainModel._internal();
-  factory resetMainModel() {
-    return _inst;
+
+  resetMainModel._internal() {
+    getPieChartfromDB;
   }
 
-  void temptest() {
-    MainModel.inst.challengeSuc = 30;
-    MainModel.inst.savingSuc = 0;
-    MainModel.inst.challengefail = 0;
-
-    resetPieChartMap();
+  factory resetMainModel() {
+    return _inst;
   }
 
 //MainController에서 바꿔야 할 내용
@@ -37,16 +35,23 @@ class resetMainModel with ChangeNotifier {
 //2. 챌린지 명
 //3. 그래프 % 실시간 계산
 
-//사용자 정보 저장 -> 1회만 설정하기
-  void setUser(String username, String challengeName, String chkAccount,
-      String savings) {
-    MainModel.inst.user.username = username;
-    MainModel.inst.user.challengeName = challengeName;
-    MainModel.inst.user.chkAccount = chkAccount;
-    MainModel.inst.user.savings = savings;
+  get getPieChartfromDB async {
+    print('test');
+    Map<dynamic, dynamic> tmpmap = await getDataMapOf("도레미");
+
+    print(tmpmap["account"][0]);
   }
 
-  User getUser() {
+//사용자 정보 저장 -> 1회만 설정하기
+  // void setUser(String username, String challengeName, String chkAccount,
+  //     String savings) {
+  //   MainModel.inst.user.username = username;
+  //   MainModel.inst.user.challengeName = challengeName;
+  //   MainModel.inst.user.chkAccount = chkAccount;
+  //   MainModel.inst.user.savings = savings;
+  // }
+
+  get getUser {
     return MainModel.inst.user;
   }
 
@@ -63,6 +68,8 @@ class resetMainModel with ChangeNotifier {
     MainModel.inst.PieChartMap['챌린지 성공'] = MainModel.inst.sucRate;
     MainModel.inst.PieChartMap['적금 성공'] = MainModel.inst.savinRate;
     MainModel.inst.PieChartMap['실패'] = MainModel.inst.failRate;
+
+    getPieChartfromDB;
   }
 
   void resetPieChartMap() {

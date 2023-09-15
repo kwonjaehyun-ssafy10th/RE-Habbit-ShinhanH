@@ -81,7 +81,7 @@ class MyHomePage extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        controller.reset.temptest();
+                        //controller.reset.temptest();
                         controller.goToRank();
                       },
                       child: const Text(
@@ -245,7 +245,7 @@ class UserWidget extends StatelessWidget {
           children: [
             Text(
               // '시계토끼 ',
-              '${controller.reset.getUser().username} ',
+              '${controller.reset.getUser.username} ',
               style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const Text(
