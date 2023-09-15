@@ -9,15 +9,20 @@ import 'light_user.dart';
 import 'shb_api.dart';
 
 transfer(date, time, from, to, amount, memoFrom, memoTo, type) async {
-  var balance = await getBalanceOf(from);
-  if (balance >= amount) {
-    patchTransaction(from, date, time, type, amount, 0, memoFrom, to);
-    if (await getNameOf(to) != null) {
-      patchTransaction(to, date, time, type, 0, amount, memoTo, from);
+  if (await getNameOf(from) != null) {
+    var balance = await getBalanceOf(from);
+    if (balance >= amount) {
+      patchTransaction(from, date, time, type, amount, 0, memoFrom, to);
+      if (await getNameOf(to) != null) {
+        patchTransaction(to, date, time, type, 0, amount, memoTo, from);
+      } else {
+        patchDiffBankAccount(to, memoTo);
+      }
     } else {
-      patchDiffBankAccount(to, memoTo);
+      print("출금가능금액이 부족합니다!");
     }
   } else {
-    print("출금가능금액이 부족합니다!");
+    patchDiffBankAccount(from, memoTo);
+    patchTransaction(to, date, time, type, 0, amount, memoTo, from);
   }
 }
