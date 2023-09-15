@@ -245,7 +245,7 @@ class UserWidget extends StatelessWidget {
           children: [
             Text(
               // '시계토끼 ',
-              '${controller.reset.getUser().username} ',
+              '${controller.reset.getUser.username} ',
               style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const Text(

@@ -1,13 +1,14 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_pagebuild/model/MainModel.dart';
 import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
 
 import 'package:flutter_pagebuild/DB/light_account.dart';
-import 'package:flutter_pagebuild/DB/light_transaction.dart';
+import 'package:flutter_pagebuild/DB/service.dart';
 
 // 1. 계좌번호&이름 입력
 // 2. 계좌번호를 통한 본인인증
@@ -160,10 +161,38 @@ class RegisController extends GetxController {
     return true;
   }
 
-//사용자 계좌 연결
-
 //메인 화면 연결
   void goToMain() {
+    //사용자 정보 업로드
+    //이름, 입출금, 적금,
+    patchUserData(checkInfo.registName, regisModel.accountConsum!.accNum,
+        regisModel.accountSaving!.accNum);
+
+    User userlogin = User.getUserlogin;
+    userlogin.username = checkInfo.registName;
+    userlogin.challengeName = '커피 안 마시기';
+    userlogin.chkAccount = regisModel.accountConsum!.accNum;
+    userlogin.savings = regisModel.accountSaving!.accNum;
+
+    Get.put(MainController());
+    //getController 필요할 때 만들 클래스들 저장
+    Get.find<MainController>().getController();
+    Get.offAll(() => const MainView());
+  }
+
+  get userInfo async {
+    User userlogin = User.getUserlogin;
+    dynamic getUserinfoMap = await getDataMapOf('도레미');
+    userlogin.username = getUserinfoMap['고객명'];
+    userlogin.challengeName = '커피 안 마시기';
+    userlogin.chkAccount = getUserinfoMap['account'][0];
+    userlogin.savings = getUserinfoMap['account'][1];
+  }
+
+  void goToMainTest() {
+    //사용자 정보 업로드
+    //이름, 입출금, 적금,
+
     Get.put(MainController());
     //getController 필요할 때 만들 클래스들 저장
     Get.find<MainController>().getController();

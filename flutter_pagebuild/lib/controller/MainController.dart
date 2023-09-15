@@ -43,15 +43,15 @@ class resetMainModel with ChangeNotifier {
   }
 
 //사용자 정보 저장 -> 1회만 설정하기
-  void setUser(String username, String challengeName, String chkAccount,
-      String savings) {
-    MainModel.inst.user.username = username;
-    MainModel.inst.user.challengeName = challengeName;
-    MainModel.inst.user.chkAccount = chkAccount;
-    MainModel.inst.user.savings = savings;
-  }
+  // void setUser(String username, String challengeName, String chkAccount,
+  //     String savings) {
+  //   MainModel.inst.user.username = username;
+  //   MainModel.inst.user.challengeName = challengeName;
+  //   MainModel.inst.user.chkAccount = chkAccount;
+  //   MainModel.inst.user.savings = savings;
+  // }
 
-  User getUser() {
+  get getUser {
     return MainModel.inst.user;
   }
 

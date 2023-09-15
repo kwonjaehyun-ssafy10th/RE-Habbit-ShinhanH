@@ -136,17 +136,11 @@ class StartPage extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              color: Color.fromARGB(255, 178, 255, 205),
-              highlightColor: Color.fromARGB(255, 107, 255, 134),
+              color: const Color.fromARGB(255, 178, 255, 205),
+              highlightColor: const Color.fromARGB(255, 107, 255, 134),
               // 클릭시 색상 다르게 표현
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  CustomRoute(
-                    builder: (BuildContext context) => const SecondScreen(),
-                    settings: const RouteSettings(),
-                  ),
-                );
+                RegisController().goToMainTest();
               },
 
               child: const Text(
