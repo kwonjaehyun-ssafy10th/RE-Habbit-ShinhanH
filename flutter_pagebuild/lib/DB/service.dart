@@ -1,8 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'light_transaction.dart';
-
-String domain = 'shb-hackton-ad177-default-rtdb.firebaseio.com';
+import 'light_api.dart';
 
 Map dataMap = {
   'user': {
@@ -75,12 +74,13 @@ void patchUserData(user, accountNo1, accountNo2, challenge, amount) async {
   final url = Uri.https(domain, "$path.json");
   await http.patch(
     url,
-    body: json.encode(dataToMap(user, accountNo1, accountNo2, challenge, amount)),
+    body:
+        json.encode(dataToMap(user, accountNo1, accountNo2, challenge, amount)),
   );
 }
 
-Map<String, dynamic> dataToMap(
-    String name, String accountNo1, String accountNo2, String challenge, int amount) {
+Map<String, dynamic> dataToMap(String name, String accountNo1,
+    String accountNo2, String challenge, int amount) {
   Map<String, dynamic> map = {};
   map['고객명'] = name;
   Map<String, dynamic> account = {};
@@ -183,13 +183,15 @@ lastMonthSpending(String accountNo, int thisMonth) async {
   return (categoryCnt);
 }
 
-getTransactionListBetween(String accountNo, String startDate, String startTime, String endDate, String endTime) async {
+getTransactionListBetween(String accountNo, String startDate, String startTime,
+    String endDate, String endTime) async {
   var response = await getTransactionListByAccountNo(accountNo);
   List list = [];
   for (var item in response) {
     var date = item["거래일자"];
     var time = item["거래시간"];
-    if ((timestamp(startDate, startTime) <= timestamp(date, time)) && (timestamp(date, time) <= timestamp(endDate, endTime))) {
+    if ((timestamp(startDate, startTime) <= timestamp(date, time)) &&
+        (timestamp(date, time) <= timestamp(endDate, endTime))) {
       list.add(item);
     }
   }
