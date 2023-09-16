@@ -131,11 +131,16 @@ class resetMainModel with ChangeNotifier {
     //소수점 자리 수
     return MainModel.inst.savinRate.toStringAsFixed(1);
   }
+
+  bool get getThreadCon {
+    return mainmodel.threadcontroll;
+  }
 }
 
 class MainController extends GetxController {
   //reset 모델 - 싱글턴 생성자
   resetMainModel reset = resetMainModel();
+  MainModel mainmodel = MainModel.inst;
 
   //하단부는 페이지 관리
   void getController() {

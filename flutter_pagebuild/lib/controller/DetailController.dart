@@ -17,7 +17,7 @@ class DetailController extends GetxController {
   //}
 
   void goToMain() {
-    Get.to(const MainView());
+    Get.to(MainView());
   }
 
   void showDetail() {
