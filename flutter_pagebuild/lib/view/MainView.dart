@@ -5,16 +5,37 @@ import 'package:provider/provider.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
 import 'package:flutter_pagebuild/model/MainModel.dart';
 // import 'package:fl_chart/fl_chart.dart';
-
+import 'dart:isolate';
 import 'package:get/get.dart';
 import 'dart:math';
 import 'package:pie_chart/pie_chart.dart';
+
+import 'package:flutter_pagebuild/controller/thread.dart';
 
 final controller = Get.find<MainController>();
 
 //ChangeNotifierProvider 의 위젯으로 반환(view 없음)
 class MainView extends StatelessWidget {
-  const MainView({Key? key}) : super(key: key);
+  final ReceivePort receivePort = ReceivePort();
+
+  MainView({Key? key}) : super(key: key) {
+    resetMainModel reset = resetMainModel();
+    if (!reset.getThreadCon) {
+      spawnNewIsolate();
+      receivePort.listen((message) {
+        if (message) {
+          print(message);
+        } else {
+          print(message);
+        }
+      });
+    }
+  }
+
+  void spawnNewIsolate() async {
+    await Isolate.spawn(myTask, receivePort.sendPort);
+  }
+
   @override
   Widget build(BuildContext context) {
     //초기값 설정용

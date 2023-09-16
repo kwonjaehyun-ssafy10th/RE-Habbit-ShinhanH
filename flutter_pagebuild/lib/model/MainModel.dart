@@ -29,6 +29,8 @@ class MainModel {
   //Model도 싱글턴으로 구현
   MainModel.privateConstructor();
 
+  bool threadcontroll = false;
+
   //MainModel.inst로 구현
   static final MainModel _inst = MainModel.privateConstructor();
   static MainModel get inst => _inst;

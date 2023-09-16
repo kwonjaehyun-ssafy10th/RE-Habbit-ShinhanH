@@ -177,13 +177,13 @@ class RegisController extends GetxController {
     Get.put(MainController());
     //getController 필요할 때 만들 클래스들 저장
     Get.find<MainController>().getController();
-    Get.offAll(() => const MainView());
+    Get.offAll(() => MainView());
   }
 
   void goToMainTest() {
     Get.put(MainController());
     //getController 필요할 때 만들 클래스들 저장
     Get.find<MainController>().getController();
-    Get.offAll(() => const MainView());
+    Get.offAll(() => MainView());
   }
 }

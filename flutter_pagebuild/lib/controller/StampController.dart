@@ -58,6 +58,6 @@ class StampController extends GetxController {
 
 //하단부 - 컨트롤러들
   void goToMain() async {
-    await Get.off(const MainView());
+    await Get.off(MainView());
   }
 }
