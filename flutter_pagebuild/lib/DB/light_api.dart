@@ -166,13 +166,13 @@ void main() async {
 
 void test() async {
   String user1 = "도레미";
-  String user2 = "쏠";
+  String user2 = "최쏠";
   // initUser(user1);
   // initUser(user2);
   var user1Account = await getCheckingAccountListOf(user1);
   var user2Account = await getCheckingAccountListOf(user2);
-  var user1AccountNo = user1Account["계좌번호"];
-  var user2AccountNo = user2Account["계좌번호"];
+  var user1AccountNo = user1Account[0]["계좌번호"];
+  var user2AccountNo = user2Account[0]["계좌번호"];
   int time = 365;
   // String date = timeToDate(time);
   // transfer(
