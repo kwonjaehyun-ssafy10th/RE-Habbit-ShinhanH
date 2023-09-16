@@ -159,12 +159,13 @@ class RegisController extends GetxController {
 
   bool verif(String str) {
     //본인인증 정답
-    String rightVeri = random.nextInt(10000).toString();
-    var path = "service/auth";
-    final url = Uri.https(domain, '$path.json');
-    Map<String, String> map = {};
-    map["certNo"] = rightVeri;
-    http.patch(url, body: json.encode(map));
+    String rightVeri = '0000';
+    //String rightVeri = random.nextInt(10000).toString();
+    // var path = "service/auth";
+    // final url = Uri.https(domain, '$path.json');
+    // Map<String, String> map = {};
+    // map["certNo"] = rightVeri;
+    // http.patch(url, body: json.encode(map));
 
     if (str != rightVeri) return false;
 
