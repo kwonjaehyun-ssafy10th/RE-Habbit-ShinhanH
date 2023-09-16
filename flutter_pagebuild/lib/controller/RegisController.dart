@@ -166,7 +166,7 @@ class RegisController extends GetxController {
     //사용자 정보 업로드
     //이름, 입출금, 적금,
     patchUserData(checkInfo.registName, regisModel.accountConsum!.accNum,
-        regisModel.accountSaving!.accNum);
+        regisModel.accountSaving!.accNum, '커피 안 마시기');
 
     User userlogin = User.getUserlogin;
     userlogin.username = checkInfo.registName;

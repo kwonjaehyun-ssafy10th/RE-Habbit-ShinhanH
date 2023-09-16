@@ -168,6 +168,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.1"
+  line_chart:
+    dependency: "direct main"
+    description:
+      name: line_chart
+      sha256: b271cddaa5d418cd82b8845662944215449bb663aeb9af6ba83a89d937dabdbe
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.11"
   lints:
     dependency: transitive
     description:
