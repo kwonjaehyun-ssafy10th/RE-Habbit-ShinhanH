@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'light_transaction.dart';
 import 'light_api.dart';
 
+String domain = 'shb-hackton-ad177-default-rtdb.firebaseio.com';
+
 Map dataMap = {
   'user': {
     '_user1': {
