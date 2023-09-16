@@ -131,10 +131,6 @@ class resetMainModel with ChangeNotifier {
     //소수점 자리 수
     return MainModel.inst.savinRate.toStringAsFixed(1);
   }
-
-  bool get getThreadCon {
-    return mainmodel.threadcontroll;
-  }
 }
 
 class MainController extends GetxController {

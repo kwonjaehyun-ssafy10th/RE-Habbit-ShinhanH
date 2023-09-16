@@ -18,23 +18,7 @@ final controller = Get.find<MainController>();
 class MainView extends StatelessWidget {
   final ReceivePort receivePort = ReceivePort();
 
-  MainView({Key? key}) : super(key: key) {
-    resetMainModel reset = resetMainModel();
-    if (!reset.getThreadCon) {
-      spawnNewIsolate();
-      receivePort.listen((message) {
-        if (message) {
-          print(message);
-        } else {
-          print(message);
-        }
-      });
-    }
-  }
-
-  void spawnNewIsolate() async {
-    await Isolate.spawn(myTask, receivePort.sendPort);
-  }
+  MainView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +53,14 @@ class MyHomePage extends StatelessWidget {
     double startHeight = screenHeight * 0.08;
     double contentWidth = screenWidth * 0.8;
     double imageHeight = screenHeight * 0.25;
+    MainModel mainmodel = MainModel.inst;
+    String alarmText;
 
-
+    if (mainmodel.alarm) {
+      alarmText = '소비 내역이 발생했습니다! \n 적금을 넣어주세요!';
+    } else {
+      alarmText = '적금을 넣고 우대이율을 누리세요!';
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -82,21 +72,25 @@ class MyHomePage extends StatelessWidget {
                 height: startHeight,
               ),
               Container(
-                decoration: BoxDecoration(
-                  // border: Border.all(
-                  //   color: Color.fromARGB(255, 223, 223, 223),
-                  // ),
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color.fromARGB(255, 27, 69, 245),
-                ),
-                child: Text(
-                  '커피 사먹지 않기 도전 중 ⏳',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),),
-                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
-              ),
+                  decoration: BoxDecoration(
+                    // border: Border.all(
+                    //   color: Color.fromARGB(255, 223, 223, 223),
+                    // ),
+                    borderRadius: BorderRadius.circular(5),
+                    color: const Color.fromARGB(255, 27, 69, 245),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  child: Consumer<resetMainModel>(
+                      builder: (context, counter, child) {
+                    return Text(
+                      alarmText,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    );
+                  })),
 
               // const HeaderWidget(),
               Stack(
@@ -104,12 +98,11 @@ class MyHomePage extends StatelessWidget {
                   Image.asset(
                     'assets/images/main-image.png',
                     height: imageHeight,
-
                   ),
                   Positioned(
-                    top: startHeight*0.25,
+                    top: startHeight * 0.25,
                     left: 0,
-                    right: screenWidth*0.4,
+                    right: screenWidth * 0.4,
                     child: Column(
                       children: [
                         UserWidget(),
@@ -127,15 +120,12 @@ class MyHomePage extends StatelessWidget {
                           ),
                           child: const Text('마이페이지'),
                         ),
-
-                        
                       ],
                     ),
                   ),
                 ],
               ),
-              
-              
+
               // 랭킹 및 현황 버튼들
               Container(
                 child: Row(
@@ -275,7 +265,6 @@ class MyHomePage extends StatelessWidget {
               }), //스택종료
 
               // 현재 진행중인 챌린지 및 이미지
-              
             ],
           ),
         ),
@@ -310,7 +299,6 @@ class UserWidget extends StatelessWidget {
       children: [
         Column(
           children: [
-            
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -344,10 +332,8 @@ class UserWidget extends StatelessWidget {
                   ' 님',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                
               ],
             ),
-            
           ],
         ),
       ],

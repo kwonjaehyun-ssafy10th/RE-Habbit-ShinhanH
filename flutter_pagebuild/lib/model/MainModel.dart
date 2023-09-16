@@ -29,7 +29,7 @@ class MainModel {
   //Model도 싱글턴으로 구현
   MainModel.privateConstructor();
 
-  bool threadcontroll = false;
+  bool alarm = false;
 
   //MainModel.inst로 구현
   static final MainModel _inst = MainModel.privateConstructor();
