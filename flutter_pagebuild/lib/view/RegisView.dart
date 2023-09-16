@@ -787,7 +787,10 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                                         color: selectedRow == index
                                             //색은 바꿔주세용
                                             ? Color.fromARGB(255, 155, 255, 186)
+// 조건부로 배경색 결정
+
                                             : Color.fromARGB(255, 214, 255, 237), // 조건부로 배경색 결정
+
                                         borderRadius: BorderRadius.circular(
                                             10), // 모서리 둥글기 값 설정
                                       ),
@@ -1177,7 +1180,9 @@ class ResultScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.12;
     double startHeight = screenHeight * 0.03;
+
     double blankHeight  = screenHeight*0.05;
+
 
     return Scaffold(
       appBar: AppBar(
@@ -1315,7 +1320,6 @@ class ResultScreen extends StatelessWidget {
               //     ),
               //   ),
               // ),
-              
             ],
           ),
         ),

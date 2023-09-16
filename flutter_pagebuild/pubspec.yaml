@@ -45,6 +45,8 @@ dependencies:
   categorized_dropdown:  1.0.0
   syncfusion_flutter_charts: ^22.2.12
   ffi: ^2.1.0
+  multi_dropdown: ^2.1.0
+  gradient_line_graph: ^1.0.0
 
 dev_dependencies:
   flutter_test:

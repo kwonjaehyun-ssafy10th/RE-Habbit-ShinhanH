@@ -99,6 +99,7 @@ updateStampCnt(String user, int day, int stamp) async {
   );
 }
 
+
 Map<String, String> categoryMap = {
   "스타벅스": "커피",
   "메가커피": "커피",
@@ -145,5 +146,7 @@ void main() async {
   // updateDay("도레미", 5);
   // patchUserData("최몰리", "192102", "181923");
   // updateStampListDayOf("도레미", 2, 1);
+
   // print(await lastMonthSpending("176662", 9));
+
 }
