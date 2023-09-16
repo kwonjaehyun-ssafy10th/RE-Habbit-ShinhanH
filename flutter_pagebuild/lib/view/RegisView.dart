@@ -578,7 +578,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
 int? selectedRow;
 
-// 입출금 계좌 조회 및 선택
 class trackAccScreen extends StatelessWidget {
   AccountList acList = AccountList();
   trackAccScreen({super.key});
@@ -587,77 +586,96 @@ class trackAccScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double appbarHeight = screenHeight * 0.12;
-    double blankHeight = screenHeight * 0.1;
+    double blankHeight = screenHeight * 0.05;
 
     return Scaffold(
-        appBar: AppBar(
-          title: const HeaderWidget(),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          toolbarHeight: appbarHeight,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${controller.checkInfo.registName} 님 환영합니다!\n',
-                style: const TextStyle(
-                  fontSize: 18,
-                ),
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: appbarHeight,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: blankHeight,
+            ),
+            Text(
+              '${controller.checkInfo.registName} 님 환영합니다!\n',
+              style: const TextStyle(
+                fontSize: 18,
               ),
-              const Text(
-                '조회할 입출금계좌 선택하기',
-                style: TextStyle(
-                  fontSize: 24,
-                ),
+            ),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 15 ,vertical: 10),
+            //   decoration: BoxDecoration(
+                
+            //     borderRadius: BorderRadius.circular(5),
+            //     color: Color.fromARGB(255, 203, 213, 253),
+            // ),
+            // child: 
+            Text(
+              '마이데이터 목록 보기',
+              style: TextStyle(
+                fontSize: 27,
               ),
-              // DataTableExample(),
-
-              AccountTable2(),
-
-              const SizedBox(
-                height: 20,
-              ),
-
-              OutlinedButton(
-                onPressed: () {
-                  if (selectedRow != null) {
-                    acList.setaccountConsum(selectedRow);
-                    // 다음 단계로
-                    selectedRow = null;
-                    Navigator.of(context).push(
-                      CustomRoute(
-                        builder: (BuildContext context) =>
-                            const ChallSelectScreen(),
-                        settings: const RouteSettings(),
-                      ),
-                    );
-                  } else {
-                    return;
-                  }
-                },
-                child: const Text(
-                  '제출',
-                  style: TextStyle(
-                    fontSize: 23,
+            ),
+            // ),
+            
+            Column(
+              children: [
+                Text(
+                  '\n보유 계좌 목록',
+                  style: TextStyle(fontSize: 24,),
                   ),
+                AccountTable2(),
+                Text(
+                  '\n보유 카드 목록',
+                  style: TextStyle(fontSize: 24,),
+                  ),
+                CardTable(),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            OutlinedButton(
+              onPressed: () {
+                if (selectedRow != null) {
+                  acList.setaccountConsum(selectedRow);
+                  selectedRow = null;
+                  Navigator.of(context).push(
+                    CustomRoute(
+                      builder: (BuildContext context) => const ChallSelectScreen(),
+                      settings: const RouteSettings(),
+                    ),
+                  );
+                } else {
+                  return;
+                }
+              },
+              child: const Text(
+                '확인',
+                style: TextStyle(
+                  fontSize: 23,
                 ),
               ),
-              SizedBox(
-                height: blankHeight,
-              ),
-            ],
-          ),
-        ));
+            ),
+            SizedBox(
+              height: blankHeight,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
-//2가 입출금
 class AccountTable2 extends StatefulWidget {
-  AccountTable2({super.key});
+  AccountTable2({Key? key});
 
-  //ac리스트 재 생성
   AccountList acList = AccountList();
   @override
   _AccountTableState2 createState() => _AccountTableState2();
@@ -676,73 +694,136 @@ class _AccountTableState2 extends State<AccountTable2> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: double.infinity,
+    return SingleChildScrollView(
+      child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
-        
         child: Card(
-            elevation: 4.0,
-            child: FutureBuilder<List<dynamic>>(
-                future: _accListFuture, //Future-객체 ->
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<dynamic>> snapshot) {
-                  // 연결 중인 경우
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                      child: Center(
-                        child: SizedBox(
-                          height: 25,
-                          width: 25,
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    );
-                    // 로딩 인디케이터 표시
-                  }
-                  // 에러 발생 시
-                  else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
-                  // 데이터가 준비되면
-                  else {
-                    return Column(
-                      
-                      children: <Widget>[
-                        
-                        // ListView.builder를 사용하여 동적으로 아이템 생성
-                        ListView.builder(
-                          
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final account = snapshot.data![index];
-                            return ListTile(
-                              
-                              title: Text(account.accName),
-                              subtitle: Text('계좌번호: ${account.accNum}'),
-                              trailing: Text('${account.accNum}'),
-                              tileColor: selectedRow == index
-                                  ? const Color.fromARGB(255, 150, 208, 255)
-                                  : null, // 선택된 로우에 색상 적용
-                              onTap: () {
-                                setState(() {
-                                  if (selectedRow == index) {
-                                    selectedRow =
-                                        null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                                  } else {
-                                    selectedRow = index; // 새로운 로우를 선택
-                                  }
-                                });
-                              },
-                            );
+          elevation: 4.0,
+          child: FutureBuilder<List<dynamic>>(
+            future: _accListFuture,
+            builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SizedBox(
+                  child: Center(
+                    child: SizedBox(
+                      height: 25,
+                      width: 25,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return Column(
+                  children: <Widget>[
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final account = snapshot.data![index];
+                        return ListTile(
+                          title: Text(account.accName),
+                          subtitle: Text('계좌번호: ${account.accNum}'),
+                          onTap: () {
+                            // 선택 로우 처리
+                            setState(() {
+                              if (selectedRow == index) {
+                                selectedRow = null;
+                              } else {
+                                selectedRow = index;
+                              }
+                            });
                           },
-                        ),
-                      ],
-                    );
-                  }
-                })));
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
+
+class CardTable extends StatefulWidget {
+  CardTable({super.key});
+
+  // 카드 리스트로 수정
+  // CardList cardList = CardList();
+  
+  @override
+  _CardTableState createState() => _CardTableState();
+}
+
+class _CardTableState extends State<CardTable> {
+  // 카드 리스트로 수정
+  // CardList cardList = CardList();
+  AccountList cardList = AccountList();
+
+  late Future<List<dynamic>> _cardListFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _cardListFuture = cardList.setAccountList(false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Card(
+        elevation: 4.0,
+        child: FutureBuilder<List<dynamic>>(
+          future: _cardListFuture,
+          builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox(
+                child: Center(
+                  child: SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return Column(
+                children: <Widget>[
+                  // ListView.builder를 사용하여 동적으로 아이템 생성
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final account = snapshot.data![index];
+                      return ListTile(
+                        // title: Text(card.cardName),
+                        title: Text('카드이름'),
+                        subtitle: Text('카드번호: ${account.accNum}'),
+                        onTap: () {},
+                      );
+                    },
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+
+// 챌린지 선택하기 페이지
 
 class ChallSelectScreen extends StatefulWidget {
   const ChallSelectScreen({Key? key}) : super(key: key);
@@ -946,6 +1027,14 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                       style: TextStyle(
                         fontSize: 23,
                       ),
+
+                    );
+                  },
+                  child: const Text(
+                    '확인',
+                    style: TextStyle(
+                      fontSize: 23,
+
                     ),
                   ),
                 ],
