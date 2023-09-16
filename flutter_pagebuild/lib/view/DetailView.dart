@@ -34,24 +34,62 @@ class DetailView extends StatelessWidget {
         leadingWidth: 10,
       ),
       // resizeToAvoidBottomInset: false,
+
       body: SingleChildScrollView(
         child: Column(
           //     mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const userInfo(),
-            const Text('Detail',
-                style: TextStyle(fontSize: 30, color: Colors.grey)),
-            // stampResult(),
+            Container(
+              padding: const EdgeInsets.only(left: 20),
+              width: screenWidth,
+              // color: Colors.amber,
+              child: const Text(
+                'Detail',
+                style: TextStyle(fontSize: 30, color: Colors.grey),
+              ),
+            ),
+            const stampResult(),
             // graphWidget(title: '',),
 
             Container(
-              height: screenHeight * 0.3,
+              height: screenHeight * 0.33,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20), color: Colors.white),
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               // height: widgetHeight,
-              child: chartWidget(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Text('> 적금 누적금액',
+                          style: TextStyle(fontSize: 20, color: Colors.purple)),
+                      Spacer(),
+                      Text(
+                        '(기준 : 소비 후 적금)',
+                        style: TextStyle(fontSize: 10, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  chartWidget(),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      //(w/Controller)
+                      Text(
+                        '총 75,000원',
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.right,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             const resultWidget(),
           ],
@@ -68,68 +106,81 @@ class userInfo extends StatelessWidget {
   Widget build(context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double widgetHeight = screenHeight * 0.3;
+    // double widgetHeight = screenHeight * 0.3;
 
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: Colors.white),
       // padding: EdgeInsets.all(10),
       margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      height: widgetHeight,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      height: screenHeight * 0.3,
+      width: screenWidth,
+
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Flexible(
+            flex: 4,
+            child: SizedBox(
+              // color: Colors.blue,
+              width: 2000,
+              child: Image.asset(
+                'assets/images/profile-img.png',
+                width: 2000,
+                height: 2000,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
           Container(
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 0),
-                  // padding: EdgeInsets.only(right: 20),
-                  child: Image.asset(
-                    'assets/images/profile-img.png',
-                    width: 200,
-                    // fit: BoxFit.contain,
+            width: 1,
+            color: Colors.grey,
+            height: screenHeight * 0.2,
+          ),
+          //챌린지 시작날짜 & 남은날짜
+          Container(
+            // width: double.infinity,
+            // height: 130,
+            color: Colors.grey,
+          ),
+          Flexible(
+            flex: 4,
+            child: Container(
+              // color: Colors.amber,
+              width: screenWidth * 0.5,
+              padding: const EdgeInsets.only(right: 7, left: 0),
+              // alignment: Alignment.center,
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  //챌린지 시작 날짜
+                  Text(
+                    '챌린지 시작 날짜',
+                    style: TextStyle(fontSize: 20, color: Colors.purple),
                   ),
-                ),
-                Container(
-                  // width: double.infinity,
-                  // height: 130,
-                  color: Colors.grey,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  // alignment: Alignment.center,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      //챌린지 시작 날짜
-                      Text(
-                        '챌린지 시작 날짜',
-                        style: TextStyle(fontSize: 23, color: Colors.purple),
-                      ),
 
-                      //(w/controller)
-                      Text(
-                        '2023.03.22',
-                        style: TextStyle(fontSize: 20),
-                      ),
-
-                      //남은 날짜
-                      Text(
-                        '남은 날짜',
-                        style: TextStyle(fontSize: 23, color: Colors.purple),
-                      ),
-
-                      //(w/controller)
-                      Text(
-                        'D-20',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
+                  //(w/controller)
+                  Text(
+                    '2023.03.22',
+                    style: TextStyle(fontSize: 20),
                   ),
-                ),
-              ],
+                  Text('', style: TextStyle(fontSize: 20)),
+
+                  //남은 날짜
+                  Text(
+                    '남은 날짜',
+                    style: TextStyle(fontSize: 20, color: Colors.purple),
+                  ),
+                  Text('', style: TextStyle(fontSize: 5)),
+
+                  //(w/controller)
+                  Text(
+                    'D-20',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -170,11 +221,53 @@ class stampResult extends StatelessWidget {
                     ),
                   ],
                 ),
+//적금 stamp 갯수
+                Row(
+                  children: [
+                    const Column(
+                      children: [
+                        Text(' 적금', style: TextStyle(fontSize: 20)),
+                        Text(' 했찌롱', style: TextStyle(fontSize: 20)),
+                      ],
+                    ),
+                    const Text('           '),
+                    SizedBox(
+                      width: screenWidth * 0.21,
+                      child: Image.asset(
+                        'assets/images/money-stamp.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    //고정
+                    const Text(
+                      ' ',
+                      style: TextStyle(fontSize: 80),
+                    ),
+                    const Text(
+                      'X',
+                      style: TextStyle(fontSize: 30),
+                    ),
+
+                    //(w/Controller)
+                    const Text(
+                      ' 3',
+                      style: TextStyle(fontSize: 50),
+                    ),
+                  ],
+                ),
+
                 //당근 스탬프
                 Row(
                   children: [
+                    const Column(
+                      children: [
+                        Text('소비', style: TextStyle(fontSize: 20)),
+                        Text('안했찌롱', style: TextStyle(fontSize: 20)),
+                      ],
+                    ),
+                    const Text('         '),
                     SizedBox(
-                      width: screenWidth * 0.3,
+                      width: screenWidth * 0.21,
                       child: Image.asset(
                         'assets/images/carrot-stamp.png',
                         fit: BoxFit.contain,
@@ -200,38 +293,17 @@ class stampResult extends StatelessWidget {
                 //토끼가 당근 먹는 Stamp
                 Row(
                   children: [
+                    const Column(
+                      children: [
+                        Text('적금', style: TextStyle(fontSize: 20)),
+                        Text('안했찌롱', style: TextStyle(fontSize: 20)),
+                      ],
+                    ),
+                    const Text('         '),
                     SizedBox(
-                      width: screenWidth * 0.3,
+                      width: screenWidth * 0.21,
                       child: Image.asset(
                         'assets/images/rabbit-stamp.png',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    //고정
-                    const Text(
-                      ' ',
-                      style: TextStyle(fontSize: 80),
-                    ),
-                    const Text(
-                      'X',
-                      style: TextStyle(fontSize: 30),
-                    ),
-
-                    //(w/Controller)
-                    const Text(
-                      ' 3',
-                      style: TextStyle(fontSize: 50),
-                    ),
-                  ],
-                ),
-
-                //적금 stamp 갯수
-                Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth * 0.3,
-                      child: Image.asset(
-                        'assets/images/money-stamp.png',
                         fit: BoxFit.contain,
                       ),
                     ),

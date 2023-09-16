@@ -22,7 +22,7 @@ class resetMainModel with ChangeNotifier {
   //싱글턴
   static final resetMainModel _inst = resetMainModel._internal();
   static final MainModel mainmodel = MainModel.inst;
-
+  User userlogin = User.getUserlogin;
   resetMainModel._internal() {
     MainModel.inst.PieChartMap['챌린지 성공'] = MainModel.inst.sucRate;
     MainModel.inst.PieChartMap['적금 성공'] = MainModel.inst.savinRate;
@@ -39,7 +39,6 @@ class resetMainModel with ChangeNotifier {
 //3. 그래프 % 실시간 계산
 
   Future<String> get getUser async {
-    User userlogin = User.getUserlogin;
     Map<String, dynamic> getUserinfoMap = await getDataMapOf('도레미');
     userlogin.username = getUserinfoMap['고객명'];
     userlogin.challengeName = getUserinfoMap['챌린지목표'];
@@ -132,8 +131,44 @@ class resetMainModel with ChangeNotifier {
     return MainModel.inst.savinRate.toStringAsFixed(1);
   }
 
-  bool get getThreadCon {
-    return mainmodel.threadcontroll;
+  trackAccount() {}
+
+  trackSaving() {}
+
+  allcheck() {
+    // List<Map<String, dynamic>> = await getTransactionListBetween(String accountNo, String startDate, String startTime,
+    //   String endDate, String endTime)
+  }
+
+//patchUserData2
+  Map<String, dynamic> dataToMap2() {
+    Map<String, dynamic> map = {};
+    map['고객명'] = userlogin.username;
+    Map<String, dynamic> account = {};
+    account['0'] = userlogin.chkAccount;
+    account['1'] = userlogin.savings;
+    map['account'] = account;
+    Map<String, dynamic> lastChecked = {};
+    lastChecked['0'] = mainmodel.lastChecked_date;
+    lastChecked['1'] = mainmodel.lastChecked_time;
+    Map<String, dynamic> stamp = {};
+
+    //성공 실패 적금 보너스
+    List stampCnt = [
+      mainmodel.challengeSuc,
+      mainmodel.challengefail,
+      mainmodel.savingSuc,
+      mainmodel.savingBonus
+    ];
+    stamp['consum'] = mainmodel.consum;
+    stamp['saving'] = mainmodel.saving;
+    stamp['day'] = stampCnt[0] + stampCnt[1] + stampCnt[2] + stampCnt[3];
+    stamp['stampCnt'] = stampCnt;
+    stamp['stampList'] = mainmodel.stampList;
+    map['stamp'] = stamp;
+    map['챌린지목표'] = userlogin.challengeName;
+    map['적금금액'] = 10000;
+    return map;
   }
 }
 
@@ -148,8 +183,6 @@ class MainController extends GetxController {
     Get.lazyPut<RankController>(() => RankController());
     Get.lazyPut<StampController>(() => StampController());
   }
-
-//장면 보여주는 뷰
 
 //하단부 -  컨트롤러들
   void goToRank() {

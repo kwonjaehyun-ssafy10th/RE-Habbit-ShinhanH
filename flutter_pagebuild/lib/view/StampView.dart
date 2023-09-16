@@ -25,17 +25,17 @@ class StampView extends StatelessWidget {
         leadingWidth: 10,
       ),
       body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Text(
               '현재 당근 수 : ${resetStamp().getchallengeSuc}개',
               // '당근 수 {$carrotCnt} / 30'
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 25,
               ),
             ),
@@ -51,7 +51,7 @@ class StampView extends StatelessWidget {
                 color: Colors.white,
               ),
               width: screenWidth * 0.8,
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -76,13 +76,14 @@ class StampView extends StatelessWidget {
             // 달력 위젯
             Stack(
               children: [
-                Calendar(),
-                Positioned(
+                const Calendar(),
+                const Positioned(
                   top: 0,
                   left: 0,
                   right: 0,
                   child: Stamps(),
                 ),
+                TextButton(onPressed: () {}, child: const Text('테스트용 버튼'))
               ],
             ),
           ],
@@ -180,7 +181,6 @@ class Stamps extends StatelessWidget {
         } else {
           imageName = 'assets/images/money-stamp.png'; // 다섯 번째 이미지
         }
-        ;
 
         return Center(
           child: Container(
