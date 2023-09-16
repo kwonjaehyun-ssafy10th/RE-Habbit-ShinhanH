@@ -44,9 +44,11 @@ class MyHomePage extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.02;
-    double blankWidth = screenWidth * 0.05;
-    double startHeight = screenHeight * 0.1;
+    double blankWidth = screenWidth * 0.08;
+    double startHeight = screenHeight * 0.08;
     double contentWidth = screenWidth * 0.8;
+    double imageHeight = screenHeight * 0.25;
+
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -60,35 +62,69 @@ class MyHomePage extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(),
+                  // border: Border.all(
+                  //   color: Color.fromARGB(255, 223, 223, 223),
+                  // ),
+                  borderRadius: BorderRadius.circular(5),
+                  color: Color.fromARGB(255, 27, 69, 245),
                 ),
-                child: Text('커피 사먹지 않기 도전 중'),
+                child: Text(
+                  '커피 사먹지 않기 도전 중 ⏳',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),),
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
               ),
 
               // const HeaderWidget(),
-              UserWidget(),
+              Stack(
+                children: [
+                  Image.asset(
+                    'assets/images/main-image.png',
+                    height: imageHeight,
 
-              // 마이페이지 버튼
-              TextButton(
-                onPressed: () {
-                  controller.goToDetail();
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    decoration: TextDecoration.underline,
                   ),
-                ),
-                child: const Text('마이페이지'),
-              ),
+                  Positioned(
+                    top: startHeight*0.25,
+                    left: 0,
+                    right: screenWidth*0.4,
+                    child: Column(
+                      children: [
+                        UserWidget(),
+                        // 마이페이지 버튼
+                        TextButton(
+                          onPressed: () {
+                            controller.goToDetail();
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.black,
+                            textStyle: const TextStyle(
+                              fontSize: 18,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          child: const Text('마이페이지'),
+                        ),
 
+                        
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              
+              
               // 랭킹 및 현황 버튼들
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color?>(
+                            const Color.fromARGB(255, 230, 239, 255)),
+                      ),
                       onPressed: () {
                         //controller.reset.temptest();
                         controller.goToRank();
@@ -97,6 +133,7 @@ class MyHomePage extends StatelessWidget {
                         '랭킹보기',
                         style: TextStyle(
                           color: Colors.black,
+                          fontSize: 18,
                         ),
                       ),
                     ),
@@ -109,12 +146,13 @@ class MyHomePage extends StatelessWidget {
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color?>(
-                            const Color.fromARGB(255, 153, 255, 180)),
+                            const Color.fromARGB(255, 223, 241, 233)),
                       ),
                       child: const Text(
                         '스탬프 보기',
                         style: TextStyle(
                           color: Colors.black,
+                          fontSize: 18,
                         ),
                       ),
                     ),
@@ -216,9 +254,7 @@ class MyHomePage extends StatelessWidget {
               }), //스택종료
 
               // 현재 진행중인 챌린지 및 이미지
-              Image.asset(
-                'assets/images/main-image.png',
-              ),
+              
             ],
           ),
         ),
@@ -251,39 +287,46 @@ class UserWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
+        Column(
           children: [
-            FutureBuilder<String>(
-                future: _usernameFuture,
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  // 연결 중 상태 처리
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
+            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                FutureBuilder<String>(
+                    future: _usernameFuture,
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      // 연결 중 상태 처리
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
 
-                  // 오류 상태 처리
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
+                      // 오류 상태 처리
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
 
-                  // 데이터가 있는 경우의 처리
-                  return Consumer<resetMainModel>(
-                    builder: (context, counter, child) {
-                      return Text(
-                        '${snapshot.data}',
-                        style: const TextStyle(
-                            fontSize: 28, fontWeight: FontWeight.bold),
+                      // 데이터가 있는 경우의 처리
+                      return Consumer<resetMainModel>(
+                        builder: (context, counter, child) {
+                          return Text(
+                            '\n${snapshot.data}',
+                            style: const TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          );
+                        },
                       );
-                    },
-                  );
-                }),
-            const Text(
-              '님',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    }),
+                const Text(
+                  ' 님',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                
+              ],
             ),
+            
           ],
         ),
       ],

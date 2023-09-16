@@ -154,7 +154,7 @@ class MainController extends GetxController {
 
   void goToDetail() {
     Get.find<DetailController>();
-    // Get.to(() => DetailView());
+    Get.to(() => DetailView());
   }
 
   void goToStamp() {
