@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'api2.dart';
-import 'user.dart';
+import 'useroutdated.dart';
 import 'account.dart';
 import 'transfer.dart';
 import 'solAppPush.dart';
@@ -84,7 +84,7 @@ void main() async {
     final List<dynamic> accounts = [];
     for (var item in list) {
       if (item.key[0] == '-') {
-        final Map<String, dynamic> accountOf = new Map();
+        final Map<String, dynamic> accountOf = {};
         accountOf[item.value["dataBody"]["고객명"]] =
             item.value["dataBody"]["조회내역1"];
         accounts.add(accountOf);
@@ -108,6 +108,6 @@ void main() async {
 
   // printData('account');
 
-  User user3 = new User("루루라라");
+  Useroutdated user3 = Useroutdated("루루라라");
   patchUser(user3);
 }

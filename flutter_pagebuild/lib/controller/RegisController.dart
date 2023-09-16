@@ -180,19 +180,7 @@ class RegisController extends GetxController {
     Get.offAll(() => const MainView());
   }
 
-  get userInfo async {
-    User userlogin = User.getUserlogin;
-    dynamic getUserinfoMap = await getDataMapOf('도레미');
-    userlogin.username = getUserinfoMap['고객명'];
-    userlogin.challengeName = '커피 안 마시기';
-    userlogin.chkAccount = getUserinfoMap['account'][0];
-    userlogin.savings = getUserinfoMap['account'][1];
-  }
-
   void goToMainTest() {
-    //사용자 정보 업로드
-    //이름, 입출금, 적금,
-
     Get.put(MainController());
     //getController 필요할 때 만들 클래스들 저장
     Get.find<MainController>().getController();
