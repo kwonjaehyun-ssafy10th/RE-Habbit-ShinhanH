@@ -165,14 +165,13 @@ class RegisController extends GetxController {
   void goToMain() {
     //사용자 정보 업로드
     //이름, 입출금, 적금,
-    patchUserData(checkInfo.registName, regisModel.accountConsum!.accNum,
-        regisModel.accountSaving!.accNum, '커피 안 마시기', 10000);
+    patchUserData(checkInfo.registName, '176662', '142490', '커피 안 마시기', 10000);
 
     User userlogin = User.getUserlogin;
     userlogin.username = checkInfo.registName;
     userlogin.challengeName = '커피 안 마시기';
-    userlogin.chkAccount = regisModel.accountConsum!.accNum;
-    userlogin.savings = regisModel.accountSaving!.accNum;
+    userlogin.chkAccount = '176662';
+    userlogin.savings = '142490';
 
     Get.put(MainController());
     //getController 필요할 때 만들 클래스들 저장

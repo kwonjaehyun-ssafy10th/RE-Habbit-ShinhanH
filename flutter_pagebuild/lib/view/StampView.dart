@@ -175,7 +175,7 @@ class Stamps extends StatelessWidget {
       childAspectRatio: 1, // 가로:세로 비율 설정
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(), // 스크롤 비활성화
-      children: List.generate(resetStamp().getStampCnt, (index) {
+      children: List.generate(resetStamp().getStampCnt + 1, (index) {
         String imageName;
         // 적용예시) n-1 일차가 rabbit 일 때
         // if (index == n-1) {

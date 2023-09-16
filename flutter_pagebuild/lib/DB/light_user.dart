@@ -9,14 +9,14 @@ import 'light_user.dart';
 import 'shb_api.dart';
 
 Map<String, dynamic> userToMap(String name) {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map['고객명'] = name;
   return map;
 }
 
 void initUser(String name) {
   var userMap = userToMap(name);
-  Map<String, dynamic> temp = new Map();
+  Map<String, dynamic> temp = {};
   temp['0'] = accountToMap(name, (random.nextInt(100000) + 100000).toString(),
       "입출금계좌", "쏠편한입출금통장", 100000, 0);
   temp['1'] = accountToMap(name, (random.nextInt(100000) + 100000).toString(),
@@ -51,6 +51,13 @@ String createName() {
   var name = lastNameList[random.nextInt(lastNameList.length)] +
       firstNameList[random.nextInt(firstNameList.length)];
   return name;
+}
+
+Future<List<dynamic>> getCardListOf(String user) async {
+  var path = 'v$version/user/$user/카드목록';
+  final url = Uri.https(domain, "$path.json");
+  var response = await http.get(url);
+  return json.decode(response.body);
 }
 
 void main() {

@@ -4,12 +4,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_pagebuild/controller/MainController.dart';
 import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/RegisController.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_pagebuild/view/MainView.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_pagebuild/DB/light_user.dart';
 
 final controller = Get.find<RegisController>();
 AccountList acList = AccountList();
@@ -131,7 +133,6 @@ class StartPage extends StatelessWidget {
           SizedBox(
             height: blankHeight,
           ),
-
           TextButton(
             style: TextButton.styleFrom(
               foregroundColor: Colors.black,
@@ -142,114 +143,107 @@ class StartPage extends StatelessWidget {
               ),
             ),
             child: const Text('로그인하기'),
-
             onPressed: () {
               // RegisController().goToMainTest();
               // 성공 팝업
               showDialog(
-                context: context,
-                
-                barrierDismissible: true,
-                builder: (BuildContext context) {
-                  double screenWidth = MediaQuery.of(context).size.width;
-                  double screenHeight = MediaQuery.of(context).size.height;
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    double screenWidth = MediaQuery.of(context).size.width;
+                    double screenHeight = MediaQuery.of(context).size.height;
 
-                  return AlertDialog(
-                    
-                    shape: RoundedRectangleBorder(
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    //Dialog Main Title
-                    title: const Column(
-                      
-                      children: <Widget>[
-                        Text("로그인"),
-                      ],
-                    ),
-                    //
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '이름을 입력해주세요.\n',
-                          style: TextStyle(
-                            fontSize: 22,
-                          ),),
-                        
-                        // 여기에 로그인 기능 구현
-                        SizedBox(
-                          width: screenWidth * 0.3,
-                          height: screenHeight *0.05,
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              // labelText: 'ex) 김신한',
-                              border: OutlineInputBorder(),
+                      ),
+                      //Dialog Main Title
+                      title: const Column(
+                        children: <Widget>[
+                          Text("로그인"),
+                        ],
+                      ),
+                      //
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            '이름을 입력해주세요.\n',
+                            style: TextStyle(
+                              fontSize: 22,
                             ),
-                            controller: _inputName,
-                            keyboardType: TextInputType.text,
                           ),
+
+                          // 여기에 로그인 기능 구현
+                          SizedBox(
+                            width: screenWidth * 0.3,
+                            height: screenHeight * 0.05,
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                // labelText: 'ex) 김신한',
+                                border: OutlineInputBorder(),
+                              ),
+                              controller: _inputName,
+                              keyboardType: TextInputType.text,
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: <Widget>[
+                        OutlinedButton(
+                          onPressed: () {
+                            RegisController().goToMainTest();
+                          },
+                          child: const Text("확인(제출성공)"),
+                        ),
+                        // (controller.verif(inputVeriN.text))
+
+                        OutlinedButton(
+                          child: const Text("확인(실패)"),
+                          onPressed: () {
+                            // 다시 인증문구 페이지로
+                            Navigator.pop(context);
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                    title: const Column(
+                                      children: <Widget>[
+                                        Text("로그인 실패"),
+                                      ],
+                                    ),
+                                    //
+                                    content: const Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          "등록되지 않은 사용자입니다.",
+                                        ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      OutlinedButton(
+                                        child: const Text("뒤로"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
                         ),
                       ],
-                    ),
-                    actions: <Widget>[
-                      OutlinedButton(
-                        onPressed: () {
-                          RegisController().goToMainTest();
-                        }, 
-                        child: const Text("확인(제출성공)"),
-                      ),
-                      // (controller.verif(inputVeriN.text))
-                      
-                      OutlinedButton(
-                        child: const Text("확인(실패)"),
-                        onPressed: () {
-                          // 다시 인증문구 페이지로
-                          Navigator.pop(context);
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                title: Column(
-                                  children: <Widget>[
-                                    new Text("로그인 실패"),
-                                  ],
-                                ),
-                                //
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      "등록되지 않은 사용자입니다.",
-                                    ),
-                                  ],
-                                ),
-                                actions: <Widget>[
-                                  new OutlinedButton(
-                                    child: new Text("뒤로"),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                        },
-                      ),
-                    ],
-                  );
-                }
-              );
+                    );
+                  });
             },
-            
-            
-            
           ),
-
-
           SizedBox(
             height: imageHeight,
             child: Image.asset(
@@ -262,8 +256,6 @@ class StartPage extends StatelessWidget {
     );
   }
 }
-
-
 
 // 두번째 페이지 - 이름 받기 -> 계좌 받기로 수정(인증용)
 
@@ -460,7 +452,6 @@ class _AuthScreenState extends State<AuthScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
     double startHeight = screenHeight * 0.15;
-    
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -611,31 +602,35 @@ class trackAccScreen extends StatelessWidget {
             // Container(
             //   padding: EdgeInsets.symmetric(horizontal: 15 ,vertical: 10),
             //   decoration: BoxDecoration(
-                
+
             //     borderRadius: BorderRadius.circular(5),
             //     color: Color.fromARGB(255, 203, 213, 253),
             // ),
-            // child: 
-            Text(
+            // child:
+            const Text(
               '마이데이터 목록 보기',
               style: TextStyle(
                 fontSize: 27,
               ),
             ),
             // ),
-            
+
             Column(
               children: [
-                Text(
+                const Text(
                   '\n보유 계좌 목록',
-                  style: TextStyle(fontSize: 24,),
+                  style: TextStyle(
+                    fontSize: 24,
                   ),
+                ),
                 AccountTable2(),
-                Text(
+                const Text(
                   '\n보유 카드 목록',
-                  style: TextStyle(fontSize: 24,),
+                  style: TextStyle(
+                    fontSize: 24,
                   ),
-                CardTable(),
+                ),
+                const CardTable(),
               ],
             ),
             const SizedBox(
@@ -643,14 +638,13 @@ class trackAccScreen extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {
-                
-                  Navigator.of(context).push(
-                    CustomRoute(
-                      builder: (BuildContext context) => const ChallSelectScreen(),
-                      settings: const RouteSettings(),
-                    ),
-                  );
-                
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) =>
+                        const ChallSelectScreen(),
+                    settings: const RouteSettings(),
+                  ),
+                );
               },
               child: const Text(
                 '확인',
@@ -670,7 +664,7 @@ class trackAccScreen extends StatelessWidget {
 }
 
 class AccountTable2 extends StatefulWidget {
-  AccountTable2({Key? key});
+  AccountTable2({super.key});
 
   AccountList acList = AccountList();
   @override
@@ -697,7 +691,8 @@ class _AccountTableState2 extends State<AccountTable2> {
           elevation: 4.0,
           child: FutureBuilder<List<dynamic>>(
             future: _accListFuture,
-            builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SizedBox(
                   child: Center(
@@ -746,11 +741,11 @@ class _AccountTableState2 extends State<AccountTable2> {
 }
 
 class CardTable extends StatefulWidget {
-  CardTable({super.key});
+  const CardTable({super.key});
 
   // 카드 리스트로 수정
   // CardList cardList = CardList();
-  
+
   @override
   _CardTableState createState() => _CardTableState();
 }
@@ -758,7 +753,6 @@ class CardTable extends StatefulWidget {
 class _CardTableState extends State<CardTable> {
   // 카드 리스트로 수정
   // CardList cardList = CardList();
-  AccountList cardList = AccountList();
 
   late Future<List<dynamic>> _cardListFuture;
 
@@ -766,7 +760,7 @@ class _CardTableState extends State<CardTable> {
   void initState() {
     super.initState();
 
-    _cardListFuture = cardList.setAccountList(false);
+    _cardListFuture = getCardListOf(resetMainModel.mainmodel.user.username);
   }
 
   @override
@@ -778,7 +772,8 @@ class _CardTableState extends State<CardTable> {
         elevation: 4.0,
         child: FutureBuilder<List<dynamic>>(
           future: _cardListFuture,
-          builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const SizedBox(
                 child: Center(
@@ -802,8 +797,8 @@ class _CardTableState extends State<CardTable> {
                       final account = snapshot.data![index];
                       return ListTile(
                         // title: Text(card.cardName),
-                        title: Text('카드이름'),
-                        subtitle: Text('카드번호: ${account.accNum}'),
+                        title: const Text('카드이름'),
+                        subtitle: Text('카드번호: $account'),
                         onTap: () {},
                       );
                     },
@@ -818,7 +813,6 @@ class _CardTableState extends State<CardTable> {
   }
 }
 
-
 // 챌린지 선택하기 페이지
 
 class ChallSelectScreen extends StatefulWidget {
@@ -831,7 +825,7 @@ class ChallSelectScreen extends StatefulWidget {
 class _ChallSelectScreenState extends State<ChallSelectScreen> {
   int? selectedRow; // 선택된 항목의 인덱스를 저장할 변수
 
-  Map<String, int> sList = {'음식점' : 7, '화장품' : 5, '배달음식' : 3};
+  Map<String, int> sList = {'음식점': 7, '화장품': 5, '배달음식': 3};
 
   @override
   Widget build(BuildContext context) {
@@ -853,192 +847,196 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
       ),
-      body: SingleChildScrollView( // SingleChildScrollView로 감싸서 스크롤 가능하게 함
+      body: SingleChildScrollView(
+        // SingleChildScrollView로 감싸서 스크롤 가능하게 함
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0.0),
-            child: 
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: startHeight,
-                  ),
-                  Container(
-                    // width: itemWidth,
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      '🔎 ${controller.checkInfo.registName} 님의 마이데이터로 구성해봤어요',
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: startHeight,
+                ),
+                Container(
+                  // width: itemWidth,
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    '🔎 ${controller.checkInfo.registName} 님의 마이데이터로 구성해봤어요',
+                    style: const TextStyle(
+                      fontSize: 18,
                     ),
                   ),
-                  const Text(
-                    '\n참여할 챌린지를 선택하세요.',
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),
+                ),
+                const Text(
+                  '\n참여할 챌린지를 선택하세요.',
+                  style: TextStyle(
+                    fontSize: 25,
                   ),
-                  SizedBox(
-                    height: blankHeight,
-                  ),
-                  SizedBox(
-                    height: itemHeight * sList.length.toDouble(),
-                    // ListView.builder 대신에 Column을 사용합니다.
-                    child: ListView.builder(
-                      itemCount: sList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        String category = sList.keys.toList()[index];
-                        int value = sList.values.toList()[index];
-                        bool isEnabled = true;
+                ),
+                SizedBox(
+                  height: blankHeight,
+                ),
+                SizedBox(
+                  height: itemHeight * sList.length.toDouble(),
+                  // ListView.builder 대신에 Column을 사용합니다.
+                  child: ListView.builder(
+                    itemCount: sList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String category = sList.keys.toList()[index];
+                      int value = sList.values.toList()[index];
+                      bool isEnabled = true;
 
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (selectedRow == index) {
-                                selectedRow =
-                                    null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                              } else {
-                                selectedRow = index; // 새로운 로우를 선택
-                              }
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            padding: const EdgeInsets.all(20.0),
-                            decoration: BoxDecoration(
-                              color: selectedRow == index
-                                  ? Color.fromARGB(255, 204, 230, 255)
-                                  : const Color.fromARGB(255, 255, 255, 255),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color.fromARGB(255, 209, 209, 209)
-                                      .withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 7,
-                                  offset: const Offset(
-                                      0, 7), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '# ${category}',
-                                            style: TextStyle(
-                                              fontSize: 22,
-                                              color: isEnabled ? Colors.black : Colors.grey,
-                                            ),
-                                          ),
-                                          Row(
-                                            // 구체적인 상호명 row로 배열하기 ->실제값 넣기
-                                            children: [
-                                              Container(
-                                                padding: const EdgeInsets.all(6),
-                                                margin: const EdgeInsets.only(top: 10),
-                                                decoration: BoxDecoration(
-                                                  
-                                                  color: selectedRow == index
-                                                      ? Color.fromARGB(255, 155, 255, 186)
-                                                      : Color.fromARGB(255, 214, 255, 237),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Text(
-                                                  '스타벅스',
-                                                  style: TextStyle(
-                                                    fontSize: 13,
-                                                    color: isEnabled ? Colors.black : Colors.grey,
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(6),
-                                                margin: const EdgeInsets.only(top: 10, left: 3),
-                                                decoration: BoxDecoration(
-                                                  
-                                                  color: selectedRow == index
-                                                      ? Color.fromARGB(255, 155, 255, 186)
-                                                      : Color.fromARGB(255, 214, 255, 237),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Text(
-                                                  '스타벅스',
-                                                  style: TextStyle(
-                                                    fontSize: 13,
-                                                    color: isEnabled ? Colors.black : Colors.grey,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    
-                                    Text(
-                                      '${value} 회 소비',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (selectedRow == index) {
+                              selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                            } else {
+                              selectedRow = index; // 새로운 로우를 선택
+                            }
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.all(20.0),
+                          decoration: BoxDecoration(
+                            color: selectedRow == index
+                                ? const Color.fromARGB(255, 204, 230, 255)
+                                : const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color.fromARGB(255, 209, 209, 209)
+                                    .withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 7,
+                                offset: const Offset(
+                                    0, 7), // changes position of shadow
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                
-                  SizedBox(
-                    height: blankHeight,
-                  ),
-                  OutlinedButton(
-                    onPressed: () {
-                      // 다음 단계로
-                      Navigator.of(context).push(
-                        CustomRoute(
-                          builder: (BuildContext context) => AccSelectScreen(),
-                          settings: const RouteSettings(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '# $category',
+                                          style: TextStyle(
+                                            fontSize: 22,
+                                            color: isEnabled
+                                                ? Colors.black
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                        Row(
+                                          // 구체적인 상호명 row로 배열하기 ->실제값 넣기
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.all(6),
+                                              margin: const EdgeInsets.only(
+                                                  top: 10),
+                                              decoration: BoxDecoration(
+                                                color: selectedRow == index
+                                                    ? const Color.fromARGB(
+                                                        255, 155, 255, 186)
+                                                    : const Color.fromARGB(
+                                                        255, 214, 255, 237),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text(
+                                                '스타벅스',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: isEnabled
+                                                      ? Colors.black
+                                                      : Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.all(6),
+                                              margin: const EdgeInsets.only(
+                                                  top: 10, left: 3),
+                                              decoration: BoxDecoration(
+                                                color: selectedRow == index
+                                                    ? const Color.fromARGB(
+                                                        255, 155, 255, 186)
+                                                    : const Color.fromARGB(
+                                                        255, 214, 255, 237),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text(
+                                                '스타벅스',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: isEnabled
+                                                      ? Colors.black
+                                                      : Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '$value 회 소비',
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
-                    child: const Text(
+                  ),
+                ),
+                SizedBox(
+                  height: blankHeight,
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    // 다음 단계로
+                    Navigator.of(context).push(
+                      CustomRoute(
+                        builder: (BuildContext context) => AccSelectScreen(),
+                        settings: const RouteSettings(),
+                      ),
+                    );
+                  },
+                  child: const Text(
                     '확인',
                     style: TextStyle(
                       fontSize: 23,
-
                     ),
                   ),
-                  
                 ),
-                  
-                  
-                ],
-              ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-
 
 // 라디오 버튼에 대한 레이블을 반환하는 함수
 
@@ -1062,7 +1060,6 @@ class AccSelectScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
-
       ),
       body: Center(
         child: Column(
@@ -1086,18 +1083,14 @@ class AccSelectScreen extends StatelessWidget {
 
             OutlinedButton(
               onPressed: () {
-                if (selectedRow != null) {
-                  // 다음 단계로
-                  selectedRow = null;
-                  acList.setaccountSaving(selectedRow);
-                  Navigator.of(context).push(
-                    CustomRoute(
-                      builder: (BuildContext context) =>
-                          const AmountSelectScreen(),
-                      settings: const RouteSettings(),
-                    ),
-                  );
-                }
+                //acList.setaccountSaving(142490);
+                Navigator.of(context).push(
+                  CustomRoute(
+                    builder: (BuildContext context) =>
+                        const AmountSelectScreen(),
+                    settings: const RouteSettings(),
+                  ),
+                );
               },
               child: const Text(
                 '선택',
@@ -1161,21 +1154,23 @@ class _AccountTableState extends State<AccountTable> {
               return Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text(
+                    title: const Text(
                       '우대금리가 쏠쏠한 SOL 적금 만들러 가기',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold),
-                      ),
+                          decoration: TextDecoration.underline,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold),
+                    ),
                     onTap: () {
                       setState(() {
-                        selectedRow = -1; // "쏠 적금 만들기"를 선택한 경우, selectedRow를 -1로 설정
+                        selectedRow =
+                            -1; // "쏠 적금 만들기"를 선택한 경우, selectedRow를 -1로 설정
                       });
                     },
-                    tileColor:
-                        selectedRow == -1 ? const Color.fromARGB(255, 150, 208, 255) : null,
+                    tileColor: selectedRow == -1
+                        ? const Color.fromARGB(255, 150, 208, 255)
+                        : null,
                   ),
                   ListView.builder(
                     shrinkWrap: true,
@@ -1210,10 +1205,8 @@ class _AccountTableState extends State<AccountTable> {
   }
 }
 
-
-
 // 챌린지 참여일수 및 금액 받기
-late int slidervalre = 10000;
+int slidervalre = 10000;
 
 class AmountSelectScreen extends StatelessWidget {
   const AmountSelectScreen({super.key});
@@ -1234,7 +1227,6 @@ class AmountSelectScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
-
       ),
       body: Center(
         child: Column(
@@ -1402,8 +1394,7 @@ class ResultScreen extends StatelessWidget {
     double appbarHeight = screenHeight * 0.12;
     double startHeight = screenHeight * 0.03;
 
-    double blankHeight  = screenHeight*0.05;
-
+    double blankHeight = screenHeight * 0.05;
 
     return Scaffold(
       appBar: AppBar(
@@ -1412,7 +1403,6 @@ class ResultScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
-
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -1448,7 +1438,6 @@ class ResultScreen extends StatelessWidget {
                       ),
                     ),
                     DataTable(
-                        
                         headingTextStyle: const TextStyle(
                           fontFamily: '아리따-돋움',
                           fontWeight: FontWeight.bold,
@@ -1563,12 +1552,11 @@ class FinalScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: HeaderWidget(),
+        title: const HeaderWidget(),
         centerTitle: true,
         toolbarHeight: 100,
         leadingWidth: 10, // 중간 맞추기 위해 사용 (깨질 위험 있음)
         backgroundColor: Colors.white,
-
       ),
       body: Center(
         child: Container(
