@@ -79,6 +79,15 @@ void patchUserData(user, accountNo1, accountNo2, challenge, amount) async {
   );
 }
 
+void patchUserData2(Map map, String user) async {
+  var path = 'service/user/$user';
+  final url = Uri.https(domain, "$path.json");
+  await http.patch(
+    url,
+    body: json.encode(map),
+  );
+}
+
 Map<String, dynamic> dataToMap(String name, String accountNo1,
     String accountNo2, String challenge, int amount) {
   Map<String, dynamic> map = {};
@@ -87,9 +96,13 @@ Map<String, dynamic> dataToMap(String name, String accountNo1,
   account['0'] = accountNo1;
   account['1'] = accountNo2;
   map['account'] = account;
-  map['lastChecked'] = 0;
+  Map<String, dynamic> lastChecked = {};
+  lastChecked['0'] = "0101";
+  lastChecked['1'] = "0000";
   Map<String, dynamic> stamp = {};
   stamp['day'] = 0;
+  stamp['consum'] = false;
+  stamp['saving'] = false; //시간 확인 해서 하루 지나면 체크
   List stampCnt = [0, 0, 0, 0];
   stamp['stampCnt'] = stampCnt;
   stamp['stampList'] = List<int>.filled(30, 0);
@@ -186,7 +199,8 @@ lastMonthSpending(String accountNo, int thisMonth) async {
 getTransactionListBetween(String accountNo, String startDate, String startTime,
     String endDate, String endTime) async {
   var response = await getTransactionListByAccountNo(accountNo);
-  List list = [];
+  //수정
+  List<String> list = [];
   for (var item in response) {
     var date = item["거래일자"];
     var time = item["거래시간"];
@@ -198,8 +212,10 @@ getTransactionListBetween(String accountNo, String startDate, String startTime,
   return list;
 }
 
-getBalanceListBetween(String accountNo, String startDate, String startTime, String endDate, String endTime) async {
-  var list = await getTransactionListBetween(accountNo, startDate, startTime, endDate, endTime);
+getBalanceListBetween(String accountNo, String startDate, String startTime,
+    String endDate, String endTime) async {
+  var list = await getTransactionListBetween(
+      accountNo, startDate, startTime, endDate, endTime);
   List balanceList = [];
   for (var item in list) {
     balanceList.add(item["잔액"]);

@@ -56,7 +56,7 @@ class MyHomePage extends StatelessWidget {
     MainModel mainmodel = MainModel.inst;
     String alarmText;
 
-    if (mainmodel.alarm) {
+    if (mainmodel.saving) {
       alarmText = '소비 내역이 발생했습니다! \n 적금을 넣어주세요!';
     } else {
       alarmText = '적금을 넣고 우대이율을 누리세요!';

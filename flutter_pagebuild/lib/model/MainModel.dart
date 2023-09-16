@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:flutter_pagebuild/DB/light_api.dart';
 import 'package:get/get.dart';
 
 class User {
@@ -29,8 +30,6 @@ class MainModel {
   //Model도 싱글턴으로 구현
   MainModel.privateConstructor();
 
-  bool alarm = false;
-
   //MainModel.inst로 구현
   static final MainModel _inst = MainModel.privateConstructor();
   static MainModel get inst => _inst;
@@ -42,10 +41,17 @@ class MainModel {
 
   //성공율
 
-  DateTime lastChecked = DateTime.now();
+  int stampCnt = 0;
+
+  bool saving = false;
+  bool consum = false;
+  int startchallenge = timestamp("0901", "0000");
+  String lastChecked_date = "0901";
+  String lastChecked_time = "0000";
+  String now_date = "0910";
+  String now_time = "0000";
   //현재까지 진행된 스탬프 갯수
   int challenge = 30;
-  int stampCnt = 0;
 
   //case 종류
   // challengeSuc = 커피 x
