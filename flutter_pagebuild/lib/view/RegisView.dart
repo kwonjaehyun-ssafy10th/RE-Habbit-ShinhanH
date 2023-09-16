@@ -643,18 +643,14 @@ class trackAccScreen extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {
-                if (selectedRow != null) {
-                  acList.setaccountConsum(selectedRow);
-                  selectedRow = null;
+                
                   Navigator.of(context).push(
                     CustomRoute(
                       builder: (BuildContext context) => const ChallSelectScreen(),
                       settings: const RouteSettings(),
                     ),
                   );
-                } else {
-                  return;
-                }
+                
               },
               child: const Text(
                 '확인',
@@ -1023,20 +1019,16 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                       );
                     },
                     child: const Text(
-                      '제출',
-                      style: TextStyle(
-                        fontSize: 23,
-                      ),
-
-                    );
-                  },
-                  child: const Text(
                     '확인',
                     style: TextStyle(
                       fontSize: 23,
 
                     ),
                   ),
+                  
+                ),
+                  
+                  
                 ],
               ),
           ),
@@ -1096,8 +1088,8 @@ class AccSelectScreen extends StatelessWidget {
               onPressed: () {
                 if (selectedRow != null) {
                   // 다음 단계로
-                  acList.setaccountSaving(selectedRow);
                   selectedRow = null;
+                  acList.setaccountSaving(selectedRow);
                   Navigator.of(context).push(
                     CustomRoute(
                       builder: (BuildContext context) =>
