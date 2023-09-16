@@ -6,6 +6,9 @@ import 'package:get/get.dart';
 import 'package:flutter_pagebuild/model/RegisModel.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
 
+import 'package:flutter_pagebuild/DB/light_account.dart';
+import 'package:flutter_pagebuild/DB/light_transaction.dart';
+
 // 1. 계좌번호&이름 입력
 // 2. 계좌번호를 통한 본인인증
 // 3. 해당 사용자 확인 (페이지 추가 필요) - 데이터 불러오기
@@ -14,16 +17,16 @@ import 'package:flutter_pagebuild/controller/MainController.dart';
 // --> 이 부분 정리해야 될 것 같음
 // 6. 적금 계좌 연결
 
+//계좌 인스턴스 생성
 class Account {
-  Account(this.bank, this.accNum);
-  Account.Savings(this.bank, this.accNum, this.maxAmount);
-  String bank;
-  int accNum;
-  int maxAmount = 0;
+  Account(this.accName, this.accNum);
+  String accName;
+  String accNum;
 
   bool selected = false;
 }
 
+//계좌 리스트 관리 클래스
 class AccountList with ChangeNotifier {
   static final AccountList _inst = AccountList._internal();
   AccountList._internal();
@@ -31,49 +34,51 @@ class AccountList with ChangeNotifier {
     return _inst;
   }
 
+//RegisModel - 싱글턴
   RegisModel regisModel = RegisModel();
+  CheckModel checkInfo = CheckModel();
 
-  //입출금 계좌 리스트
-// 데이터 소스
-  List<Account> temp = <Account>[
-    Account('신한은행', 1104742313),
-    Account('우리은행', 2623339834),
-    Account('새마을금고', 3058831284),
-    Account('농협은행', 3564775924),
-    Account('카카오뱅크', 7432343242),
-  ];
-  List<Account> temp2 = <Account>[
-    Account.Savings('신한은행', 1104742313, 300000),
-    // Account('카카오뱅크', 7432343242, 200000),
-    // Account('우리은행', 2623339834, 200000),
-    // Account('새마을금고', 3058831284, 300000),
-    // Account('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-    Account.Savings('농협은행', 3564775924, 300000),
-  ];
-  void setAccountList(List<Account> a) {
-    int idx = 0;
-    regisModel.accountList.clear();
-    while (regisModel.accountList.length < a.length) {
-      regisModel.accountList.add(a[idx++]);
+  dataToAccount(account, bool saving) {
+    if (saving) {
+      if (account["구분"]?.contains("적금")) {
+        String accName = account["상품명"];
+        String accNum = account["계좌번호"];
+        return Account(accName, accNum);
+      }
+    } else {
+      if (account["구분"]?.contains("입출금")) {
+        String accName = account["상품명"];
+        String accNum = account["계좌번호"];
+        return Account(accName, accNum);
+      }
     }
-
-    notifyListeners();
   }
 
-  List<Account> get getAccountList {
+  Future<List<dynamic>> setAccountList(bool saving) async {
+    List<dynamic> tmplist =
+        await getAccountListOf(checkInfo.registName); //Map을 담은 리스트
+
+    int idx = 0;
+    regisModel.accountList.clear();
+    while (idx < tmplist.length) {
+      dynamic tmp = dataToAccount(tmplist[idx], saving);
+      if (tmp != null) {
+        regisModel.accountList.add(tmp);
+      }
+
+      idx++;
+    }
+
     return regisModel.accountList;
   }
 
 //사용자가 고른 계좌 정보 등록
-  void setaccountConsum(int? selecRow) {
+  void setaccountConsum(int? selecRow) async {
     if (selecRow == null) return;
     regisModel.accountConsum = regisModel.accountList[selecRow];
   }
 
-  void setaccountSaving(int? selecRow) {
+  void setaccountSaving(int? selecRow) async {
     if (selecRow == null) return;
     regisModel.accountSaving = regisModel.accountList[selecRow];
   }
@@ -97,23 +102,21 @@ class pickChallenge {
 
   RegisModel regisModel = RegisModel();
 
-  //1.여태까지의 소비내역 반환
-  void setconsumList() {
-    //소비내역을 걸러내는 로직
-    regisModel.consumList.add('스타벅스');
-    regisModel.consumList.add('배민');
-    regisModel.consumList.add('택시');
-    regisModel.consumList.add('무신사');
-    regisModel.consumList;
-  }
-
-  List get getconsumList {
+  get getconsumList {
     //소비내역 반환
     return regisModel.consumList;
   }
 
   List get getconsumLabel {
     return regisModel.consumLabel;
+  }
+
+  void setSavingAmount(int amount) {
+    regisModel.savingAmount = amount;
+  }
+
+  get getSavingAmount {
+    return regisModel.savingAmount;
   }
 }
 
