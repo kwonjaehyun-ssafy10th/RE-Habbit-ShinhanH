@@ -57,17 +57,17 @@ Future getDataMapOf(user) async {
   return json.decode(response.body);
 }
 
-void patchUserData(user, accountNo1, accountNo2, challenge) async {
+void patchUserData(user, accountNo1, accountNo2, challenge, amount) async {
   var path = 'service/user/$user';
   final url = Uri.https(domain, "$path.json");
   await http.patch(
     url,
-    body: json.encode(dataToMap(user, accountNo1, accountNo2, challenge)),
+    body: json.encode(dataToMap(user, accountNo1, accountNo2, challenge, amount)),
   );
 }
 
 Map<String, dynamic> dataToMap(
-    String name, String accountNo1, String accountNo2, String challenge) {
+    String name, String accountNo1, String accountNo2, String challenge, int amount) {
   Map<String, dynamic> map = {};
   map['고객명'] = name;
   Map<String, dynamic> account = {};
@@ -82,6 +82,7 @@ Map<String, dynamic> dataToMap(
   stamp['stampList'] = List<int>.filled(30, 0);
   map['stamp'] = stamp;
   map['챌린지목표'] = challenge;
+  map['적금금액'] = amount;
   return map;
 }
 
@@ -150,24 +151,24 @@ categoryOf(String title) {
   return categoryMap[title];
 }
 
-// lastMonthSpending(String accountNo, int thisMonth) async {
-//   List list = await getTransactionListByAccountNo(accountNo);
-//   Map<String, int> categoryCnt = {};
-//   for (var item in list) {
-//     if (int.parse(item["거래일자"].substring(0, 2)) == ((thisMonth - 2) % 12) + 1) {
-//       var expenditure = item["내용"];
-//       if (categoryMap.containsKey(expenditure)) {
-//         var category = categoryOf(expenditure);
-//         if (categoryCnt.containsKey(category)) {
-//           categoryCnt[category] = categoryCnt[category]! + 1;
-//         } else {
-//           categoryCnt[category] = 1;
-//         }
-//       }
-//     }
-//   }
-//   return (categoryCnt);
-// }
+lastMonthSpending(String accountNo, int thisMonth) async {
+  List list = await getTransactionListByAccountNo(accountNo);
+  Map<String, int> categoryCnt = {};
+  for (var item in list) {
+    if (int.parse(item["거래일자"].substring(0, 2)) == ((thisMonth - 2) % 12) + 1) {
+      var expenditure = item["내용"];
+      if (categoryMap.containsKey(expenditure)) {
+        var category = categoryOf(expenditure);
+        if (categoryCnt.containsKey(category)) {
+          categoryCnt[category] = categoryCnt[category]! + 1;
+        } else {
+          categoryCnt[category] = 1;
+        }
+      }
+    }
+  }
+  return (categoryCnt);
+}
 
 void main() async {
   // print(await getDataMapOf("도레미"));
