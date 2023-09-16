@@ -25,16 +25,16 @@ Future getDataMapOf(user) async {
   return json.decode(response.body);
 }
 
-void patchUserData(user, accountNo1, accountNo2) async {
+void patchUserData(user, accountNo1, accountNo2, challenge) async {
   var path = 'service/user/$user';
   final url = Uri.https(domain, "$path.json");
   await http.patch(
   url,
-  body: json.encode(dataToMap(user, accountNo1, accountNo2)),
+  body: json.encode(dataToMap(user, accountNo1, accountNo2, challenge)),
   );
 }
 
-Map<String, dynamic> dataToMap(String name, String accountNo1, String accountNo2) {
+Map<String, dynamic> dataToMap(String name, String accountNo1, String accountNo2, String challenge) {
   Map<String, dynamic> map = {};
   map['고객명'] = name;
   Map<String, dynamic> account = {};
@@ -48,6 +48,7 @@ Map<String, dynamic> dataToMap(String name, String accountNo1, String accountNo2
   stamp['stampCnt'] = stampCnt;
   stamp['stampList'] = List<int>.filled(30, 0);
   map['stamp'] = stamp;
+  map['챌린지목표'] = challenge;
   return map;
 }
 
