@@ -11,7 +11,7 @@ import 'shb_api.dart';
 
 Random random = Random();
 String domain = 'shb-hackton-ad177-default-rtdb.firebaseio.com';
-String version = '3';
+String version = '4';
 
 Map<String, dynamic> api3 = {
   'account': {

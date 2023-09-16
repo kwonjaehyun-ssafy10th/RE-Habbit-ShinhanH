@@ -824,6 +824,7 @@ class _CardTableState extends State<CardTable> {
 
 
 // 챌린지 선택하기 페이지
+
 class ChallSelectScreen extends StatefulWidget {
   const ChallSelectScreen({Key? key}) : super(key: key);
 
@@ -832,8 +833,10 @@ class ChallSelectScreen extends StatefulWidget {
 }
 
 class _ChallSelectScreenState extends State<ChallSelectScreen> {
-  int radioVal = 0;
-  AccountList acList = AccountList();
+  int? selectedRow; // 선택된 항목의 인덱스를 저장할 변수
+
+  Map<String, int> sList = {'음식점' : 7, '화장품' : 5, '배달음식' : 3};
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -842,9 +845,9 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
     double startHeight = screenHeight * 0.05;
 
     double itemWidth = screenWidth * 0.8;
-    double appbarHeight = screenHeight * 0.12;
+    double itemHeight = screenHeight * 0.15;
 
-    //pickchallinst.setconsumList();
+    double appbarHeight = screenHeight * 0.12;
 
     return Scaffold(
       appBar: AppBar(
@@ -853,152 +856,197 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
         centerTitle: true,
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
-
       ),
-      body: SingleChildScrollView(
+      body: SingleChildScrollView( // SingleChildScrollView로 감싸서 스크롤 가능하게 함
         child: Center(
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: startHeight,
-                ),
-                Container(
-                  width: itemWidth,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    '🔎 선택하신 [${acList.getaccountConsum?.accName}] 계좌의 소비내역을 바탕으로 구성했어요',
-                    // '선택하신 ${acList.getaccountConsum?.bank} ${acList.getaccountConsum?.accNum} 계좌에서 발생한 소비내역을 바탕으로 구성했어요🔎',
-                    style: const TextStyle(
-                      fontSize: 18,
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0.0),
+            child: 
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: startHeight,
+                  ),
+                  Container(
+                    // width: itemWidth,
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      '🔎 ${controller.checkInfo.registName} 님의 마이데이터로 구성해봤어요',
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                ),
-                const Text(
-                  '\n참여할 챌린지를 선택하세요.',
-                  style: TextStyle(
-                    fontSize: 25,
+                  const Text(
+                    '\n참여할 챌린지를 선택하세요.',
+                    style: TextStyle(
+                      fontSize: 25,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: blankHeight,
-                ),
-                SizedBox(
-                  width: itemWidth,
-                  child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                      ),
-                      shrinkWrap: true,
-                      itemCount: 4,
+                  SizedBox(
+                    height: blankHeight,
+                  ),
+                  SizedBox(
+                    height: itemHeight * sList.length.toDouble(),
+                    // ListView.builder 대신에 Column을 사용합니다.
+                    child: ListView.builder(
+                      itemCount: sList.length,
                       itemBuilder: (BuildContext context, int index) {
+                        String category = sList.keys.toList()[index];
+                        int value = sList.values.toList()[index];
                         bool isEnabled = true;
 
                         return InkWell(
-                            onTap: () {
-                              setState(() {
-                                if (selectedRow == index) {
-                                  selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                                } else {
-                                  selectedRow = index; // 새로운 로우를 선택
-                                }
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(3.0),
-                              decoration: BoxDecoration(
-                                color: selectedRow == index
-                                    ? Color.fromARGB(255, 204, 230, 255)
-                                    : const Color.fromARGB(
-                                        255, 255, 255, 255), // 조건부로 배경색 결정
-                                borderRadius:
-                                    BorderRadius.circular(10), // 모서리 둥글기 값 설정
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                          onTap: () {
+                            setState(() {
+                              if (selectedRow == index) {
+                                selectedRow =
+                                    null; // 이미 선택된 로우를 다시 탭하면 선택 해제
+                              } else {
+                                selectedRow = index; // 새로운 로우를 선택
+                              }
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            padding: const EdgeInsets.all(20.0),
+                            decoration: BoxDecoration(
+                              color: selectedRow == index
+                                  ? Color.fromARGB(255, 204, 230, 255)
+                                  : const Color.fromARGB(255, 255, 255, 255),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color.fromARGB(255, 209, 209, 209)
+                                      .withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 7,
+                                  offset: const Offset(
+                                      0, 7), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
-                                    Text(
-                                      //소비 종류와 관련된 버튼
-                                      pickchallinst.getconsumLabel[index],
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: isEnabled
-                                            ? Colors.black
-                                            : Colors.grey,
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '# ${category}',
+                                            style: TextStyle(
+                                              fontSize: 22,
+                                              color: isEnabled ? Colors.black : Colors.grey,
+                                            ),
+                                          ),
+                                          Row(
+                                            // 구체적인 상호명 row로 배열하기 ->실제값 넣기
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.all(6),
+                                                margin: const EdgeInsets.only(top: 10),
+                                                decoration: BoxDecoration(
+                                                  
+                                                  color: selectedRow == index
+                                                      ? Color.fromARGB(255, 155, 255, 186)
+                                                      : Color.fromARGB(255, 214, 255, 237),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Text(
+                                                  '스타벅스',
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: isEnabled ? Colors.black : Colors.grey,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.all(6),
+                                                margin: const EdgeInsets.only(top: 10, left: 3),
+                                                decoration: BoxDecoration(
+                                                  
+                                                  color: selectedRow == index
+                                                      ? Color.fromARGB(255, 155, 255, 186)
+                                                      : Color.fromARGB(255, 214, 255, 237),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Text(
+                                                  '스타벅스',
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: isEnabled ? Colors.black : Colors.grey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Container(
-                                      padding: const EdgeInsets.all(5),
-                                      margin: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                        color: selectedRow == index
-                                            //색은 바꿔주세용
-                                            ? Color.fromARGB(255, 155, 255, 186)
-// 조건부로 배경색 결정
-
-                                            : Color.fromARGB(255, 214, 255, 237), // 조건부로 배경색 결정
-
-                                        borderRadius: BorderRadius.circular(
-                                            10), // 모서리 둥글기 값 설정
+                                    
+                                    Text(
+                                      '${value} 회 소비',
+                                      style: TextStyle(
+                                        fontSize: 18,
                                       ),
-                                      child: Text(
-                                        // '# test',
-                                        '# ${pickchallinst.getconsumList[index]}', // 여기에 원하는 텍스트를 넣으십시오.
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: isEnabled
-                                              ? Colors.black
-                                              : Colors.grey,
-                                        ),
-                                      ),
-                                    )
+                                    ),
                                   ],
                                 ),
-                              ),
-                            ));
-                      }),
-                ),
-                SizedBox(
-                  height: blankHeight,
-                ),
-                OutlinedButton(
-                  onPressed: () {
-                    // 다음 단계로
-                    Navigator.of(context).push(
-                      CustomRoute(
-                        builder: (BuildContext context) => AccSelectScreen(),
-                        settings: const RouteSettings(),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                
+                  SizedBox(
+                    height: blankHeight,
+                  ),
+                  OutlinedButton(
+                    onPressed: () {
+                      // 다음 단계로
+                      Navigator.of(context).push(
+                        CustomRoute(
+                          builder: (BuildContext context) => AccSelectScreen(),
+                          settings: const RouteSettings(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      '제출',
+                      style: TextStyle(
+                        fontSize: 23,
                       ),
+
                     );
                   },
                   child: const Text(
                     '확인',
                     style: TextStyle(
                       fontSize: 23,
+
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ),
         ),
       ),
     );
   }
 }
+
+
 
 // 라디오 버튼에 대한 레이블을 반환하는 함수
 
