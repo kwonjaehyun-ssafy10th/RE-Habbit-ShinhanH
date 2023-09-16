@@ -1,5 +1,7 @@
 import 'dart:ffi';
-
+import 'dart:math';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_pagebuild/model/MainModel.dart';
 import 'package:flutter_pagebuild/view/MainView.dart';
@@ -9,6 +11,9 @@ import 'package:flutter_pagebuild/controller/MainController.dart';
 
 import 'package:flutter_pagebuild/DB/light_account.dart';
 import 'package:flutter_pagebuild/DB/service.dart';
+
+Random random = Random();
+var domain = "https://shb-hackton-ad177-default-rtdb.firebaseio.com";
 
 // 1. 계좌번호&이름 입력
 // 2. 계좌번호를 통한 본인인증
@@ -154,7 +159,12 @@ class RegisController extends GetxController {
 
   bool verif(String str) {
     //본인인증 정답
-    String rightVeri = '0000';
+    String rightVeri = random.nextInt(10000).toString();
+    var path = "service/auth";
+    final url = Uri.https(domain, '$path.json');
+    Map<String, String> map = {};
+    map["certNo"] = rightVeri;
+    http.patch(url, body: json.encode(map));
 
     if (str != rightVeri) return false;
 
