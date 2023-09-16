@@ -100,6 +100,44 @@ updateStampCnt(String user, int day, int stamp) async {
 }
 
 
+Map<String, String> categoryMap = {
+  "스타벅스": "커피",
+  "메가커피": "커피",
+  "이디야": "커피",
+  "투썸플레이스": "커피",
+  "배달의민족": "배달음식",
+  "요기요": "배달음식",
+  "쿠팡이츠": "배달음식",
+  "카카오택시": "택시",
+  "UT택시": "택시",
+  "무신사": "옷",
+  "카카오스타일": "옷"
+};
+
+categoryOf(String title) {
+  return categoryMap[title];
+}
+
+lastMonthSpending(String accountNo, int thisMonth) async {
+  List list = await getTransactionListByAccountNo(accountNo);
+  Map<String, int> categoryCnt = {};
+  for (var item in list) {
+    if (int.parse(item["거래일자"].substring(0, 2)) == ((thisMonth - 2) % 12) + 1) {
+      var expenditure = item["내용"];
+      if (categoryMap.containsKey(expenditure)) {
+        var category = categoryOf(expenditure);
+        if (categoryCnt.containsKey(category)) {
+          categoryCnt[category] = categoryCnt[category]! + 1;
+        } else {
+          categoryCnt[category] = 1;
+        }
+      }
+    }
+  }
+  return (categoryCnt);
+}
+
+
 void main() async {
   // print(await getDataMapOf("도레미"));
   // print(await getDataMapOf("최쏠"));
@@ -108,4 +146,7 @@ void main() async {
   // updateDay("도레미", 5);
   // patchUserData("최몰리", "192102", "181923");
   // updateStampListDayOf("도레미", 2, 1);
+
+  // print(await lastMonthSpending("176662", 9));
+
 }

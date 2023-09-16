@@ -10,21 +10,127 @@
 // import 'dart:async';
 // import 'dart:math';
 
-// import 'package:flutter/material.dart';
-// import 'package:gradient_line_graph/gradient_line_graph.dart';
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double blankHeight = screenHeight * 0.01;
+    double mainHeight = screenHeight * 0.2;
+    double contentWidth = screenWidth * 0.5;
+    double appbarHeight = screenHeight * 0.12;
 
-// class DetailView extends StatelessWidget {
-//   DetailView({Key? key}) : super(key: key);
-//   final controller = Get.find<DetailController>();
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 228, 247, 247),
+      appBar: AppBar(
+        title: const HeaderWidget(),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: appbarHeight,
+      ),
+      // resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20), color: Colors.white),
+              // padding: EdgeInsets.all(10),
+              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
 
-//   @override
-//   Widget build(BuildContext context) {
-//     double screenHeight = MediaQuery.of(context).size.height;
-//     double screenWidth = MediaQuery.of(context).size.width;
-//     double blankHeight = screenHeight * 0.01;
-//     double blankWidth = screenWidth * 0.05;
-//     double startHeight = screenHeight * 0.27;
-//     double contentWidth = screenWidth * 0.5;
+              // height: mainHeight,
+              child: Column(
+                // color: Colors.red,
+                children: [
+                  Container(
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 0),
+                          // padding: EdgeInsets.only(right: 20),
+                          child: Image.asset('assets/images/profile-img.png',
+                              width: contentWidth, 
+                              fit: BoxFit.contain
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 130,
+                          color: Colors.grey,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          // alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              //챌린지 시작 날짜
+                              Text(
+                                '챌린지 시작날짜',
+                                style: TextStyle(
+                                    fontSize: 23, color: Colors.purple),
+                              ),
+                              //여백
+                              Text(
+                                '',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              //(w/controller)
+                              Text(
+                                '2023.03.22',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              Text(
+                                '',
+                                style: TextStyle(fontSize: 30),
+                              ),
+                              //남은 날짜
+                              Text(
+                                '남은 날짜',
+                                style: TextStyle(
+                                    fontSize: 23, color: Colors.purple),
+                              ),
+                              //여백
+                              Text(
+                                '',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              //(w/controller)
+                              Text(
+                                'D-20',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 30),
+                    child: Row(
+                      children: [
+                        //(w/Controller)
+                        Text(
+                          'OOO',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        //고정
+                        Text('님의 커피 1잔 평균 금액은 ',
+                            style: TextStyle(color: Colors.grey)),
+                        //(w/Controller)
+                        Text('5,000', style: TextStyle(color: Colors.grey)),
+                        //고정
+                        Text('원 입니다.', style: TextStyle(color: Colors.grey))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
 
 //     return Scaffold(
 //       backgroundColor: Color.fromARGB(255, 228, 247, 247),
@@ -470,99 +576,20 @@
 //   }
 // }
 
-// //누적금액 Graph
-// //https://pub.dev/packages/gradient_line_graph/install
-// class CumulativeGraph extends StatefulWidget {
-//   CumulativeGraph({Key? key, required this.title}) : super(key: key);
 
-//   // This widget is the home page of your application. It is stateful, meaning
-//   // that it has a State object (defined below) that contains fields that affect
-//   // how it looks.
+  @override
+  Widget build(BuildContext context) {
+    return IconButton.filled(
+      onPressed: () {
+        var controller = Get.find<DetailController>();
+        controller.goToMain();
+      },
+      icon: Image.asset(
+        'assets/images/logo-image.png',
+        // height: 2000,
+      ),
+      iconSize: 250,
+    );
+  }
+}
 
-//   // This class is the configuration for the state. It holds the values (in this
-//   // case the title) provided by the parent (in this case the App widget) and
-//   // used by the build method of the State. Fields in a Widget subclass are
-//   // always marked "final".
-
-//   final String title;
-
-//   @override
-//   _CumulativeGraphState createState() => _CumulativeGraphState();
-// }
-
-// class _CumulativeGraphState extends State<CumulativeGraph> {
-//   double downloadRate = 20;
-//   double downloadProgress = 10;
-
-//   @override
-//   void initState() {
-//     super.initState();
-
-//     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-//       download();
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             Container(
-//               child: GradientLineGraphView(
-//                 min: 0,
-//                 max: 100,
-//                 value: downloadRate,
-//                 precentage: downloadProgress,
-//                 color: Color(0xFF4cbdbb).withOpacity(0.7),
-//                 duration: Duration(milliseconds: 0),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Future download() async {
-//     setState(() {
-//       downloadProgress = 0;
-//       downloadRate = 40;
-//     });
-
-//     Timer.periodic(new Duration(milliseconds: 500), (timer) {
-//       print('current downloadProgress: $downloadProgress');
-//       print('current downloadRate: $downloadRate');
-
-//       if (downloadProgress >= 99) {
-//         timer.cancel();
-//       }
-
-//       var generated = generateRandom(30, 80).toDouble();
-//       goToDownloadValue(generated);
-//     });
-//   }
-
-//   void goToDownloadValue(value) {
-//     var valueToAdd = (value - downloadRate) / 10;
-//     var counter = 0;
-//     Timer.periodic(Duration(milliseconds: 50), (timer) {
-//       if (counter == 9 || downloadRate == value) {
-//         timer.cancel();
-//       }
-
-//       counter++;
-//       setState(() {
-//         downloadRate += valueToAdd;
-//         downloadProgress += 0.5;
-//       });
-//     });
-//   }
-
-//   int generateRandom(int min, int max) {
-//     var rn = new Random();
-//     return min + rn.nextInt(max - min);
-//   }
-// }

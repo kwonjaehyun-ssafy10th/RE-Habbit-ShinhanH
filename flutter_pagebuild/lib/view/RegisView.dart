@@ -379,6 +379,7 @@ class _AuthScreenState extends State<AuthScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double blankHeight = screenHeight * 0.05;
     double startHeight = screenHeight * 0.15;
+    
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -597,6 +598,7 @@ class _AccountTableState2 extends State<AccountTable2> {
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 10.0),
+        
         child: Card(
             elevation: 4.0,
             child: FutureBuilder<List<dynamic>>(
@@ -623,14 +625,18 @@ class _AccountTableState2 extends State<AccountTable2> {
                   // 데이터가 준비되면
                   else {
                     return Column(
+                      
                       children: <Widget>[
+                        
                         // ListView.builder를 사용하여 동적으로 아이템 생성
                         ListView.builder(
+                          
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             final account = snapshot.data![index];
                             return ListTile(
+                              
                               title: Text(account.accName),
                               subtitle: Text('계좌번호: ${account.accNum}'),
                               trailing: Text('${account.accNum}'),
@@ -687,6 +693,7 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
         centerTitle: true,
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
+
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -780,8 +787,10 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                                         color: selectedRow == index
                                             //색은 바꿔주세용
                                             ? Color.fromARGB(255, 155, 255, 186)
-                                            : Color.fromARGB(255, 214, 255,
-                                                237), // 조건부로 배경색 결정
+// 조건부로 배경색 결정
+
+                                            : Color.fromARGB(255, 214, 255, 237), // 조건부로 배경색 결정
+
                                         borderRadius: BorderRadius.circular(
                                             10), // 모서리 둥글기 값 설정
                                       ),
@@ -851,6 +860,7 @@ class AccSelectScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
+
       ),
       body: Center(
         child: Column(
@@ -1003,6 +1013,7 @@ class AmountSelectScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
+
       ),
       body: Center(
         child: Column(
@@ -1169,7 +1180,9 @@ class ResultScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.12;
     double startHeight = screenHeight * 0.03;
-    double blankHeight = screenHeight * 0.05;
+
+    double blankHeight  = screenHeight*0.05;
+
 
     return Scaffold(
       appBar: AppBar(
@@ -1178,6 +1191,7 @@ class ResultScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
         leadingWidth: 10,
+
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -1213,6 +1227,7 @@ class ResultScreen extends StatelessWidget {
                       ),
                     ),
                     DataTable(
+                        
                         headingTextStyle: const TextStyle(
                           fontFamily: '아리따-돋움',
                           fontWeight: FontWeight.bold,
@@ -1332,6 +1347,7 @@ class FinalScreen extends StatelessWidget {
         toolbarHeight: 100,
         leadingWidth: 10, // 중간 맞추기 위해 사용 (깨질 위험 있음)
         backgroundColor: Colors.white,
+
       ),
       body: Center(
         child: Container(
