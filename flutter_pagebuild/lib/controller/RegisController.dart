@@ -181,9 +181,6 @@ class RegisController extends GetxController {
   }
 
   void goToMainTest() {
-    //사용자 정보 업로드
-    //이름, 입출금, 적금,
-
     Get.put(MainController());
     //getController 필요할 때 만들 클래스들 저장
     Get.find<MainController>().getController();

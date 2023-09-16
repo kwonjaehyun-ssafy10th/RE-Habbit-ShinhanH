@@ -120,7 +120,7 @@ class MyHomePage extends StatelessWidget {
                 height: blankHeight,
               ),
 
-              Consumer<resetMainModel>(builder: (context, resetmodel, child) {
+              Consumer<resetMainModel>(builder: (context, resetmodel, _) {
                 return
                     // 달성률 관련 위젯들 묶음
                     Stack(

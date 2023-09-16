@@ -21,12 +21,12 @@ import 'package:flutter_pagebuild/DB/service.dart';
 class resetMainModel with ChangeNotifier {
   //싱글턴
   static final resetMainModel _inst = resetMainModel._internal();
+  static final MainModel mainmodel = MainModel.inst;
 
   resetMainModel._internal() {
     MainModel.inst.PieChartMap['챌린지 성공'] = MainModel.inst.sucRate;
     MainModel.inst.PieChartMap['적금 성공'] = MainModel.inst.savinRate;
     MainModel.inst.PieChartMap['실패'] = MainModel.inst.failRate;
-    getPieChartfromDB;
   }
 
   factory resetMainModel() {
@@ -38,28 +38,19 @@ class resetMainModel with ChangeNotifier {
 //2. 챌린지 명
 //3. 그래프 % 실시간 계산
 
-  get getPieChartfromDB async {
-    //User user = await getUser;
-    print('test');
-    //Map<dynamic, dynamic> tmpmap = await getDataMapOf(user.username);
-  }
-
-//사용자 정보 저장 -> 1회만 설정하기
-  // void setUser(String username, String challengeName, String chkAccount,
-  //     String savings) {
-  //   MainModel.inst.user.username = username;
-  //   MainModel.inst.user.challengeName = challengeName;
-  //   MainModel.inst.user.chkAccount = chkAccount;
-  //   MainModel.inst.user.savings = savings;
-  // }`
-
   Future<String> get getUser async {
     User userlogin = User.getUserlogin;
     Map<String, dynamic> getUserinfoMap = await getDataMapOf('도레미');
     userlogin.username = getUserinfoMap['고객명'];
-    userlogin.challengeName = '커피 안 마시기';
+    userlogin.challengeName = getUserinfoMap['챌린지목표'];
     userlogin.chkAccount = getUserinfoMap['account'][0];
     userlogin.savings = getUserinfoMap['account'][1];
+
+    mainmodel.challenge = 30;
+    mainmodel.stampCnt = getUserinfoMap['stamp']['day'];
+    mainmodel.challengeSuc = getUserinfoMap['stamp']['stampCnt'][0];
+    mainmodel.challengefail = getUserinfoMap['stamp']['stampCnt'][1];
+    mainmodel.savingSuc = getUserinfoMap['stamp']['stampCnt'][2];
     notifyListeners();
 
     return userlogin.username;
@@ -67,7 +58,7 @@ class resetMainModel with ChangeNotifier {
 
 //원형 그래프
   void setPieChartMap() async {
-    await getPieChartfromDB;
+    await getUser;
     //챌린지 달성률 업데이트
     MainModel.inst.sucRate =
         MainModel.inst.challengeSuc / MainModel.inst.dayCnt * 100;
@@ -82,7 +73,8 @@ class resetMainModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetPieChartMap() {
+  void resetPieChartMap() async {
+    await getUser;
     //챌린지 달성률 업데이트
     MainModel.inst.sucRate =
         MainModel.inst.challengeSuc / MainModel.inst.dayCnt * 100;

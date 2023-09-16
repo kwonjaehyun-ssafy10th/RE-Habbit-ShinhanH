@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pagebuild/controller/RegisController.dart';
 import 'package:flutter_pagebuild/view/RegisView.dart';
 import 'package:get/get.dart';
+import 'package:flutter_pagebuild/controller/thread.dart';
 
 void main() {
-  runApp(MyApp());
+  //spawnNewIsolate();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Initialize the UserController
@@ -18,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: '아리따-돋움',
       ),
-      home: RegisView(),
+      home: const RegisView(),
     );
   }
 }
