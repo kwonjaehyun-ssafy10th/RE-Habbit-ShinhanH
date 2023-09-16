@@ -28,7 +28,7 @@ class RegisModel {
   List<Account> accountList = [];
 
   List consumLabel = ['커피 안 마시기', '배달 음식 안 먹기', '택시 안 타기', '옷 사지 않기'];
-  List consumList = ['스타벅스\n카페', '배x의민족', '택시결제', '스타일지그'];
+  List consumList = ['스타벅스', '배x의민족', '택시결제', '스타일지그'];
 
   Account? accountConsum;
   Account? accountSaving;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
@@ -83,9 +84,11 @@ class StartPage extends StatelessWidget {
   Widget build(context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double buttonHeight = screenHeight * 0.1;
+    double buttonHeight2 = screenHeight * 0.05;
+
     double imageHeight = screenHeight * 0.4;
-    double startHeight = screenHeight * 0.15;
-    double blankHeight = screenHeight * 0.03;
+    double startHeight = screenHeight * 0.1;
+    double blankHeight = screenHeight * 0.02;
 
     return Center(
       child: Column(
@@ -127,6 +130,47 @@ class StartPage extends StatelessWidget {
           SizedBox(
             height: blankHeight,
           ),
+
+          TextButton(
+            onPressed: () {
+              RegisController().goToMainTest();
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.black,
+              textStyle: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            child: const Text('로그인하기'),
+          ),
+
+          // SizedBox(
+          //   height: buttonHeight2,
+          //   width: 200,
+          //   child: MaterialButton(
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(15.0),
+          //     ),
+          //     color: const Color.fromARGB(255, 178, 255, 205),
+          //     highlightColor: const Color.fromARGB(255, 107, 255, 134),
+          //     // 클릭시 색상 다르게 표현
+          //     onPressed: () {
+          //       RegisController().goToMainTest();
+          //     },
+
+          //     child: const Text(
+          //       '로그인 하기',
+          //       style: TextStyle(
+          //         fontSize: 30,
+          //         color: Colors.white,
+          //       ),
+          //       textAlign: TextAlign.center,
+          //     ),
+          //   ),
+          // ),
+
           SizedBox(
             height: imageHeight,
             child: Image.asset(
@@ -642,6 +686,7 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
         backgroundColor: Colors.white,
         centerTitle: true,
         toolbarHeight: appbarHeight,
+        leadingWidth: 10,
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -708,7 +753,7 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                               padding: const EdgeInsets.all(3.0),
                               decoration: BoxDecoration(
                                 color: selectedRow == index
-                                    ? const Color.fromARGB(255, 255, 241, 200)
+                                    ? Color.fromARGB(255, 204, 230, 255)
                                     : const Color.fromARGB(
                                         255, 255, 255, 255), // 조건부로 배경색 결정
                                 borderRadius:
@@ -734,15 +779,15 @@ class _ChallSelectScreenState extends State<ChallSelectScreen> {
                                       decoration: BoxDecoration(
                                         color: selectedRow == index
                                             //색은 바꿔주세용
-                                            ? const Color.fromARGB(
-                                                255, 199, 224, 201)
-                                            : Colors.white, // 조건부로 배경색 결정
+                                            ? Color.fromARGB(255, 155, 255, 186)
+                                            : Color.fromARGB(255, 214, 255,
+                                                237), // 조건부로 배경색 결정
                                         borderRadius: BorderRadius.circular(
                                             10), // 모서리 둥글기 값 설정
                                       ),
                                       child: Text(
-                                        '# test',
-                                        //pickchallinst.getconsumList[index], // 여기에 원하는 텍스트를 넣으십시오.
+                                        // '# test',
+                                        '# ${pickchallinst.getconsumList[index]}', // 여기에 원하는 텍스트를 넣으십시오.
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: isEnabled
@@ -805,6 +850,7 @@ class AccSelectScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
+        leadingWidth: 10,
       ),
       body: Center(
         child: Column(
@@ -936,7 +982,7 @@ class _AccountTableState extends State<AccountTable> {
 }
 
 // 챌린지 참여일수 및 금액 받기
-late int slidervalre;
+late int slidervalre = 10000;
 
 class AmountSelectScreen extends StatelessWidget {
   const AmountSelectScreen({super.key});
@@ -956,6 +1002,7 @@ class AmountSelectScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
+        leadingWidth: 10,
       ),
       body: Center(
         child: Column(
@@ -1122,6 +1169,7 @@ class ResultScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.12;
     double startHeight = screenHeight * 0.03;
+    double blankHeight = screenHeight * 0.05;
 
     return Scaffold(
       appBar: AppBar(
@@ -1129,6 +1177,7 @@ class ResultScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
+        leadingWidth: 10,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -1147,7 +1196,7 @@ class ResultScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const Text(
-                      '\n===============\n\n** RECEIPT **\n\n===============',
+                      '\n==================\n\n** RECEIPT **\n\n==================',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 28,
@@ -1156,10 +1205,10 @@ class ResultScreen extends StatelessWidget {
                     SizedBox(
                       width: screenWidth * 0.8,
                       child: Text(
-                        '\n${controller.checkInfo.registName}님이 선택하신 \nRe-Habbit이 맞나요?\n\n................................................................',
+                        '\n${controller.checkInfo.registName} 님이 선택하신 \nRe-Habbit이 맞나요?\n\n................................................................',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 22,
                         ),
                       ),
                     ),
@@ -1168,10 +1217,12 @@ class ResultScreen extends StatelessWidget {
                           fontFamily: '아리따-돋움',
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
+                          fontSize: 18,
                         ),
                         dataTextStyle: const TextStyle(
                           fontFamily: '아리따-돋움',
                           color: Colors.black,
+                          fontSize: 15,
                         ),
                         columns: const [
                           DataColumn(label: Text('항목')),
@@ -1198,14 +1249,14 @@ class ResultScreen extends StatelessWidget {
                           ]),
                           DataRow(cells: [
                             const DataCell(Text('실패시 적금금액')),
-                            DataCell(Text(' ${pickchallinst.getSavingAmount}')),
+                            DataCell(Text('${pickchallinst.getSavingAmount}')),
                             // DataCell(Text('${amount}')),
                           ]),
                         ]),
                     const Text(
                       '................................................................\n',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 22,
                       ),
                     ),
                   ],
@@ -1232,26 +1283,28 @@ class ResultScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // 선택지 2 - 다시 설정하기
-              TextButton(
-                onPressed: () {
-                  // 적금 선택 단계로
-                  Navigator.of(context).push(
-                    CustomRoute(
-                      builder: (BuildContext context) => trackAccScreen(),
-                      settings: const RouteSettings(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  '수정하기',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 112, 108, 108),
-                    fontSize: 18,
-                  ),
-                ),
-              ),
+              SizedBox(
+                height: blankHeight,
+              )
+              // 선택지 2 - 다시 설정하기 -> 삭제
+              // TextButton(
+              //   onPressed: () {
+              //     // 적금 선택 단계로
+              //     Navigator.of(context).push(
+              //       CustomRoute(
+              //         builder: (BuildContext context) => trackAccScreen(),
+              //         settings: const RouteSettings(),
+              //       ),
+              //     );
+              //   },
+              //   child: const Text(
+              //     '수정하기',
+              //     style: TextStyle(
+              //       color: Color.fromARGB(255, 112, 108, 108),
+              //       fontSize: 18,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -1269,15 +1322,16 @@ class FinalScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double appbarHeight = screenHeight * 0.12;
-    double startHeight = screenHeight * 0.20;
-    double blankHeight = screenHeight * 0.03;
+    double startHeight = screenHeight * 0.22;
+    double blankHeight = screenHeight * 0.02;
 
     return Scaffold(
       appBar: AppBar(
-        title: const HeaderWidget(),
+        title: HeaderWidget(),
         centerTitle: true,
+        toolbarHeight: 100,
+        leadingWidth: 10, // 중간 맞추기 위해 사용 (깨질 위험 있음)
         backgroundColor: Colors.white,
-        toolbarHeight: appbarHeight,
       ),
       body: Center(
         child: Container(

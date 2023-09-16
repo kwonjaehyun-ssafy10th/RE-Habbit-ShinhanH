@@ -2,25 +2,19 @@ import 'dart:math';
 import 'account.dart';
 //import 'practice2.dart';
 
-class User {
+class Useroutdated {
   String name;
   List<dynamic> accountList = [];
   List<dynamic> notificationList = [];
 
   Random random = Random();
 
-  User(this.name) {
-
-    accountList.add(Account(
-        this.name,
-        (random.nextInt(100000) + 100000).toString(),
-        "입출금계좌",
-        "쏠편한입출금통장",
-        100000));
-    accountList.add(Account(this.name,
-        (random.nextInt(100000) + 100000).toString(), "자유적금", "쏠편한작심3일적금", 0));
+  Useroutdated(this.name) {
+    accountList.add(Account(name, (random.nextInt(100000) + 100000).toString(),
+        "입출금계좌", "쏠편한입출금통장", 100000));
+    accountList.add(Account(name, (random.nextInt(100000) + 100000).toString(),
+        "자유적금", "쏠편한작심3일적금", 0));
     // userCnt++;
-
   }
 
   @override
@@ -41,7 +35,7 @@ class User {
 }
 
 void main() {
-  var user = User('김신한');
+  var user = Useroutdated('김신한');
   print(user.toMap());
   print(user);
   print(user.accountList);

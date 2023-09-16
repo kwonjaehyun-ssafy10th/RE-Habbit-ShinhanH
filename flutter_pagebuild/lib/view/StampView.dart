@@ -22,6 +22,8 @@ class StampView extends StatelessWidget {
         backgroundColor: Colors.white,
         toolbarHeight: appbarHeight,
         centerTitle: true,
+        leadingWidth: 10,
+
       ),
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),

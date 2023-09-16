@@ -6,8 +6,12 @@ class User {
   User.privateConstructor();
   static final User _instUser = User.privateConstructor();
 
+  static get getUserlogin {
+    return _instUser;
+  }
+
   //사용자명
-  String username = '김신한';
+  String username = 'test';
 
   //챌린지명
   String challengeName = '';
@@ -31,14 +35,12 @@ class MainModel {
   //-- 여기가 싱글턴 패턴 구현 파트
 
 //사용자 정보 객체
-  User user = User._instUser;
+  User user = User.getUserlogin;
   //데이터 종류
 
   //성공율
 
-  
-
-
+  DateTime lastChecked = DateTime.now();
   //현재까지 진행된 스탬프 갯수
   int challenge = 30;
   int stampCnt = 0;
@@ -50,17 +52,17 @@ class MainModel {
   // savingBonus = 커피 x 적금 o
 
   // 0 - 커피x [성공]
-  // 1 - 커피o / 적금 o [성공]
-  // -1 - 커피o / 적금 x [실패]
+  // 1 - 커피o / 적금 x [실패]
+  // 2 - 커피o / 적금 o [성공]
 
   //성공 판에서 성공여부 체크 하는 map = 스탬프 화면에 올릴 정보들
   // key = 몇일차인지 : value = 성공여부
-  Map<int, int> check = {1:-1, 2:-1, 3:0, 4:0};
+  Map<int, int> check = {1: -1, 2: -1, 3: 0, 4: 0};
   // List<int> stampList = [];
 
-  int challengeSuc = 11;
+  int challengeSuc = 10;
   int savingSuc = 10;
-  int challengefail = 5;
+  int challengefail = 10;
   int savingBonus = 3;
 
   // 현황 나타내는 문장
@@ -73,5 +75,4 @@ class MainModel {
   double savinRate = -1;
 
   int dayCnt = 30;
-
 }
