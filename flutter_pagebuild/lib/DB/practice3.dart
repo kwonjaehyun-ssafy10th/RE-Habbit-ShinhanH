@@ -39,4 +39,36 @@
 //   //   url,
 //   //   body: json.encode((await getAccountListOf("최쏠"))[0][0]),
 //   // );
+  // transfer("0731", "1503", "888888", "176662", 5000000, "급여", "급여", "급여이체");
+  // getNameOf("888888").then((res) => print(res));
+  // var mega = createAccountNo();
+  // print(mega);
+  // var ediya = createAccountNo();
+  // print(ediya);
+  // var twosome = createAccountNo();
+  // print(twosome);
+  // var yogiyo = createAccountNo();
+  // print(yogiyo);
+  // var coupangEats = createAccountNo();
+  // print(coupangEats);
+  // var kakaoTaxi = createAccountNo();
+  // print(kakaoTaxi);
+  // List list = [
+  //   ["0807", "0854", "카카오택시", 8600],
+  //   ["0807", "1250", "메가커피", 2500],
+  //   ["0808", "1935", "요기요", 23000],
+  //   ["0811", "0837", "이디야", 3900],
+  //   ["0815", "1539", "무신사", 57000],
+  //   ["0815", "1841", "UT택시", 7400],
+  //   ["0815", "1916", "쿠팡이츠", 22000],
+  //   ["0816", "0838", "투썸플레이스", 5900],
+  //   ["0817", "0853", "카카오택시", 10500],
+  //   ["0819", "1427", "카카오스타일", 68000],
+  //   ["0822", "1245", "스타벅스", 6500],
+  //   ["0823", "1846", "카카오택시", 9400],
+  //   ["0829", "1239", "이디야", 4100]
+  // ];
+  // for (var item in list) {
+  //   await transfer(item[0], item[1], "142490", nameToAccountNo[item[2]], item[3], item[2], "영업매출", "신한체크");
+  // }
 // }
