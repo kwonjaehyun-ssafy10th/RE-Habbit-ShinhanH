@@ -57,6 +57,17 @@ Future getDataMapOf(user) async {
   return json.decode(response.body);
 }
 
+Future getStampListOf(user) async {
+  var path = 'service/user/$user/stamp/stampList';
+  final url = Uri.https(domain, "$path.json");
+  final response = await http.get(url);
+  List<int> stampList = [];
+  for (int stamp in json.decode(response.body)) {
+    stampList.add(stamp);
+  }
+  return stampList;
+}
+
 void patchUserData(user, accountNo1, accountNo2, challenge, amount) async {
   var path = 'service/user/$user';
   final url = Uri.https(domain, "$path.json");
