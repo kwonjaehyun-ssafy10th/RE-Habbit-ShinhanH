@@ -934,6 +934,8 @@ class AccSelectScreen extends StatelessWidget {
     double appbarHeight = screenHeight * 0.12;
     double blankHeight = screenHeight * 0.1;
 
+    // int? selectedRow = 0;
+
     return Scaffold(
       appBar: AppBar(
         title: const HeaderWidget(),
@@ -1004,13 +1006,13 @@ class AccountTable extends StatefulWidget {
 }
 
 class _AccountTableState extends State<AccountTable> {
-  // 선택된 로우의 인덱스를 저장하는 변수
+  int selectedRow = -1; // "쏠 적금 만들기"를 기본값으로 선택하도록 초기화
   AccountList acList = AccountList();
   late Future<List<dynamic>> _accListFuture;
+
   @override
   void initState() {
     super.initState();
-
     _accListFuture = acList.setAccountList(true);
   }
 
@@ -1020,57 +1022,76 @@ class _AccountTableState extends State<AccountTable> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Card(
-          elevation: 4.0,
-          child: FutureBuilder<dynamic>(
-            future: _accListFuture, //Future-객체 ->
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SizedBox(
-                  child: Center(
-                    child: SizedBox(
-                      height: 25,
-                      width: 25,
-                      child: CircularProgressIndicator(),
-                    ),
+        elevation: 4.0,
+        child: FutureBuilder<dynamic>(
+          future: _accListFuture,
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox(
+                child: Center(
+                  child: SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: CircularProgressIndicator(),
                   ),
-                );
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                return Column(
-                  children: <Widget>[
-                    // ListView.builder를 사용하여 동적으로 아이템 생성
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        final account = snapshot.data![index];
-                        return ListTile(
-                          title: Text(account.accName),
-                          subtitle: Text('계좌번호: ${account.accNum}'),
-                          tileColor: selectedRow == index
-                              ? const Color.fromARGB(255, 150, 208, 255)
-                              : null, // 선택된 로우에 색상 적용
-                          onTap: () {
-                            setState(() {
-                              if (selectedRow == index) {
-                                selectedRow = null; // 이미 선택된 로우를 다시 탭하면 선택 해제
-                              } else {
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text(
+                      '우대금리가 쏠쏠한 SOL 적금 만들러 가기',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold),
+                      ),
+                    onTap: () {
+                      setState(() {
+                        selectedRow = -1; // "쏠 적금 만들기"를 선택한 경우, selectedRow를 -1로 설정
+                      });
+                    },
+                    tileColor:
+                        selectedRow == -1 ? const Color.fromARGB(255, 150, 208, 255) : null,
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final account = snapshot.data![index];
+                      return Column(
+                        children: [
+                          ListTile(
+                            title: Text(account.accName),
+                            trailing: Text('우대금리: ${account.accNum} %'),
+                            tileColor: selectedRow == index
+                                ? const Color.fromARGB(255, 150, 208, 255)
+                                : null,
+                            onTap: () {
+                              setState(() {
                                 selectedRow = index; // 새로운 로우를 선택
-                              }
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                );
-              }
-            },
-          )),
+                              });
+                            },
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }
+
+
 
 // 챌린지 참여일수 및 금액 받기
 late int slidervalre = 10000;
