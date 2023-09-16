@@ -198,6 +198,15 @@ getTransactionListBetween(String accountNo, String startDate, String startTime,
   return list;
 }
 
+getBalanceListBetween(String accountNo, String startDate, String startTime, String endDate, String endTime) async {
+  var list = await getTransactionListBetween(accountNo, startDate, startTime, endDate, endTime);
+  List balanceList = [];
+  for (var item in list) {
+    balanceList.add(item["잔액"]);
+  }
+  return balanceList;
+}
+
 void main() async {
   // print(await getDataMapOf("도레미"));
   // print(await getDataMapOf("최쏠"));
