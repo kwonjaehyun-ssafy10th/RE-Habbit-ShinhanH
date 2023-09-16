@@ -58,6 +58,13 @@ class MyHomePage extends StatelessWidget {
               SizedBox(
                 height: startHeight,
               ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                ),
+                child: Text('커피 사먹지 않기 도전 중'),
+              ),
+
               // const HeaderWidget(),
               UserWidget(),
 
