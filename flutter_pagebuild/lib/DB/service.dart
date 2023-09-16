@@ -196,6 +196,18 @@ lastMonthSpending(String accountNo, int thisMonth) async {
   return (categoryCnt);
 }
 
+spendingdata(String user) async {
+  var path = 'v$version/user/$user/소비분류';
+  final url = Uri.https(domain, '$path.json');
+  var response = await http.get(url);
+  Map<String, dynamic> map = json.decode(response.body);
+  List<MapEntry<String, dynamic>> sortedList = map.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+  List<Map<String, dynamic>> resultList = List.from(sortedList.map((entry) {
+    return {entry.key: entry.value};
+  }));
+  return resultList;
+}
+
 getTransactionListBetween(String accountNo, String startDate, String startTime,
     String endDate, String endTime) async {
   var response = await getTransactionListByAccountNo(accountNo);
