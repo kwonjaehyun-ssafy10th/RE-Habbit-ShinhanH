@@ -181,6 +181,19 @@ lastMonthSpending(String accountNo, int thisMonth) async {
   return (categoryCnt);
 }
 
+getTransactionListBetween(String accountNo, String startDate, String startTime, String endDate, String endTime) async {
+  var response = await getTransactionListByAccountNo(accountNo);
+  List list = [];
+  for (var item in response) {
+    var date = item["거래일자"];
+    var time = item["거래시간"];
+    if ((timestamp(startDate, startTime) <= timestamp(date, time)) && (timestamp(date, time) <= timestamp(endDate, endTime))) {
+      list.add(item);
+    }
+  }
+  return list;
+}
+
 void main() async {
   // print(await getDataMapOf("도레미"));
   // print(await getDataMapOf("최쏠"));
