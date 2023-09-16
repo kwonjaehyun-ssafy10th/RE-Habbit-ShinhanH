@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pagebuild/model/MainModel.dart';
+import 'package:flutter_pagebuild/view/DetailView.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pagebuild/controller/StampController.dart';
 import 'package:flutter_pagebuild/controller/MainController.dart';
@@ -83,7 +85,15 @@ class StampView extends StatelessWidget {
                   right: 0,
                   child: Stamps(),
                 ),
-                TextButton(onPressed: () {}, child: const Text('테스트용 버튼'))
+                TextButton(
+                    onPressed: () {
+                      MainModel.inst.now_date =
+                          (int.parse(MainModel.inst.lastChecked_date) + 1)
+                              .toString();
+                      MainModel.inst.now_time = "0000";
+                      resetMainModel().checkStamp();
+                    },
+                    child: const Text('테스트용 버튼'))
               ],
             ),
           ],
@@ -178,8 +188,10 @@ class Stamps extends StatelessWidget {
           // 첫 번째 이미지
         } else if (stamp == 1) {
           imageName = 'assets/images/rabbit-stamp.png'; // 두 번째 이미지
+        } else if (stamp == 2) {
+          imageName = 'assets/images/money-stamp.png';
         } else {
-          imageName = 'assets/images/money-stamp.png'; // 다섯 번째 이미지
+          imageName = 'assets/images/gold-carrot-stamp.PNG'; // 다섯 번째 이미지
         }
 
         return Center(

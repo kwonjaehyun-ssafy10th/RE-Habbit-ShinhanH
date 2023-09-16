@@ -201,7 +201,8 @@ spendingdata(String user) async {
   final url = Uri.https(domain, '$path.json');
   var response = await http.get(url);
   Map<String, dynamic> map = json.decode(response.body);
-  List<MapEntry<String, dynamic>> sortedList = map.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+  List<MapEntry<String, dynamic>> sortedList = map.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
   List<Map<String, dynamic>> resultList = List.from(sortedList.map((entry) {
     return {entry.key: entry.value};
   }));
@@ -212,7 +213,8 @@ getTransactionListBetween(String accountNo, String startDate, String startTime,
     String endDate, String endTime) async {
   var response = await getTransactionListByAccountNo(accountNo);
   //수정
-  List<String> list = [];
+
+  List list = [];
   for (var item in response) {
     var date = item["거래일자"];
     var time = item["거래시간"];
@@ -231,6 +233,28 @@ getBalanceListBetween(String accountNo, String startDate, String startTime,
   List balanceList = [];
   for (var item in list) {
     balanceList.add(item["잔액"]);
+  }
+  return balanceList;
+}
+
+getTitleListBetween(String accountNo, String startDate, String startTime,
+    String endDate, String endTime) async {
+  List list = await getTransactionListBetween(
+      accountNo, startDate, startTime, endDate, endTime);
+  List<String> balanceList = [];
+  for (var item in list) {
+    balanceList.add(item["내용"]);
+  }
+  return balanceList;
+}
+
+getMoneyListBetween(String accountNo, String startDate, String startTime,
+    String endDate, String endTime) async {
+  List list = await getTransactionListBetween(
+      accountNo, startDate, startTime, endDate, endTime);
+  List<int> balanceList = [];
+  for (var item in list) {
+    balanceList.add(item["입금금액"]);
   }
   return balanceList;
 }
