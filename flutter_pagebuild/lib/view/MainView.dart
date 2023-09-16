@@ -15,7 +15,6 @@ final controller = Get.find<MainController>();
 //ChangeNotifierProvider 의 위젯으로 반환(view 없음)
 class MainView extends StatelessWidget {
   const MainView({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     //초기값 설정용
@@ -120,7 +119,7 @@ class MyHomePage extends StatelessWidget {
                 height: blankHeight,
               ),
 
-              Consumer<resetMainModel>(builder: (context, resetmodel, _) {
+              Consumer<resetMainModel>(builder: (context, resetmodel, child) {
                 return
                     // 달성률 관련 위젯들 묶음
                     Stack(

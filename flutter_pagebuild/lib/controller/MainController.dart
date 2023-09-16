@@ -51,9 +51,20 @@ class resetMainModel with ChangeNotifier {
     mainmodel.challengeSuc = getUserinfoMap['stamp']['stampCnt'][0];
     mainmodel.challengefail = getUserinfoMap['stamp']['stampCnt'][1];
     mainmodel.savingSuc = getUserinfoMap['stamp']['stampCnt'][2];
+    mainmodel.stampList = getUserinfoMap['stamp']['stampList'];
     notifyListeners();
 
     return userlogin.username;
+  }
+
+  Future<void> get resetUser async {
+    Map<String, dynamic> getUserinfoMap = await getDataMapOf('도레미');
+    mainmodel.challenge = 30;
+    mainmodel.stampCnt = getUserinfoMap['stamp']['day'];
+    mainmodel.challengeSuc = getUserinfoMap['stamp']['stampCnt'][0];
+    mainmodel.challengefail = getUserinfoMap['stamp']['stampCnt'][1];
+    mainmodel.savingSuc = getUserinfoMap['stamp']['stampCnt'][2];
+    mainmodel.stampList = getUserinfoMap['stamp']['stampList'];
   }
 
 //원형 그래프
@@ -143,7 +154,7 @@ class MainController extends GetxController {
 
   void goToDetail() {
     Get.find<DetailController>();
-    Get.to(() => DetailView());
+    // Get.to(() => DetailView());
   }
 
   void goToStamp() {
