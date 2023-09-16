@@ -39,7 +39,8 @@ class resetMainModel with ChangeNotifier {
 //3. 그래프 % 실시간 계산
 
   Future<String> get getUser async {
-    Map<String, dynamic> getUserinfoMap = await getDataMapOf('도레미');
+    Map<String, dynamic> getUserinfoMap =
+        await getDataMapOf(userlogin.username);
     userlogin.username = getUserinfoMap['고객명'];
     userlogin.challengeName = getUserinfoMap['챌린지목표'];
     userlogin.chkAccount = getUserinfoMap['account'][0];
@@ -51,19 +52,21 @@ class resetMainModel with ChangeNotifier {
     mainmodel.challengeSuc = getUserinfoMap['stamp']['stampCnt'][0];
     mainmodel.challengefail = getUserinfoMap['stamp']['stampCnt'][1];
     mainmodel.savingSuc = getUserinfoMap['stamp']['stampCnt'][2];
-    mainmodel.stampList = await getStampListOf('도레미');
+    mainmodel.savingBonus = getUserinfoMap['stamp']['stampCnt'][3];
+    mainmodel.stampList = await getStampListOf(userlogin.username);
     return userlogin.username;
   }
 
   Future<void> get resetUser async {
-    Map<String, dynamic> getUserinfoMap = await getDataMapOf('도레미');
+    Map<String, dynamic> getUserinfoMap =
+        await getDataMapOf(userlogin.username);
     mainmodel.challenge = 30;
     mainmodel.stampCnt = getUserinfoMap['stamp']['day'];
     mainmodel.challengeSuc = getUserinfoMap['stamp']['stampCnt'][0];
     mainmodel.challengefail = getUserinfoMap['stamp']['stampCnt'][1];
     mainmodel.savingSuc = getUserinfoMap['stamp']['stampCnt'][2];
-
-    mainmodel.stampList = await getStampListOf('도레미');
+    mainmodel.savingBonus = getUserinfoMap['stamp']['stampCnt'][3];
+    mainmodel.stampList = await getStampListOf(userlogin.username);
   }
 
 //원형 그래프
@@ -169,6 +172,97 @@ class resetMainModel with ChangeNotifier {
     map['챌린지목표'] = userlogin.challengeName;
     map['적금금액'] = 10000;
     return map;
+  }
+
+  void checkStamp() async {
+    print(userlogin.chkAccount);
+    int lastDate = int.parse(mainmodel.lastChecked_date);
+    int lastTime = int.parse(mainmodel.lastChecked_time);
+    int nowDate = int.parse(mainmodel.now_date);
+    int nowTime = int.parse(mainmodel.now_time);
+    print('out');
+    print(lastDate);
+    print(nowDate);
+    while (lastDate < nowDate) {
+      print('whilein');
+      List<String> temp = await getTitleListBetween(
+          userlogin.chkAccount,
+          lastDate.toString().padLeft(4, '0'),
+          lastTime.toString().padLeft(4, '0'),
+          (lastDate + 1).toString().padLeft(4, '0'),
+          '0000');
+      print('test');
+      //일단 커피일때만 체크
+      for (String s in temp) {
+        if (categoryMap[s] != "커피") {
+          mainmodel.consum = true;
+        }
+        if (s.contains('적금')) {
+          mainmodel.saving = true;
+        }
+      }
+
+      List<String> temp2 = await getTitleListBetween(
+          userlogin.savings,
+          lastDate.toString().padLeft(4, '0'),
+          lastTime.toString().padLeft(4, '0'),
+          (lastDate + 1).toString().padLeft(4, '0'),
+          '0000');
+
+      int idx = lastDate % 100 - 1;
+      print('testidx');
+
+      print(idx);
+      if (mainmodel.consum && mainmodel.saving) {
+        mainmodel.stampList[idx] = 2;
+        mainmodel.savingSuc++;
+      } else if (!mainmodel.consum && mainmodel.saving) {
+        mainmodel.stampList[idx] = 3;
+        mainmodel.savingBonus++;
+      } else if (mainmodel.consum && !mainmodel.saving) {
+        mainmodel.stampList[idx] = 1;
+        mainmodel.challengefail++;
+      } else {
+        mainmodel.stampList[idx] = 0;
+        mainmodel.challengeSuc++;
+      }
+
+      mainmodel.consum = false;
+      mainmodel.saving = false;
+      lastDate++;
+      mainmodel.stampCnt++;
+    }
+
+    List<String> temp = await getTitleListBetween(
+        userlogin.chkAccount,
+        lastDate.toString().padLeft(4, '0'),
+        lastTime.toString().padLeft(4, '0'),
+        nowDate.toString().padLeft(4, '0'),
+        nowTime.toString().padLeft(4, '0'));
+
+    //일단 커피일때만 체크
+    for (String s in temp) {
+      if (categoryMap[s] != "커피") {
+        mainmodel.consum = true;
+        break;
+      }
+    }
+
+    List<String> temp2 = await getTitleListBetween(
+        userlogin.savings,
+        lastDate.toString().padLeft(4, '0'),
+        lastTime.toString().padLeft(4, '0'),
+        nowDate.toString().padLeft(4, '0'),
+        nowTime.toString().padLeft(4, '0'));
+
+    if (temp2.isNotEmpty && temp2.contains(10000)) {
+      mainmodel.saving = true;
+    }
+
+    patchUserData2(dataToMap2(), userlogin.username);
+
+    mainmodel.lastChecked_date = mainmodel.now_date;
+    mainmodel.lastChecked_time = mainmodel.now_time;
   }
 }
 
