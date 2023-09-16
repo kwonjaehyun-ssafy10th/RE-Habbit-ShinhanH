@@ -10,7 +10,7 @@ Map dataMap = {
       'lastChecked': '-time',
       'stamp': {
         'day': '_day',
-        'stampCnt': ['_succeedCnt', '_failCnt', '_moneyCnt'],
+        'stampCnt': ['_succeedCnt', '_failCnt', '_moneyCnt', '_bonusCnt'],
         'stampList': [
           '_day1',
           '_day2',
@@ -90,7 +90,7 @@ Map<String, dynamic> dataToMap(String name, String accountNo1,
   map['lastChecked'] = 0;
   Map<String, dynamic> stamp = {};
   stamp['day'] = 0;
-  List stampCnt = [0, 0, 0];
+  List stampCnt = [0, 0, 0, 0];
   stamp['stampCnt'] = stampCnt;
   stamp['stampList'] = List<int>.filled(30, 0);
   map['stamp'] = stamp;
