@@ -44,7 +44,9 @@ Map dataMap = {
           '_day29',
           '_day30'
         ],
-        '고객명': '_user1'
+        '고객명': '_user1',
+        '챌린지목표': '_challenge',
+        '적금금액': '_amount'
       }
     }
   }
