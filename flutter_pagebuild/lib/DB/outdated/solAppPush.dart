@@ -1,8 +1,8 @@
-import 'user.dart';
+import 'useroutdated.dart';
 import 'notification.dart';
 
 class SolAppPush {
-  void push(User to, Notification notification) {
+  void push(Useroutdated to, Notification notification) {
     to.notificationList.add(notification);
   }
 }

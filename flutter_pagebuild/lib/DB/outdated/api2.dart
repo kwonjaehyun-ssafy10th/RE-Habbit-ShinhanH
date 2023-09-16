@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'user.dart';
+import 'useroutdated.dart';
 import 'account.dart';
 import 'transfer.dart';
 import 'solAppPush.dart';
@@ -9,7 +9,7 @@ import 'notification.dart';
 export 'api2.dart';
 
 int time = 0;
-String date = "09${((time / 10).toInt() + 1).toString().padLeft(2, '0')}";
+String date = "09${(time ~/ 10 + 1).toString().padLeft(2, '0')}";
 
 Map<String, dynamic> api2 = {
   'account': {
@@ -52,7 +52,7 @@ void patchToFirebase(action, map) async {
   var keyName = keyMap[action];
   final url = Uri.https(
       'shb-hackton-ad177-default-rtdb.firebaseio.com', path + ".json");
-  Map<String, dynamic> temp = new Map();
+  Map<String, dynamic> temp = {};
   temp[map[keyName]] = map;
   await http.patch(
     url,
@@ -60,7 +60,7 @@ void patchToFirebase(action, map) async {
   );
 }
 
-void patchUser(User user) {
+void patchUser(Useroutdated user) {
   patchToFirebase('user', user.toMap());
   for (var account in user.accountList) {
     patchAccount(account);
@@ -73,7 +73,7 @@ void patchAccount(Account account) {
 }
 
 void patchBalance(Account account) {
-  Map<String, dynamic> map = new Map();
+  Map<String, dynamic> map = {};
   map['계좌번호'] = account.accountNo;
   map['잔액'] = account.balance;
   patchToFirebase('balance', map);

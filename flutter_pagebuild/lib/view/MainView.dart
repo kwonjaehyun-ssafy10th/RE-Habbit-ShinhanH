@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pagebuild/DB/outdated/useroutdated.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_pagebuild/controller/MainController.dart';
+import 'package:flutter_pagebuild/model/MainModel.dart';
 // import 'package:fl_chart/fl_chart.dart';
 
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     //초기값 설정용
     controller.reset.setPieChartMap();
+
     return ChangeNotifierProvider<resetMainModel>(
       create: (context) => resetMainModel(),
       child: MaterialApp(
@@ -57,7 +60,7 @@ class MyHomePage extends StatelessWidget {
                 height: startHeight,
               ),
               // const HeaderWidget(),
-              const UserWidget(),
+              UserWidget(),
 
               // 마이페이지 버튼
               TextButton(
@@ -232,7 +235,10 @@ final colorList = <Color>[
 
 // 유저위젯
 class UserWidget extends StatelessWidget {
-  const UserWidget({super.key});
+  late final Future<String> _usernameFuture;
+  UserWidget({Key? key})
+      : _usernameFuture = controller.reset.getUser,
+        super(key: key);
 
   @override
   Widget build(context) {
@@ -243,11 +249,31 @@ class UserWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              // '시계토끼 ',
-              '${controller.reset.getUser.username} ',
-              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
+            FutureBuilder<String>(
+                future: _usernameFuture,
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  // 연결 중 상태 처리
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+
+                  // 오류 상태 처리
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+
+                  // 데이터가 있는 경우의 처리
+                  return Consumer<resetMainModel>(
+                    builder: (context, counter, child) {
+                      return Text(
+                        '${snapshot.data}',
+                        style: const TextStyle(
+                            fontSize: 28, fontWeight: FontWeight.bold),
+                      );
+                    },
+                  );
+                }),
             const Text(
               '님',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
