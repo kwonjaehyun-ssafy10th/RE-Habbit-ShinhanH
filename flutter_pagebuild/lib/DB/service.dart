@@ -118,24 +118,24 @@ categoryOf(String title) {
   return categoryMap[title];
 }
 
-lastMonthSpending(String accountNo, int thisMonth) async {
-  List list = await getTransactionListByAccountNo(accountNo);
-  Map<String, int> categoryCnt = {};
-  for (var item in list) {
-    if (int.parse(item["거래일자"].substring(0, 2)) == ((thisMonth - 2) % 12) + 1) {
-      var expenditure = item["내용"];
-      if (categoryMap.containsKey(expenditure)) {
-        var category = categoryOf(expenditure);
-        if (categoryCnt.containsKey(category)) {
-          categoryCnt[category] = categoryCnt[category]! + 1;
-        } else {
-          categoryCnt[category] = 1;
-        }
-      }
-    }
-  }
-  return (categoryCnt);
-}
+// lastMonthSpending(String accountNo, int thisMonth) async {
+//   List list = await getTransactionListByAccountNo(accountNo);
+//   Map<String, int> categoryCnt = {};
+//   for (var item in list) {
+//     if (int.parse(item["거래일자"].substring(0, 2)) == ((thisMonth - 2) % 12) + 1) {
+//       var expenditure = item["내용"];
+//       if (categoryMap.containsKey(expenditure)) {
+//         var category = categoryOf(expenditure);
+//         if (categoryCnt.containsKey(category)) {
+//           categoryCnt[category] = categoryCnt[category]! + 1;
+//         } else {
+//           categoryCnt[category] = 1;
+//         }
+//       }
+//     }
+//   }
+//   return (categoryCnt);
+// }
 
 
 void main() async {

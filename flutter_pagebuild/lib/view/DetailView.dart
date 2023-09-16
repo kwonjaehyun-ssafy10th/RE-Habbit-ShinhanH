@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pagebuild/view/MainView.dart';
 //import 'package:flutter_pagebuild/view/flutter/dev/bots/utils.dart';
 
 import 'package:get/get.dart';
@@ -7,20 +6,14 @@ import 'package:flutter_pagebuild/controller/DetailController.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:line_chart/line_chart.dart';
 
-
-//graph
-// https://pub.dev/packages/gradient_line_graph/example
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:gradient_line_graph/gradient_line_graph.dart';
+class DetailView extends StatelessWidget {
+  DetailView({Key? key}) : super(key: key);
+  final controller = Get.find<DetailController>();
 
-// //graph
-// // https://pub.dev/packages/gradient_line_graph/example
-// import 'dart:async';
-// import 'dart:math';
 
   @override
   Widget build(BuildContext context) {
@@ -641,3 +634,4 @@ class LineChart extends CustomPainter {
     return oldDelegate.points != points;
   }
 }
+
