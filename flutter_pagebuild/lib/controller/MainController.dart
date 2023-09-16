@@ -47,13 +47,12 @@ class resetMainModel with ChangeNotifier {
     userlogin.savings = getUserinfoMap['account'][1];
 
     mainmodel.challenge = 30;
+
     mainmodel.stampCnt = getUserinfoMap['stamp']['day'];
     mainmodel.challengeSuc = getUserinfoMap['stamp']['stampCnt'][0];
     mainmodel.challengefail = getUserinfoMap['stamp']['stampCnt'][1];
     mainmodel.savingSuc = getUserinfoMap['stamp']['stampCnt'][2];
-    mainmodel.stampList = getUserinfoMap['stamp']['stampList'];
-    notifyListeners();
-
+    mainmodel.stampList = await getStampListOf('도레미');
     return userlogin.username;
   }
 
@@ -64,7 +63,8 @@ class resetMainModel with ChangeNotifier {
     mainmodel.challengeSuc = getUserinfoMap['stamp']['stampCnt'][0];
     mainmodel.challengefail = getUserinfoMap['stamp']['stampCnt'][1];
     mainmodel.savingSuc = getUserinfoMap['stamp']['stampCnt'][2];
-    mainmodel.stampList = getUserinfoMap['stamp']['stampList'];
+
+    mainmodel.stampList = await getStampListOf('도레미');
   }
 
 //원형 그래프

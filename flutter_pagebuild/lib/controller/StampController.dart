@@ -21,7 +21,16 @@ class resetStamp with ChangeNotifier {
   get setStamp {}
 
   get getStampList {
+    notifyListeners();
     return mainmodel.stampList;
+  }
+
+  get getStampCnt {
+    return mainmodel.stampCnt;
+  }
+
+  get getchallengeSuc {
+    return mainmodel.challengeSuc;
   }
   // 메서드들
   // MainModel 에 있는 변수 사용하기!!
